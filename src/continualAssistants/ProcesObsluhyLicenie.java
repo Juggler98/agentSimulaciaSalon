@@ -1,6 +1,8 @@
 package continualAssistants;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
 import myGenerators.RandTriangular;
 import myGenerators.RandUniformDiscrete;
 import simulation.*;
@@ -30,14 +32,23 @@ public class ProcesObsluhyLicenie extends Process {
 	//meta! sender="AgentLicenia", id="32", type="Start"
 	public void processStart(MessageForm message) {
 		message.setCode(Mc.koniecObsluhyLicenie);
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
 		double holdTime;
-		double percentage = randPercentageTypLicenia.nextDouble();
-		if (percentage < 0.3) {
-			holdTime = randLicenieJednoduche.nextValue();
+		if (zakaznik.isGoToHlbkoveLicenie()) {
+			holdTime = randHlbkoveCistenie.nextValue();
+			zakaznik.setStavZakaznika(StavZakaznika.HLBKOVECISTENIE);
+			zakaznik.setCasZaciatkuObsluhy(2, mySim().currentTime());
 		} else {
-			holdTime = randLicenieZlozite.nextValue();
+			zakaznik.setStavZakaznika(StavZakaznika.LICENIE);
+			zakaznik.setCasZaciatkuObsluhy(3, mySim().currentTime());
+			double percentage = randPercentageTypLicenia.nextDouble();
+			if (percentage < 0.3) {
+				holdTime = randLicenieJednoduche.nextValue();
+			} else {
+				holdTime = randLicenieZlozite.nextValue();
+			}
+			holdTime *= 60;
 		}
-		holdTime *= 60;
 		hold(holdTime, message);
     }
 

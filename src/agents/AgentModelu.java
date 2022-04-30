@@ -30,7 +30,7 @@ public class AgentModelu extends Agent {
 	//meta! tag="end"
 
     public void spustiSimulaciu() {
-        MyMessage message = new MyMessage(mySim());
+        MyMessage message = new MyMessage(mySim(), null);
         message.setCode(Mc.init);
         message.setAddressee(this);
         manager().notice(message);

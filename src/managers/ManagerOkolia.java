@@ -1,6 +1,8 @@
 package managers;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
@@ -25,18 +27,25 @@ public class ManagerOkolia extends Manager {
 
     //meta! sender="AgentModelu", id="4", type="Notice"
     public void processInit(MessageForm message) {
+        message.setAddressee(myAgent().findAssistant(Id.planovacPrichodyZakaznika));
+        startContinualAssistant(message);
     }
 
     //meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
     public void processFinish(MessageForm message) {
         message.setCode(Mc.prichodZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentModelu));
-
         notice(message);
     }
 
     //meta! sender="AgentModelu", id="6", type="Notice"
     public void processOdchodZakaznika(MessageForm message) {
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        zakaznik.setCasOdchodu(mySim().currentTime());
+        zakaznik.setStavZakaznika(StavZakaznika.ODCHOD);
+        ((SalonSimulation) mySim()).addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+        ((SalonSimulation) mySim()).addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+        ((SalonSimulation) mySim()).getStatsVykonov()[9]++;
     }
 
     //meta! userInfo="Process messages defined in code", id="0"

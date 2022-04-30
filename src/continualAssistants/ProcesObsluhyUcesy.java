@@ -1,59 +1,88 @@
 package continualAssistants;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
+import myGenerators.EmpiricDiscrete;
+import myGenerators.RandEmpiricDiscrete;
+import myGenerators.RandUniformDiscrete;
 import simulation.*;
 import agents.*;
 import OSPABA.Process;
 
+import java.util.Random;
+
 //meta! id="28"
-public class ProcesObsluhyUcesy extends Process
-{
-	public ProcesObsluhyUcesy(int id, Simulation mySim, CommonAgent myAgent)
-	{
-		super(id, mySim, myAgent);
-	}
+public class ProcesObsluhyUcesy extends Process {
 
-	@Override
-	public void prepareReplication()
-	{
-		super.prepareReplication();
-		// Setup component for the next replication
-	}
+    private static final Random seedGenerator = new Random();
+    private static final EmpiricDiscrete[] empiricDiscretesUcesZlozity = {new EmpiricDiscrete(30, 60, 0.4), new EmpiricDiscrete(61, 120, 0.6)};
+    private static final EmpiricDiscrete[] empiricDiscretesUcesSvadobny = {new EmpiricDiscrete(50, 60, 0.2), new EmpiricDiscrete(61, 100, 0.3), new EmpiricDiscrete(101, 150, 0.5)};
+    private static final RandUniformDiscrete randUcesJednoduchy = new RandUniformDiscrete(10, 30, seedGenerator);
+    private static final RandEmpiricDiscrete randUcesZlozity = new RandEmpiricDiscrete(empiricDiscretesUcesZlozity, seedGenerator);
+    private static final RandEmpiricDiscrete randUcesSvadobny = new RandEmpiricDiscrete(empiricDiscretesUcesSvadobny, seedGenerator);
+    private final Random randPercentageTypUcesu = new Random(seedGenerator.nextLong());
 
-	//meta! sender="AgentUcesov", id="29", type="Start"
-	public void processStart(MessageForm message)
-	{
-	}
+    public ProcesObsluhyUcesy(int id, Simulation mySim, CommonAgent myAgent) {
+        super(id, mySim, myAgent);
+    }
 
-	//meta! userInfo="Process messages defined in code", id="0"
-	public void processDefault(MessageForm message)
-	{
-		switch (message.code())
-		{
-		}
-	}
+    @Override
+    public void prepareReplication() {
+        super.prepareReplication();
+        // Setup component for the next replication
+    }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.start:
-			processStart(message);
-		break;
+    //meta! sender="AgentUcesov", id="29", type="Start"
+    public void processStart(MessageForm message) {
+        message.setCode(Mc.koniecObsluhyUcesy);
 
-		default:
-			processDefault(message);
-		break;
-		}
-	}
-	//meta! tag="end"
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
 
-	@Override
-	public AgentUcesov myAgent()
-	{
-		return (AgentUcesov)super.myAgent();
-	}
+        double percentage = randPercentageTypUcesu.nextDouble();
+        double holdTime;
+        if (percentage < 0.4) {
+            holdTime = randUcesJednoduchy.nextValue();
+        } else if (percentage < 0.8) {
+            holdTime = randUcesZlozity.nextValue();
+        } else {
+            holdTime = randUcesSvadobny.nextValue();
+        }
+        holdTime *= 60;
+
+        zakaznik.setStavZakaznika(StavZakaznika.UCES);
+        zakaznik.setCasZaciatkuObsluhy(1, mySim().currentTime());
+
+        hold(holdTime, message);
+    }
+
+    //meta! userInfo="Process messages defined in code", id="0"
+    public void processDefault(MessageForm message) {
+        switch (message.code()) {
+            case Mc.koniecObsluhyUcesy:
+                assistantFinished(message);
+                break;
+        }
+    }
+
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    @Override
+    public void processMessage(MessageForm message) {
+        switch (message.code()) {
+            case Mc.start:
+                processStart(message);
+                break;
+
+            default:
+                processDefault(message);
+                break;
+        }
+    }
+    //meta! tag="end"
+
+    @Override
+    public AgentUcesov myAgent() {
+        return (AgentUcesov) super.myAgent();
+    }
 
 }
