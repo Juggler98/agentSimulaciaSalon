@@ -6,6 +6,7 @@ import OSPABA.MessageForm;
 import OSPABA.Simulation;
 import agents.AgentPracovnika;
 import entities.pracovnik.Pracovnik;
+import entities.pracovnik.TypPracovnika;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.Config;
@@ -71,8 +72,14 @@ public abstract class ManagerPracovnika extends Manager {
         pracovnik.setVyuzitie(pracovnik.getOdpracovanyCas() / mySim().currentTime());
         agent.uvolniZamestnanca(pracovnik);
 
+        obsluzDalsieho(message);
+    }
+
+    protected void obsluzDalsieho(MessageForm message) {
+        AgentPracovnika agent = (AgentPracovnika) myAgent();
         // Ak je niekto v rade a je volny pracovnik spusti obsluhu dalsieho zakaznika
-        if (!agent.isRadEmpty() && agent.jeNiektoVolny()) {
+        MySimulation mySimulation = ((MySimulation) mySim());
+        if (!agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + mySimulation.getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
             Zakaznik novyZakaznik = agent.vyberZRadu();
             Pracovnik novyPracovnik = agent.obsadZamestnanca();
 
@@ -99,14 +106,12 @@ public abstract class ManagerPracovnika extends Manager {
             }
 
             if (mySim().currentTime() <= Config.endTime) {
-                ((MySimulation) mySim()).addDlzkaRadu(radIndex, (agent.getRadSize() + 1) * (mySim().currentTime() - agent.getLastRadChange()));
+                mySimulation.addDlzkaRadu(radIndex, (agent.getRadSize() + 1) * (mySim().currentTime() - agent.getLastRadChange()));
                 agent.setLastRadChange(mySim().currentTime());
             }
 
             msgCopy.setAddressee(agent.getProces());
             startContinualAssistant(msgCopy);
-        } else {
-
         }
     }
 

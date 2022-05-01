@@ -4,6 +4,7 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
+import sun.plugin2.message.Message;
 
 //meta! id="1"
 public class ManagerModelu extends Manager {
@@ -34,6 +35,11 @@ public class ManagerModelu extends Manager {
         switch (message.code()) {
             case Mc.init:
                 message.setAddressee(mySim().findAgent(Id.agentOkolia));
+                notice(message);
+                break;
+
+            case Mc.zatvorenie:
+                MyMessage msgCopy = new MyMessage((MyMessage) message);
                 notice(message);
                 break;
         }

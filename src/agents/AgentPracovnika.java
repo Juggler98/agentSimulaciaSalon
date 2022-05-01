@@ -56,6 +56,10 @@ public abstract class AgentPracovnika extends Agent {
         return !volnyZamestnanci.isEmpty();
     }
 
+    public boolean niktoNepracuje() {
+        return  volnyZamestnanci.size() == zamestnanci.length;
+    }
+
     public Pracovnik getZamestnanec(int i) {
         return zamestnanci[i];
     }
@@ -78,6 +82,12 @@ public abstract class AgentPracovnika extends Agent {
 
     public boolean isRadEmpty() {
         return rad.isEmpty();
+    }
+
+    public boolean ideNiektoPlatit() {
+        if (rad.isEmpty())
+            return false;
+        return rad.peek().isObsluzeny();
     }
 
     public TypPracovnika getTypPracovnika() {

@@ -10,6 +10,7 @@ public class AgentModelu extends Agent {
         super(id, mySim, parent);
         init();
         addOwnMessage(Mc.init);
+        addOwnMessage(Mc.zatvorenie);
     }
 
     @Override

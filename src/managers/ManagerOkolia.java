@@ -23,63 +23,65 @@ public class ManagerOkolia extends Manager {
         }
     }
 
-	//meta! sender="AgentModelu", id="4", type="Notice"
-	public void processInit(MessageForm message) {
+    //meta! sender="AgentModelu", id="4", type="Notice"
+    public void processInit(MessageForm message) {
         message.setAddressee(myAgent().findAssistant(Id.planovacPrichodyZakaznika));
         startContinualAssistant(message);
     }
 
-	//meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
-	public void processFinish(MessageForm message) {
+    //meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
+    public void processFinish(MessageForm message) {
         message.setCode(Mc.prichodZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentModelu));
         notice(message);
     }
 
-	//meta! sender="AgentModelu", id="6", type="Notice"
-	public void processOdchodZakaznika(MessageForm message) {
+    //meta! sender="AgentModelu", id="6", type="Notice"
+    public void processOdchodZakaznika(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         zakaznik.setCasOdchodu(mySim().currentTime());
         zakaznik.setStavZakaznika(StavZakaznika.ODCHOD);
         ((MySimulation) mySim()).addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
         ((MySimulation) mySim()).addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
         ((MySimulation) mySim()).getStatsVykonov()[9]++;
+
+        // Ak je po zaverecnej a vsetci su obsluzeny zastavuje replikaciu
+        if (mySim().currentTime() > Config.endTime && ((MySimulation) mySim()).getStatsVykonov()[8] == ((MySimulation) mySim()).getStatsVykonov()[9]) {
+            mySim().stopReplication();
+        }
     }
 
-	//meta! userInfo="Process messages defined in code", id="0"
-	public void processDefault(MessageForm message) {
+    //meta! userInfo="Process messages defined in code", id="0"
+    public void processDefault(MessageForm message) {
         switch (message.code()) {
         }
     }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	public void init()
-	{
-	}
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    public void init() {
+    }
 
-	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.odchodZakaznika:
-			processOdchodZakaznika(message);
-		break;
+    @Override
+    public void processMessage(MessageForm message) {
+        switch (message.code()) {
+            case Mc.odchodZakaznika:
+                processOdchodZakaznika(message);
+                break;
 
-		case Mc.init:
-			processInit(message);
-		break;
+            case Mc.init:
+                processInit(message);
+                break;
 
-		case Mc.finish:
-			processFinish(message);
-		break;
+            case Mc.finish:
+                processFinish(message);
+                break;
 
-		default:
-			processDefault(message);
-		break;
-		}
-	}
-	//meta! tag="end"
+            default:
+                processDefault(message);
+                break;
+        }
+    }
+    //meta! tag="end"
 
     @Override
     public AgentOkolia myAgent() {

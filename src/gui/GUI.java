@@ -74,8 +74,8 @@ public class GUI extends JFrame implements ISimDelegate {
             zamestnanciField[i] = new JTextField();
         }
 
-        int[] spinnerValues = {1000 * 1000, 500 * 1000, 250 * 1000, 100 * 1000, 50 * 1000, 25 * 1000, 10 * 1000, 5 * 1000, 2 * 1000, 1000, 1000 / 2, 1000 / 5, 1000 / 10, 1000 / 25, 1000 / 50, 1000 / 100, 1000 / 250, 1000 / 500, 1, 0};
-        String[] spinnerData = {"x1/1000", "x1/500", "x1/250", "x1/100", "x1/50", "x1/25", "x1/10", "x1/5", "x1/2", "x1", "x2", "x5", "x10", "x25", "x50", "x100", "x250", "x500", "x1000", "Virtual"};
+        int[] spinnerValues = {1000, 1000 / 2, 1000 / 5, 1000 / 10, 1000 / 25, 1000 / 50, 1000 / 100, 1000 / 250, 1000 / 500, 1, -1, 0};
+        String[] spinnerData = {"x1", "x2", "x5", "x10", "x25", "x50", "x100", "x250", "x500", "x1000", "x2000", "Virtual"};
         SpinnerListModel spinnerListModel = new SpinnerListModel(spinnerData);
         JSpinner spinner = new JSpinner(spinnerListModel);
         spinner.setValue("x100");
@@ -176,8 +176,21 @@ public class GUI extends JFrame implements ISimDelegate {
                 Config.pocetKozmeticiek = kozmeticky;
                 Config.pocetKadernicok = kadernicky;
                 salonSimulation = new MySimulation();
-
                 salonSimulation.registerDelegate(this);
+
+                String valueStr = (String) spinner.getValue();
+                int value = 100;
+                for (int i = 0; i < spinnerData.length; i++) {
+                    if (spinnerData[i].equals(valueStr)) {
+                        value = spinnerValues[i];
+                        break;
+                    }
+                }
+                int sleepTime = value;
+                if (salonSimulation != null) {
+                    //TODO: done
+                    setSleepTime(sleepTime);
+                }
 
                 Object[][] tableData2 = new Object[salonSimulation.getStatsNames().length][2];
                 for (int i = 0; i < salonSimulation.getStatsNames().length; i++) {
@@ -187,13 +200,24 @@ public class GUI extends JFrame implements ISimDelegate {
                 tables[3].getColumnModel().getColumn(0).setPreferredWidth(buttonWidth * 2);
                 tables[3].getColumnModel().getColumn(2).setPreferredWidth(buttonWidth * 2 - 20);
 
-                //salonSimulation.stopSimulation(sleepTime); //TODO:
-
                 SimulationThread simulationThread = new SimulationThread();
                 simulationThread.start();
 
+                replicationLabel.setText(salonSimulation.currentReplication() + 1 + "");
+
                 salonSimulation.onSimulationWillStart(s -> {
-                    System.out.println("start");
+                });
+
+                salonSimulation.onReplicationWillStart(s -> {
+                    replicationLabel.setText(salonSimulation.currentReplication() + 1 + "");
+                });
+
+                salonSimulation.onReplicationDidFinish(s -> {
+                    setSleepTime(this.sleepTime);
+                });
+
+                salonSimulation.onSimulationDidFinish(s -> {
+                    this.refresh(salonSimulation);
                 });
 
                 stop.setEnabled(true);
@@ -215,11 +239,11 @@ public class GUI extends JFrame implements ISimDelegate {
         pause.addActionListener(e -> {
             if (salonSimulation != null) {
                 if (salonSimulation.isPaused()) {
-                    salonSimulation.pauseSimulation();
+                    salonSimulation.resumeSimulation();
                     pause.setText("Pause");
                     pause.setSize(buttonWidth, buttonHeight);
                 } else {
-                    salonSimulation.resumeSimulation();
+                    salonSimulation.pauseSimulation();
                     pause.setText("Continue");
                     pause.setSize(buttonWidth + 12, buttonHeight);
                 }
@@ -247,9 +271,10 @@ public class GUI extends JFrame implements ISimDelegate {
                     break;
                 }
             }
-            sleepTime = value;
+            int sleepTime = value;
             if (salonSimulation != null) {
-                //salonSimulation.pauseSimulation(sleepTime); //TODO:
+                //TODO: done
+                setSleepTime(sleepTime);
             }
         });
 
@@ -300,6 +325,17 @@ public class GUI extends JFrame implements ISimDelegate {
 
         this.setVisible(true);
 
+    }
+
+    private void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
+        if (sleepTime == 0) {
+            salonSimulation.setMaxSimSpeed();
+        } else if (sleepTime == -1) {
+            salonSimulation.setSimSpeed(1, 1 / 2000.0);
+        } else {
+            salonSimulation.setSimSpeed(1, sleepTime / 1000.0);
+        }
     }
 
 
@@ -377,106 +413,114 @@ public class GUI extends JFrame implements ISimDelegate {
 
     @Override
     public void simStateChanged(Simulation simulation, SimState simState) {
+        switch (simState) {
+            case running:
+                break;
 
+            case replicationRunning:
+                // noop
+                break;
+
+            case replicationStopped:
+                // noop
+                break;
+
+            case stopped:
+                this.stop();
+                break;
+        }
     }
 
     @Override
     public void refresh(Simulation simulation) {
         MySimulation salonSimulation = (MySimulation) simulation;
-        System.out.println("refresh");
-        if (!salonSimulation.isRunning()) {
-            this.stop();
-        } else {
-            replicationLabel.setText(salonSimulation.currentReplication() + 1 + "");
+
+        resultLabel.setText(getTime((int) simulation.currentTime(), 9));
+        if (salonSimulation.currentReplication() > 30) {
+            double s = Math.sqrt((1.0 / (salonSimulation.currentReplication() - 1) * salonSimulation.getxI()[0]) - (1.0 / (salonSimulation.currentReplication() - 1) * salonSimulation.getxI()[1]));
+            double start = salonSimulation.getxI()[1] / salonSimulation.currentReplication() - s * 1.645 / Math.sqrt(salonSimulation.currentReplication());
+            double end = salonSimulation.getxI()[1] / salonSimulation.currentReplication() + s * 1.645 / Math.sqrt(salonSimulation.currentReplication());
+            intervalSpolahlivostiLabel.setText(String.format("<%s, %s>", getTime((int) start, 0), getTime((int) end, 0)));
         }
 
-        if (!salonSimulation.isPaused()  || !salonSimulation.isRunning()) { //TODO
-            resultLabel.setText(getTime((int) simulation.currentTime(), 9));
-            if (salonSimulation.currentReplication() > 30) {
-                double s = Math.sqrt((1.0 / (salonSimulation.currentReplication() - 1) * salonSimulation.getxI()[0]) - (1.0 / (salonSimulation.currentReplication() - 1) * salonSimulation.getxI()[1]));
-                double start = salonSimulation.getxI()[1] / salonSimulation.currentReplication() - s * 1.645 / Math.sqrt(salonSimulation.currentReplication());
-                double end = salonSimulation.getxI()[1] / salonSimulation.currentReplication() + s * 1.645 / Math.sqrt(salonSimulation.currentReplication());
-                intervalSpolahlivostiLabel.setText(String.format("<%s, %s>", getTime((int) start, 0), getTime((int) end, 0)));
-            }
 
+        tables[0].getModel().setValueAt(salonSimulation.agentRecepcie().getRadSize(), 0, 1);
+        tables[0].getModel().setValueAt(salonSimulation.agentUcesov().getRadSize(), 1, 1);
+        tables[0].getModel().setValueAt(salonSimulation.agentLicenia().getRadSize(), 2, 1);
 
-            tables[0].getModel().setValueAt(salonSimulation.agentRecepcie().getRadSize(), 0, 1);
-            tables[0].getModel().setValueAt(salonSimulation.agentUcesov().getRadSize(), 1, 1);
-            tables[0].getModel().setValueAt(salonSimulation.agentLicenia().getRadSize(), 2, 1);
-
-            for (int i = 0; i < 3; i++) {
-                AgentPracovnika pracovisko;
-                if (i == 0)
-                    pracovisko = salonSimulation.agentRecepcie();
-                else if (i == 1)
-                    pracovisko = salonSimulation.agentUcesov();
-                else
-                    pracovisko = salonSimulation.agentLicenia();
-                if (pracovisko.getLastRadChange() != 0)
-                    tables[0].getModel().setValueAt(salonSimulation.getDlzkyRadov()[i] / pracovisko.getLastRadChange(), i, 2);
-                else
-                    tables[0].getModel().setValueAt(0.0, i, 2);
-                tables[0].getModel().setValueAt(salonSimulation.getCelkoveDlzkyRadov()[i] / salonSimulation.currentReplication(), i, 3);
-            }
-
-            for (int i = 0; i < salonSimulation.getZamestnanci().size(); i++) {
-                Pracovnik zamestnanec = salonSimulation.getZamestnanci().get(i);
-                tables[1].getModel().setValueAt(zamestnanec.isObsluhuje() ? "X" : "", i, 1);
-                tables[1].getModel().setValueAt(zamestnanec.isObsluhuje() ? zamestnanec.getObsluhujeZakaznika() : "", i, 2);
-                tables[1].getModel().setValueAt(getTime((int) zamestnanec.getOdpracovanyCas(), 0), i, 3);
-                tables[1].getModel().setValueAt(Math.round(zamestnanec.getVyuzitie() * 100 * 100) / 100.0, i, 4);
-            }
-
-            if (salonSimulation.getZakaznici().size() <= 1 && pocetZakaznikov > 1) {
-                tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas"}));
-                pocetZakaznikov = 0;
-            }
-
-            for (int i = 0; i < salonSimulation.getZakaznici().size(); i++) {
-                Zakaznik zakaznikSalonu = salonSimulation.getZakaznici().get(i);
-                if (pocetZakaznikov < salonSimulation.getZakaznici().size()) {
-                    for (int j = pocetZakaznikov; j < salonSimulation.getZakaznici().size(); j++) {
-                        DefaultTableModel model = (DefaultTableModel) tables[2].getModel();
-                        model.addRow(new Object[]{"Zákazník č. " + ++pocetZakaznikov});
-                    }
-
-                }
-                tables[2].getModel().setValueAt(zakaznikSalonu.getStavZakaznika(), i, 1);
-
-                if (zakaznikSalonu.getCasPrichodu() > 0) {
-                    tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasPrichodu(), 9), i, 2);
-                }
-
-                if (zakaznikSalonu.getCasOdchodu() > 0) {
-                    tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasOdchodu(), 9), i, 8);
-                    tables[2].getModel().setValueAt(getTime((int) (zakaznikSalonu.getCasOdchodu() - zakaznikSalonu.getCasPrichodu()), 0), i, 9);
-                }
-
-                tables[2].getModel().setValueAt(zakaznikSalonu.getStavZakaznika(), i, 1);
-
-                for (int j = 0; j < 5; j++) {
-                    if (zakaznikSalonu.getCasZaciatkuObsluhy(j) > 0) {
-                        tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasZaciatkuObsluhy(j), 9), i, 3 + j);
-                    }
-                }
-            }
-
-            for (int i = 0; i < salonSimulation.getStatsNames().length - 4; i++) {
-                tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[i], i, 1);
-                tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[i] / salonSimulation.currentReplication(), i, 2);
-            }
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[1] / salonSimulation.getStatsVykonov()[9]), 0), 10, 1);
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[1] / salonSimulation.currentReplication()), 0), 10, 2);
-
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[0] / salonSimulation.getStatsVykonov()[9]), 0), 11, 1);
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[0] / salonSimulation.currentReplication()), 0), 11, 2);
-
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[2] / (salonSimulation.getStatsVykonov()[0] + salonSimulation.getStatsVykonov()[4])), 0), 12, 1);
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[2] / salonSimulation.currentReplication()), 0), 12, 2);
-
-            tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / salonSimulation.currentReplication()), 0), 13, 2);
-
+        for (int i = 0; i < 3; i++) {
+            AgentPracovnika pracovisko;
+            if (i == 0)
+                pracovisko = salonSimulation.agentRecepcie();
+            else if (i == 1)
+                pracovisko = salonSimulation.agentUcesov();
+            else
+                pracovisko = salonSimulation.agentLicenia();
+            if (pracovisko.getLastRadChange() != 0)
+                tables[0].getModel().setValueAt(salonSimulation.getDlzkyRadov()[i] / pracovisko.getLastRadChange(), i, 2);
+            else
+                tables[0].getModel().setValueAt(0.0, i, 2);
+            tables[0].getModel().setValueAt(salonSimulation.getCelkoveDlzkyRadov()[i] / salonSimulation.currentReplication(), i, 3);
         }
+
+        for (int i = 0; i < salonSimulation.getZamestnanci().size(); i++) {
+            Pracovnik zamestnanec = salonSimulation.getZamestnanci().get(i);
+            tables[1].getModel().setValueAt(zamestnanec.isObsluhuje() ? "X" : "", i, 1);
+            tables[1].getModel().setValueAt(zamestnanec.isObsluhuje() ? zamestnanec.getObsluhujeZakaznika() : "", i, 2);
+            tables[1].getModel().setValueAt(getTime((int) zamestnanec.getOdpracovanyCas(), 0), i, 3);
+            tables[1].getModel().setValueAt(Math.round(zamestnanec.getVyuzitie() * 100 * 100) / 100.0, i, 4);
+        }
+
+        if (salonSimulation.getZakaznici().size() <= 1 && pocetZakaznikov > 1) {
+            tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas"}));
+            pocetZakaznikov = 0;
+        }
+
+        for (int i = 0; i < salonSimulation.getZakaznici().size(); i++) {
+            Zakaznik zakaznikSalonu = salonSimulation.getZakaznici().get(i);
+            if (pocetZakaznikov < salonSimulation.getZakaznici().size()) {
+                for (int j = pocetZakaznikov; j < salonSimulation.getZakaznici().size(); j++) {
+                    DefaultTableModel model = (DefaultTableModel) tables[2].getModel();
+                    model.addRow(new Object[]{"Zákazník č. " + ++pocetZakaznikov});
+                }
+
+            }
+            tables[2].getModel().setValueAt(zakaznikSalonu.getStavZakaznika(), i, 1);
+
+            if (zakaznikSalonu.getCasPrichodu() > 0) {
+                tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasPrichodu(), 9), i, 2);
+            }
+
+            if (zakaznikSalonu.getCasOdchodu() > 0) {
+                tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasOdchodu(), 9), i, 8);
+                tables[2].getModel().setValueAt(getTime((int) (zakaznikSalonu.getCasOdchodu() - zakaznikSalonu.getCasPrichodu()), 0), i, 9);
+            }
+
+            tables[2].getModel().setValueAt(zakaznikSalonu.getStavZakaznika(), i, 1);
+
+            for (int j = 0; j < 5; j++) {
+                if (zakaznikSalonu.getCasZaciatkuObsluhy(j) > 0) {
+                    tables[2].getModel().setValueAt(getTime((int) zakaznikSalonu.getCasZaciatkuObsluhy(j), 9), i, 3 + j);
+                }
+            }
+        }
+
+        for (int i = 0; i < salonSimulation.getStatsNames().length - 4; i++) {
+            tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[i], i, 1);
+            tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[i] / salonSimulation.currentReplication(), i, 2);
+        }
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[1] / salonSimulation.getStatsVykonov()[9]), 0), 10, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[1] / salonSimulation.currentReplication()), 0), 10, 2);
+
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[0] / salonSimulation.getStatsVykonov()[9]), 0), 11, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[0] / salonSimulation.currentReplication()), 0), 11, 2);
+
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[2] / (salonSimulation.getStatsVykonov()[0] + salonSimulation.getStatsVykonov()[4])), 0), 12, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[2] / salonSimulation.currentReplication()), 0), 12, 2);
+
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / salonSimulation.currentReplication()), 0), 13, 2);
+
+//        }
     }
 
     private class SimulationThread extends Thread {

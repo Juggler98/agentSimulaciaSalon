@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
-    private static int pocetZakaznikov = 0;
+    public static int pocetZakaznikov = 0;
 
     private final double casPrichodu;
     private double casOdchodu;

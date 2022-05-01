@@ -47,6 +47,8 @@ public class MySimulation extends Simulation {
         agentUcesov().inicializuj(Config.pocetKadernicok);
         agentLicenia().inicializuj(Config.pocetKozmeticiek);
 
+        Zakaznik.pocetZakaznikov = 0;
+
         Arrays.fill(statsVykonov, 0);
         Arrays.fill(casy, 0);
         Arrays.fill(dlzkyRadov, 0);
@@ -68,9 +70,6 @@ public class MySimulation extends Simulation {
         }
 
         agentModelu().spustiSimulaciu();
-
-        //zakaznici.add(zakaznikSalonu);
-        //zakaznikSalonu.setStavZakaznika(StavZakaznika.PRICHOD);
     }
 
     @Override
@@ -174,6 +173,10 @@ public class MySimulation extends Simulation {
         _agentLicenia = agentLicenia;
     }
     //meta! tag="end"
+
+    public int getDlzkaRaduUcesyLicenie() {
+        return agentLicenia().getRadSize() + agentUcesov().getRadSize();
+    }
 
     public int getPocetObsluhovanychRecepcia() {
         return pocetObsluhovanychRecepcia;

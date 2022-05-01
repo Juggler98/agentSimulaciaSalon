@@ -19,4 +19,5 @@ public class Mc extends IdList
 	public static final int koniecObsluhyRecepcia = 2;
 	public static final int koniecObsluhyUcesy = 3;
 	public static final int koniecObsluhyLicenie = 4;
+	public static final int zatvorenie = 5;
 }
