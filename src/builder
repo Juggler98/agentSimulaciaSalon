@@ -2,27 +2,28 @@
 <ABAsim>
   <Agents>
     <Agent>
-      <SimId>5</SimId>
-      <InternalId>10</InternalId>
-      <Name>AgentLicenia</Name>
-      <Bounds>2191,934,180,180</Bounds>
-      <Reasoner>ManagerLicenia</Reasoner>
+      <SimId>1</SimId>
+      <InternalId>1</InternalId>
+      <Name>AgentModelu</Name>
+      <Bounds>1259,187,180,180</Bounds>
+      <Reasoner>ManagerModelu</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
-      <Components>
-        <Process>
-          <SimId>1004</SimId>
-          <InternalId>31</InternalId>
-          <Name>ProcesObsluhyLicenie</Name>
-          <Bounds>25,61,35,18</Bounds>
-        </Process>
-      </Components>
+    </Agent>
+    <Agent>
+      <SimId>7</SimId>
+      <InternalId>36</InternalId>
+      <Name>AgentSalonu</Name>
+      <Bounds>1494,522,180,180</Bounds>
+      <Reasoner>ManagerSalonu</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
     </Agent>
     <Agent>
       <SimId>4</SimId>
       <InternalId>9</InternalId>
       <Name>AgentUcesov</Name>
-      <Bounds>1836,1052,180,180</Bounds>
+      <Bounds>1488,1142,180,180</Bounds>
       <Reasoner>ManagerUcesov</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -36,27 +37,10 @@
       </Components>
     </Agent>
     <Agent>
-      <SimId>3</SimId>
-      <InternalId>8</InternalId>
-      <Name>AgentRecepcie</Name>
-      <Bounds>1464,1063,180,180</Bounds>
-      <Reasoner>ManagerRecepcie</Reasoner>
-      <ReasonerBounds>74,25,32,25</ReasonerBounds>
-      <UsePetriNet>false</UsePetriNet>
-      <Components>
-        <Process>
-          <SimId>1002</SimId>
-          <InternalId>25</InternalId>
-          <Name>ProcesObsluhyRecepcia</Name>
-          <Bounds>32,66,35,18</Bounds>
-        </Process>
-      </Components>
-    </Agent>
-    <Agent>
       <SimId>2</SimId>
       <InternalId>2</InternalId>
       <Name>AgentOkolia</Name>
-      <Bounds>683,832,180,180</Bounds>
+      <Bounds>582,852,180,180</Bounds>
       <Reasoner>ManagerOkolia</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -70,12 +54,38 @@
       </Components>
     </Agent>
     <Agent>
-      <SimId>1</SimId>
-      <InternalId>1</InternalId>
-      <Name>AgentModelu</Name>
-      <Bounds>1638,404,180,180</Bounds>
-      <Reasoner>ManagerModelu</Reasoner>
+      <SimId>3</SimId>
+      <InternalId>8</InternalId>
+      <Name>AgentRecepcie</Name>
+      <Bounds>1100,1076,180,180</Bounds>
+      <Reasoner>ManagerRecepcie</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
+      <Components>
+        <Process>
+          <SimId>1002</SimId>
+          <InternalId>25</InternalId>
+          <Name>ProcesObsluhyRecepcia</Name>
+          <Bounds>32,66,35,18</Bounds>
+        </Process>
+      </Components>
+    </Agent>
+    <Agent>
+      <SimId>5</SimId>
+      <InternalId>10</InternalId>
+      <Name>AgentLicenia</Name>
+      <Bounds>1855,1094,180,180</Bounds>
+      <Reasoner>ManagerLicenia</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
+      <Components>
+        <Process>
+          <SimId>1004</SimId>
+          <InternalId>31</InternalId>
+          <Name>ProcesObsluhyLicenie</Name>
+          <Bounds>25,61,35,18</Bounds>
+        </Process>
+      </Components>
     </Agent>
   </Agents>
   <Messages>
@@ -108,6 +118,14 @@
       <Destination>1</Destination>
     </Message>
     <Message>
+      <SimId>1007</SimId>
+      <InternalId>37</InternalId>
+      <Name>obsluhaZakaznika</Name>
+      <Type>RequestResponse</Type>
+      <Source>1</Source>
+      <Destination>36</Destination>
+    </Message>
+    <Message>
       <SimId>1003</SimId>
       <InternalId>6</InternalId>
       <Name>odchodZakaznika</Name>
@@ -116,29 +134,35 @@
       <Destination>2</Destination>
     </Message>
     <Message>
+      <InternalId>38</InternalId>
+      <Type>Parent</Type>
+      <Source>36</Source>
+      <Destination>1</Destination>
+    </Message>
+    <Message>
       <InternalId>11</InternalId>
       <Type>Parent</Type>
       <Source>8</Source>
-      <Destination>1</Destination>
+      <Destination>36</Destination>
     </Message>
     <Message>
       <InternalId>12</InternalId>
       <Type>Parent</Type>
       <Source>9</Source>
-      <Destination>1</Destination>
+      <Destination>36</Destination>
     </Message>
     <Message>
       <InternalId>14</InternalId>
       <Type>Parent</Type>
       <Source>10</Source>
-      <Destination>1</Destination>
+      <Destination>36</Destination>
     </Message>
     <Message>
       <SimId>1004</SimId>
       <InternalId>17</InternalId>
       <Name>obsluhaRecepia</Name>
       <Type>RequestResponse</Type>
-      <Source>1</Source>
+      <Source>36</Source>
       <Destination>8</Destination>
     </Message>
     <Message>
@@ -146,7 +170,7 @@
       <InternalId>18</InternalId>
       <Name>obsluhaUcesy</Name>
       <Type>RequestResponse</Type>
-      <Source>1</Source>
+      <Source>36</Source>
       <Destination>9</Destination>
     </Message>
     <Message>
@@ -154,7 +178,7 @@
       <InternalId>19</InternalId>
       <Name>obsluhaLicenie</Name>
       <Type>RequestResponse</Type>
-      <Source>1</Source>
+      <Source>36</Source>
       <Destination>10</Destination>
     </Message>
     <Message>
@@ -176,5 +200,5 @@
       <Destination>28</Destination>
     </Message>
   </Messages>
-  <IID>34</IID>
+  <IID>46</IID>
 </ABAsim>

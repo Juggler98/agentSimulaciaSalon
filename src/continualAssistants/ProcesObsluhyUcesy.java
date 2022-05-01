@@ -33,8 +33,8 @@ public class ProcesObsluhyUcesy extends Process {
         // Setup component for the next replication
     }
 
-    //meta! sender="AgentUcesov", id="29", type="Start"
-    public void processStart(MessageForm message) {
+	//meta! sender="AgentUcesov", id="29", type="Start"
+	public void processStart(MessageForm message) {
         message.setCode(Mc.koniecObsluhyUcesy);
 
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
@@ -52,12 +52,13 @@ public class ProcesObsluhyUcesy extends Process {
 
         zakaznik.setStavZakaznika(StavZakaznika.UCES);
         zakaznik.setCasZaciatkuObsluhy(1, mySim().currentTime());
+        ((MySimulation) mySim()).addCas(2, holdTime);
 
         hold(holdTime, message);
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
             case Mc.koniecObsluhyUcesy:
                 assistantFinished(message);
@@ -65,20 +66,22 @@ public class ProcesObsluhyUcesy extends Process {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.start:
-                processStart(message);
-                break;
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.start:
+			processStart(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentUcesov myAgent() {

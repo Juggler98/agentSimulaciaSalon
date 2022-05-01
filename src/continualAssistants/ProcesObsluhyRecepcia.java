@@ -1,6 +1,7 @@
 package continualAssistants;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import myGenerators.RandUniformContinuous;
 import simulation.*;
@@ -33,8 +34,16 @@ public class ProcesObsluhyRecepcia extends Process {
         double holdTime;
         if (zakaznik.isObsluzeny()) {
             holdTime = randPlatba.nextValue();
+            zakaznik.setCasZaciatkuObsluhy(4, mySim().currentTime());
+            zakaznik.setStavZakaznika(StavZakaznika.PLATBA);
         } else {
             holdTime = randObjednavka.nextValue();
+            ((MySimulation) mySim()).incPocetObsluhovanychRecepcia(1);
+            ((MySimulation) mySim()).getStatsVykonov()[8]++;
+
+            zakaznik.setCasZaciatkuObsluhy(0, mySim().currentTime());
+            zakaznik.setStavZakaznika(StavZakaznika.OBJEDNAVKA);
+            ((MySimulation) mySim()).addCas(1, mySim().currentTime() - zakaznik.getCasPrichodu());
         }
         hold(holdTime, message);
     }

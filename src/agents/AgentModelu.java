@@ -3,15 +3,13 @@ package agents;
 import OSPABA.*;
 import simulation.*;
 import managers.*;
-import continualAssistants.*;
-import instantAssistants.*;
 
 //meta! id="1"
 public class AgentModelu extends Agent {
     public AgentModelu(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
-        addOwnMessage(Mc.init);
         init();
+        addOwnMessage(Mc.init);
     }
 
     @Override

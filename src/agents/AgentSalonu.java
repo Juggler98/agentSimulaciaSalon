@@ -3,8 +3,6 @@ package agents;
 import OSPABA.*;
 import simulation.*;
 import managers.*;
-import continualAssistants.*;
-import instantAssistants.*;
 
 //meta! id="36"
 public class AgentSalonu extends Agent

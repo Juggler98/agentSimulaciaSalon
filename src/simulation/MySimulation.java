@@ -2,10 +2,13 @@ package simulation;
 
 import OSPABA.*;
 import agents.*;
+import entities.pracovnik.Pracovnik;
+import entities.zakaznik.Zakaznik;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class SalonSimulation extends Simulation {
+public class MySimulation extends Simulation {
 
     private final int[] statsVykonov = new int[10];
     private final double[] statsAllVykonov = new double[10];
@@ -20,7 +23,12 @@ public class SalonSimulation extends Simulation {
     private final double[] xI = new double[2];
     private double xAvg = 0;
 
-    public SalonSimulation() {
+    private int pocetObsluhovanychRecepcia = 0;
+
+    private final ArrayList<Pracovnik> zamestnanci = new ArrayList<>();
+    private final ArrayList<Zakaznik> zakaznici = new ArrayList<>();
+
+    public MySimulation() {
         init();
     }
 
@@ -34,17 +42,65 @@ public class SalonSimulation extends Simulation {
     public void prepareReplication() {
         super.prepareReplication();
         // Reset entities, queues, local statistics, etc...
+
+        agentRecepcie().inicializuj(Config.pocetRecepcnych);
+        agentUcesov().inicializuj(Config.pocetKadernicok);
+        agentLicenia().inicializuj(Config.pocetKozmeticiek);
+
+        Arrays.fill(statsVykonov, 0);
+        Arrays.fill(casy, 0);
+        Arrays.fill(dlzkyRadov, 0);
+
+        xAvg = 0;
+
+        pocetObsluhovanychRecepcia = 0;
+
+        zamestnanci.clear();
+        zakaznici.clear();
+        for (int i = 0; i < Config.pocetRecepcnych; i++) {
+            zamestnanci.add(agentRecepcie().getZamestnanec(i));
+        }
+        for (int i = 0; i < Config.pocetKadernicok; i++) {
+            zamestnanci.add(agentUcesov().getZamestnanec(i));
+        }
+        for (int i = 0; i < Config.pocetKozmeticiek; i++) {
+            zamestnanci.add(agentLicenia().getZamestnanec(i));
+        }
+
+        agentModelu().spustiSimulaciu();
+
+        //zakaznici.add(zakaznikSalonu);
+        //zakaznikSalonu.setStavZakaznika(StavZakaznika.PRICHOD);
     }
 
     @Override
     public void replicationFinished() {
         // Collect local statistics into global, update UI, etc...
+        celkoveCasy[0] += casy[0] / statsVykonov[9];
+        celkoveCasy[1] += casy[1] / statsVykonov[9];
+        celkoveCasy[2] += casy[2] / (statsVykonov[0] + statsVykonov[4]);
+        celkoveCasy[3] += currentTime() - Config.endTime;
+
+        celkoveDlzkyRadov[0] += dlzkyRadov[0] / (Config.endTime + 1);
+        celkoveDlzkyRadov[1] += dlzkyRadov[1] / (Config.endTime + 1);
+        celkoveDlzkyRadov[2] += dlzkyRadov[2] / (Config.endTime + 1);
+
+        for (int i = 0; i < statsVykonov.length; i++) {
+            statsAllVykonov[i] += statsVykonov[i];
+        }
+
+        xI[0] += Math.pow(xAvg / statsVykonov[9], 2);
+        xI[1] += xAvg / statsVykonov[9];
+
         super.replicationFinished();
     }
 
     @Override
     public void simulationFinished() {
         // Dysplay simulation results
+        for (Pracovnik zamestnanec : zamestnanci) {
+            zamestnanec.setVyuzitie(zamestnanec.getOdpracovanyCas() / currentTime());
+        }
         super.simulationFinished();
     }
 
@@ -119,50 +175,63 @@ public class SalonSimulation extends Simulation {
     }
     //meta! tag="end"
 
+    public int getPocetObsluhovanychRecepcia() {
+        return pocetObsluhovanychRecepcia;
+    }
 
+    public void incPocetObsluhovanychRecepcia(int dlzka) {
+        this.pocetObsluhovanychRecepcia += dlzka;
+    }
 
-	public String[] getStatsNames() {
-		return statsNames;
-	}
+    public String[] getStatsNames() {
+        return statsNames;
+    }
 
-	public double[] getStatsAllVykonov() {
-		return statsAllVykonov;
-	}
+    public double[] getStatsAllVykonov() {
+        return statsAllVykonov;
+    }
 
-	public int[] getStatsVykonov() {
-		return statsVykonov;
-	}
+    public int[] getStatsVykonov() {
+        return statsVykonov;
+    }
 
-	public void addCas(int index, double cas) {
-		casy[index] += cas;
-	}
+    public void addCas(int index, double cas) {
+        casy[index] += cas;
+    }
 
-	public void addDlzkaRadu(int index, double dlzkaRadu) {
-		dlzkyRadov[index] += dlzkaRadu;
-	}
+    public void addDlzkaRadu(int index, double dlzkaRadu) {
+        dlzkyRadov[index] += dlzkaRadu;
+    }
 
-	public double[] getDlzkyRadov() {
-		return dlzkyRadov;
-	}
+    public double[] getDlzkyRadov() {
+        return dlzkyRadov;
+    }
 
-	public double[] getCelkoveDlzkyRadov() {
-		return celkoveDlzkyRadov;
-	}
+    public double[] getCelkoveDlzkyRadov() {
+        return celkoveDlzkyRadov;
+    }
 
-	public double[] getCasy() {
-		return casy;
-	}
+    public double[] getCasy() {
+        return casy;
+    }
 
-	public double[] getCelkoveCasy() {
-		return celkoveCasy;
-	}
+    public double[] getCelkoveCasy() {
+        return celkoveCasy;
+    }
 
-	public double[] getxI() {
-		return xI;
-	}
+    public double[] getxI() {
+        return xI;
+    }
 
-	public void addXAvg(double xAvg) {
-		this.xAvg += xAvg;
-	}
+    public void addXAvg(double xAvg) {
+        this.xAvg += xAvg;
+    }
 
+    public ArrayList<Pracovnik> getZamestnanci() {
+        return zamestnanci;
+    }
+
+    public ArrayList<Zakaznik> getZakaznici() {
+        return zakaznici;
+    }
 }

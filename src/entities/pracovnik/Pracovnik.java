@@ -1,9 +1,9 @@
-package entities;
+package entities.pracovnik;
 
 import OSPABA.Entity;
 import OSPABA.Simulation;
 
-public class Zamestnanec extends Entity implements Comparable<Zamestnanec> {
+public class Pracovnik extends Entity implements Comparable<Pracovnik> {
 
     private Double odpracovanyCas = 0.0;
     private Double zaciatokObsluhy = 0.0;
@@ -11,11 +11,11 @@ public class Zamestnanec extends Entity implements Comparable<Zamestnanec> {
     private boolean obsluhuje = false;
     private int obsluhujeZakaznika = 0;
 
-    public Zamestnanec(Simulation mySim) {
+    public Pracovnik(Simulation mySim) {
         super(mySim);
     }
 
-    public Zamestnanec(int id, Simulation mySim) {
+    public Pracovnik(int id, Simulation mySim) {
         super(id, mySim);
     }
 
@@ -60,8 +60,18 @@ public class Zamestnanec extends Entity implements Comparable<Zamestnanec> {
     }
 
     @Override
-    public int compareTo(Zamestnanec o) {
+    public int compareTo(Pracovnik o) {
         return odpracovanyCas.compareTo(o.odpracovanyCas);
     }
 
+    @Override
+    public String toString() {
+        return "Pracovnik{" +
+                "odpracovanyCas=" + odpracovanyCas +
+                ", zaciatokObsluhy=" + zaciatokObsluhy +
+                ", vyuzitie=" + vyuzitie +
+                ", obsluhuje=" + obsluhuje +
+                ", obsluhujeZakaznika=" + obsluhujeZakaznika +
+                '}';
+    }
 }

@@ -4,10 +4,9 @@ import OSPABA.*;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
-import instantAssistants.*;
 
 //meta! id="9"
-public class ManagerUcesov extends Manager {
+public class ManagerUcesov extends ManagerPracovnika {
     public ManagerUcesov(int id, Simulation mySim, Agent myAgent) {
         super(id, mySim, myAgent);
         init();
@@ -25,12 +24,14 @@ public class ManagerUcesov extends Manager {
 
     //meta! sender="AgentSalonu", id="18", type="Request"
     public void processObsluhaUcesy(MessageForm message) {
-        message.setAddressee(myAgent().findAssistant(Id.procesObsluhyUcesy));
-        startContinualAssistant(message);
+        zacniObsluhu(message);
+//        message.setAddressee(myAgent().findAssistant(Id.procesObsluhyUcesy));
+//        startContinualAssistant(message);
     }
 
     //meta! sender="ProcesObsluhyUcesy", id="29", type="Finish"
     public void processFinish(MessageForm message) {
+        ukonciObsluhu(message);
         message.setCode(Mc.obsluhaUcesy);
         message.setAddressee(mySim().findAgent(Id.agentSalonu));
         response(message);

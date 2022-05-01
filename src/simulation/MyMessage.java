@@ -1,24 +1,24 @@
 package simulation;
 
 import OSPABA.*;
-import entities.Zamestnanec;
+import entities.pracovnik.Pracovnik;
 import entities.zakaznik.Zakaznik;
 
 public class MyMessage extends MessageForm {
 
     private Zakaznik zakaznik;
-    private Zamestnanec zamestnanec;
+    private Pracovnik pracovnik;
 
     public MyMessage(Simulation sim, Zakaznik zakaznik) {
         super(sim);
         this.zakaznik = zakaznik;
-        this.zamestnanec = null;
+        this.pracovnik = null;
     }
 
     public MyMessage(MyMessage original) {
         super(original);
         zakaznik = original.zakaznik;
-        zamestnanec = original.zamestnanec;
+        pracovnik = original.pracovnik;
         // copy() is called in superclass
     }
 
@@ -38,15 +38,15 @@ public class MyMessage extends MessageForm {
         return zakaznik;
     }
 
-    public Zamestnanec getZamestnanec() {
-        return zamestnanec;
+    public Pracovnik getZamestnanec() {
+        return pracovnik;
     }
 
     public void setZakaznik(Zakaznik zakaznik) {
         this.zakaznik = zakaznik;
     }
 
-    public void setZamestnanec(Zamestnanec zamestnanec) {
-        this.zamestnanec = zamestnanec;
+    public void setZamestnanec(Pracovnik pracovnik) {
+        this.pracovnik = pracovnik;
     }
 }

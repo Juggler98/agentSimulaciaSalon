@@ -7,8 +7,15 @@ import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
 
+import java.util.Random;
+
 //meta! id="36"
 public class ManagerSalonu extends Manager {
+
+    private static final Random seedGenerator = new Random();
+    private static final Random randPercentageTypZakaznika = new Random(seedGenerator.nextLong());
+    private static final Random randPercentageCiseniePleti = new Random(seedGenerator.nextLong());
+
     public ManagerSalonu(int id, Simulation mySim, Agent myAgent) {
         super(id, mySim, myAgent);
         init();
@@ -41,6 +48,26 @@ public class ManagerSalonu extends Manager {
             message.setAddressee(mySim().findAgent(Id.agentModelu));
             response(message);
         } else {
+            ((MySimulation) mySim()).incPocetObsluhovanychRecepcia(-1);
+            double percentage = randPercentageTypZakaznika.nextDouble();
+            if (percentage < 0.2) {
+                zakaznik.setTypZakaznika(TypZakaznika.UCES);
+                ((MySimulation) mySim()).getStatsVykonov()[0]++;
+            } else if (percentage < 0.35) {
+                ((MySimulation) mySim()).getStatsVykonov()[2]++;
+                zakaznik.setTypZakaznika(TypZakaznika.LICENIE);
+            } else {
+                ((MySimulation) mySim()).getStatsVykonov()[4]++;
+                zakaznik.setTypZakaznika(TypZakaznika.UCESAJLICENIE);
+            }
+            if (zakaznik.getTypZakaznika() == TypZakaznika.LICENIE || zakaznik.getTypZakaznika() == TypZakaznika.UCESAJLICENIE) {
+                double percentage2 = randPercentageCiseniePleti.nextDouble();
+                if (percentage2 < 0.35) {
+                    ((MySimulation) mySim()).getStatsVykonov()[6]++;
+                    zakaznik.setGoToHlbkoveLicenie(true);
+                    zakaznik.setHlbkoveLicenie(true);
+                }
+            }
             if (zakaznik.getTypZakaznika() == TypZakaznika.LICENIE) {
                 message.setCode(Mc.obsluhaLicenie);
                 message.setAddressee(mySim().findAgent(Id.agentLicenia));
@@ -56,10 +83,13 @@ public class ManagerSalonu extends Manager {
     public void processObsluhaUcesy(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
+
         if (zakaznik.getTypZakaznika() == TypZakaznika.UCESAJLICENIE) {
+            ((MySimulation) mySim()).getStatsVykonov()[5]++;
             message.setCode(Mc.obsluhaLicenie);
             message.setAddressee(mySim().findAgent(Id.agentLicenia));
         } else {
+            ((MySimulation) mySim()).getStatsVykonov()[1]++;
             zakaznik.setObsluzeny();
             message.setCode(Mc.obsluhaRecepia);
             message.setAddressee(mySim().findAgent(Id.agentRecepcie));
@@ -71,6 +101,12 @@ public class ManagerSalonu extends Manager {
     public void processObsluhaLicenie(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
+
+        if (zakaznik.getTypZakaznika() != TypZakaznika.UCESAJLICENIE && !zakaznik.isGoToHlbkoveLicenie()) {
+            ((MySimulation) mySim()).getStatsVykonov()[3]++;
+        }
+        if (zakaznik.isGoToHlbkoveLicenie())
+            ((MySimulation) mySim()).getStatsVykonov()[7]++;
         if (zakaznik.isGoToHlbkoveLicenie()) {
             message.setCode(Mc.obsluhaLicenie);
             message.setAddressee(mySim().findAgent(Id.agentLicenia));

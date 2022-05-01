@@ -4,7 +4,6 @@ import OSPABA.*;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
-import instantAssistants.*;
 
 //meta! id="2"
 public class AgentOkolia extends Agent {
@@ -14,6 +13,7 @@ public class AgentOkolia extends Agent {
     public AgentOkolia(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
         init();
+        addOwnMessage(Mc.novyZakaznik);
     }
 
     @Override

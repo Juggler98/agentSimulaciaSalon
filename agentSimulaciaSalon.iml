@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="ABACore" level="project" />
+    <orderEntry type="library" name="jfreechart-demo-1.5.2-jar-with-dependencies" level="project" />
   </component>
 </module>

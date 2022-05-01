@@ -3,11 +3,9 @@ package managers;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
-import continualAssistants.*;
-import instantAssistants.*;
 
 //meta! id="10"
-public class ManagerLicenia extends Manager {
+public class ManagerLicenia extends ManagerPracovnika {
     public ManagerLicenia(int id, Simulation mySim, Agent myAgent) {
         super(id, mySim, myAgent);
         init();
@@ -23,46 +21,52 @@ public class ManagerLicenia extends Manager {
         }
     }
 
-    //meta! sender="ProcesObsluhyLicenie", id="32", type="Finish"
-    public void processFinish(MessageForm message) {
+	//meta! sender="ProcesObsluhyLicenie", id="32", type="Finish"
+	public void processFinish(MessageForm message) {
+    	ukonciObsluhu(message);
+
         message.setCode(Mc.obsluhaLicenie);
         message.setAddressee(mySim().findAgent(Id.agentSalonu));
         response(message);
     }
 
-    //meta! sender="AgentSalonu", id="19", type="Request"
-    public void processObsluhaLicenie(MessageForm message) {
-		message.setAddressee(myAgent().findAssistant(Id.procesObsluhyLicenie));
-		startContinualAssistant(message);
+	//meta! sender="AgentSalonu", id="19", type="Request"
+	public void processObsluhaLicenie(MessageForm message) {
+    	zacniObsluhu(message);
+        //message.setAddressee(myAgent().findAssistant(Id.procesObsluhyLicenie));
+        //startContinualAssistant(message);
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    public void init() {
-    }
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	public void init()
+	{
+	}
 
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.obsluhaLicenie:
-                processObsluhaLicenie(message);
-                break;
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.obsluhaLicenie:
+			processObsluhaLicenie(message);
+		break;
 
-            case Mc.finish:
-                processFinish(message);
-                break;
+		case Mc.finish:
+			processFinish(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentLicenia myAgent() {
