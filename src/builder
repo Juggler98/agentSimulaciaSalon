@@ -2,28 +2,10 @@
 <ABAsim>
   <Agents>
     <Agent>
-      <SimId>1</SimId>
-      <InternalId>1</InternalId>
-      <Name>AgentModelu</Name>
-      <Bounds>1259,187,180,180</Bounds>
-      <Reasoner>ManagerModelu</Reasoner>
-      <ReasonerBounds>74,25,32,25</ReasonerBounds>
-      <UsePetriNet>false</UsePetriNet>
-    </Agent>
-    <Agent>
-      <SimId>7</SimId>
-      <InternalId>36</InternalId>
-      <Name>AgentSalonu</Name>
-      <Bounds>1494,522,180,180</Bounds>
-      <Reasoner>ManagerSalonu</Reasoner>
-      <ReasonerBounds>74,25,32,25</ReasonerBounds>
-      <UsePetriNet>false</UsePetriNet>
-    </Agent>
-    <Agent>
       <SimId>4</SimId>
       <InternalId>9</InternalId>
       <Name>AgentUcesov</Name>
-      <Bounds>1488,1142,180,180</Bounds>
+      <Bounds>1580,1020,180,180</Bounds>
       <Reasoner>ManagerUcesov</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -37,10 +19,36 @@
       </Components>
     </Agent>
     <Agent>
+      <SimId>1</SimId>
+      <InternalId>1</InternalId>
+      <Name>AgentModelu</Name>
+      <Bounds>1104,55,180,180</Bounds>
+      <Reasoner>ManagerModelu</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
+    </Agent>
+    <Agent>
+      <SimId>8</SimId>
+      <InternalId>57</InternalId>
+      <Name>AgentParkoviska</Name>
+      <Bounds>2207,739,180,180</Bounds>
+      <Reasoner>ManagerParkoviska</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
+      <Components>
+        <Process>
+          <SimId>1007</SimId>
+          <InternalId>65</InternalId>
+          <Name>ProcesParkovania</Name>
+          <Bounds>27,60,35,18</Bounds>
+        </Process>
+      </Components>
+    </Agent>
+    <Agent>
       <SimId>2</SimId>
       <InternalId>2</InternalId>
       <Name>AgentOkolia</Name>
-      <Bounds>582,852,180,180</Bounds>
+      <Bounds>720,612,180,180</Bounds>
       <Reasoner>ManagerOkolia</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -49,15 +57,30 @@
           <SimId>1001</SimId>
           <InternalId>22</InternalId>
           <Name>PlanovacPrichodyZakaznika</Name>
-          <Bounds>17,65,35,13</Bounds>
+          <Bounds>18,66,35,13</Bounds>
+        </Scheduler>
+        <Scheduler>
+          <SimId>1006</SimId>
+          <InternalId>50</InternalId>
+          <Name>PlanovacUzavretia</Name>
+          <Bounds>103,84,35,13</Bounds>
         </Scheduler>
       </Components>
+    </Agent>
+    <Agent>
+      <SimId>7</SimId>
+      <InternalId>36</InternalId>
+      <Name>AgentSalonu</Name>
+      <Bounds>1679,455,180,180</Bounds>
+      <Reasoner>ManagerSalonu</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
     </Agent>
     <Agent>
       <SimId>3</SimId>
       <InternalId>8</InternalId>
       <Name>AgentRecepcie</Name>
-      <Bounds>1100,1076,180,180</Bounds>
+      <Bounds>1176,741,180,180</Bounds>
       <Reasoner>ManagerRecepcie</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -74,7 +97,7 @@
       <SimId>5</SimId>
       <InternalId>10</InternalId>
       <Name>AgentLicenia</Name>
-      <Bounds>1855,1094,180,180</Bounds>
+      <Bounds>1795,1020,180,180</Bounds>
       <Reasoner>ManagerLicenia</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -94,6 +117,12 @@
       <Type>StartFinish</Type>
       <Source>10</Source>
       <Destination>31</Destination>
+    </Message>
+    <Message>
+      <InternalId>66</InternalId>
+      <Type>StartFinish</Type>
+      <Source>57</Source>
+      <Destination>65</Destination>
     </Message>
     <Message>
       <InternalId>3</InternalId>
@@ -182,6 +211,12 @@
       <Destination>10</Destination>
     </Message>
     <Message>
+      <InternalId>51</InternalId>
+      <Type>StartFinish</Type>
+      <Source>2</Source>
+      <Destination>50</Destination>
+    </Message>
+    <Message>
       <InternalId>23</InternalId>
       <Type>StartFinish</Type>
       <Source>2</Source>
@@ -194,11 +229,25 @@
       <Destination>25</Destination>
     </Message>
     <Message>
+      <InternalId>59</InternalId>
+      <Type>Parent</Type>
+      <Source>57</Source>
+      <Destination>36</Destination>
+    </Message>
+    <Message>
       <InternalId>29</InternalId>
       <Type>StartFinish</Type>
       <Source>9</Source>
       <Destination>28</Destination>
     </Message>
+    <Message>
+      <SimId>1008</SimId>
+      <InternalId>62</InternalId>
+      <Name>parkovanie</Name>
+      <Type>RequestResponse</Type>
+      <Source>36</Source>
+      <Destination>57</Destination>
+    </Message>
   </Messages>
-  <IID>46</IID>
+  <IID>70</IID>
 </ABAsim>

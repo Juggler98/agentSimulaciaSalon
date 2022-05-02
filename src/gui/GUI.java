@@ -172,7 +172,7 @@ public class GUI extends JFrame implements ISimDelegate {
                     }
                 }
 
-                salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky);
+                salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky, false);
                 salonSimulation.registerDelegate(this);
 
                 String valueStr = (String) spinner.getValue();
@@ -357,7 +357,7 @@ public class GUI extends JFrame implements ISimDelegate {
         lineChart.pack();
         lineChart.setVisible(true);
         for (int recepcne = 1; recepcne <= 10; recepcne++) {
-            MySimulation salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky);
+            MySimulation salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky, false);
             salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
             lineChart.addPoint(recepcne, salonSimulation.getCelkoveDlzkyRadov()[0] / salonSimulation.currentReplication());
         }
@@ -371,7 +371,7 @@ public class GUI extends JFrame implements ISimDelegate {
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 10; j++) {
                 for (int k = 1; k <= 10; k++) {
-                    MySimulation salonSimulation = new MySimulation(i, j, k);
+                    MySimulation salonSimulation = new MySimulation(i, j, k, false);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
 //                    System.out.println(i + "," + j + "," + k);
 //                    System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.getPocetReplikacii());

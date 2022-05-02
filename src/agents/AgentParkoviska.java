@@ -3,13 +3,15 @@ package agents;
 import OSPABA.*;
 import simulation.*;
 import managers.*;
+import continualAssistants.*;
 
-//meta! id="36"
-public class AgentSalonu extends Agent {
-    public AgentSalonu(int id, Simulation mySim, Agent parent) {
+//meta! id="57"
+public class AgentParkoviska extends Agent {
+    public AgentParkoviska(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
         init();
-    }
+		addOwnMessage(Mc.koniecParkovania);
+	}
 
     @Override
     public void prepareReplication() {
@@ -19,12 +21,9 @@ public class AgentSalonu extends Agent {
 
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
-        new ManagerSalonu(Id.managerSalonu, mySim(), this);
-        addOwnMessage(Mc.obsluhaZakaznika);
-        addOwnMessage(Mc.obsluhaRecepia);
-        addOwnMessage(Mc.obsluhaUcesy);
+        new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
+        new ProcesParkovania(Id.procesParkovania, mySim(), this);
         addOwnMessage(Mc.parkovanie);
-        addOwnMessage(Mc.obsluhaLicenie);
     }
     //meta! tag="end"
 }

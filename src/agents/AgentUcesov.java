@@ -25,7 +25,7 @@ public class AgentUcesov extends AgentPracovnika {
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerUcesov(Id.managerUcesov, mySim(), this);
-        setProces(new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this));
+        setProces(new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this)); //TODO: setProces
         addOwnMessage(Mc.obsluhaUcesy);
     }
     //meta! tag="end"

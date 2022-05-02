@@ -30,7 +30,7 @@ public class AgentLicenia extends AgentPracovnika {
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerLicenia(Id.managerLicenia, mySim(), this);
-        setProces(new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this));
+        setProces(new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this)); //TODO: setProces
         addOwnMessage(Mc.obsluhaLicenie);
     }
     //meta! tag="end"

@@ -5,9 +5,9 @@ import simulation.*;
 import agents.*;
 import continualAssistants.*;
 
-//meta! id="9"
-public class ManagerUcesov extends ManagerPracovnika {
-    public ManagerUcesov(int id, Simulation mySim, Agent myAgent) {
+//meta! id="57"
+public class ManagerParkoviska extends Manager {
+    public ManagerParkoviska(int id, Simulation mySim, Agent myAgent) {
         super(id, mySim, myAgent);
         init();
     }
@@ -22,19 +22,12 @@ public class ManagerUcesov extends ManagerPracovnika {
         }
     }
 
-    //meta! sender="AgentSalonu", id="18", type="Request"
-    public void processObsluhaUcesy(MessageForm message) {
-        zacniObsluhu(message);
-//        message.setAddressee(myAgent().findAssistant(Id.procesObsluhyUcesy));
-//        startContinualAssistant(message);
+    //meta! sender="ProcesParkovania", id="66", type="Finish"
+    public void processFinish(MessageForm message) {
     }
 
-    //meta! sender="ProcesObsluhyUcesy", id="29", type="Finish"
-    public void processFinish(MessageForm message) {
-        ukonciObsluhu(message);
-        message.setCode(Mc.obsluhaUcesy);
-        message.setAddressee(mySim().findAgent(Id.agentSalonu));
-        response(message);
+    //meta! sender="AgentSalonu", id="62", type="Request"
+    public void processParkovanie(MessageForm message) {
     }
 
     //meta! userInfo="Process messages defined in code", id="0"
@@ -50,12 +43,12 @@ public class ManagerUcesov extends ManagerPracovnika {
     @Override
     public void processMessage(MessageForm message) {
         switch (message.code()) {
-            case Mc.finish:
-                processFinish(message);
+            case Mc.parkovanie:
+                processParkovanie(message);
                 break;
 
-            case Mc.obsluhaUcesy:
-                processObsluhaUcesy(message);
+            case Mc.finish:
+                processFinish(message);
                 break;
 
             default:
@@ -66,8 +59,8 @@ public class ManagerUcesov extends ManagerPracovnika {
     //meta! tag="end"
 
     @Override
-    public AgentUcesov myAgent() {
-        return (AgentUcesov) super.myAgent();
+    public AgentParkoviska myAgent() {
+        return (AgentParkoviska) super.myAgent();
     }
 
 }

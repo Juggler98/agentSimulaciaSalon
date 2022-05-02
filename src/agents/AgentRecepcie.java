@@ -30,7 +30,7 @@ public class AgentRecepcie extends AgentPracovnika {
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerRecepcie(Id.managerRecepcie, mySim(), this);
-        setProces(new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this));
+        setProces(new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this)); //TODO: setProces
         addOwnMessage(Mc.obsluhaRecepia);
     }
     //meta! tag="end"

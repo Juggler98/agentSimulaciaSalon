@@ -12,6 +12,7 @@ public class Mc extends IdList
 	public static final int obsluhaRecepia = 1004;
 	public static final int obsluhaUcesy = 1005;
 	public static final int obsluhaLicenie = 1006;
+	public static final int parkovanie = 1008;
 	//meta! tag="end"
 
 	// 1..1000 range reserved for user
@@ -20,4 +21,6 @@ public class Mc extends IdList
 	public static final int koniecObsluhyUcesy = 3;
 	public static final int koniecObsluhyLicenie = 4;
 	public static final int zatvorenie = 5;
+	public static final int koniecParkovania = 6;
+	public static final int novyZakaznikAutom = 7;
 }

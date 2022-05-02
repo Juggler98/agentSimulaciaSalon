@@ -3,10 +3,11 @@ package continualAssistants;
 import OSPABA.*;
 import simulation.*;
 import agents.*;
+import OSPABA.Process;
 
-//meta! id="50"
-public class PlanovacUzavretia extends Scheduler {
-    public PlanovacUzavretia(int id, Simulation mySim, CommonAgent myAgent) {
+//meta! id="65"
+public class ProcesParkovania extends Process {
+    public ProcesParkovania(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);
     }
 
@@ -16,17 +17,14 @@ public class PlanovacUzavretia extends Scheduler {
         // Setup component for the next replication
     }
 
-    //meta! sender="AgentOkolia", id="51", type="Start"
+    //meta! sender="AgentParkoviska", id="66", type="Start"
     public void processStart(MessageForm message) {
-        message.setCode(Mc.zatvorenie);
-        hold(Config.endTime, message);
     }
 
     //meta! userInfo="Process messages defined in code", id="0"
     public void processDefault(MessageForm message) {
         switch (message.code()) {
-            case Mc.zatvorenie:
-                ((MySimulation) mySim()).agentRecepcie().uzavri();
+            case Mc.koniecParkovania:
                 assistantFinished(message);
                 break;
         }
@@ -48,8 +46,8 @@ public class PlanovacUzavretia extends Scheduler {
     //meta! tag="end"
 
     @Override
-    public AgentOkolia myAgent() {
-        return (AgentOkolia) super.myAgent();
+    public AgentParkoviska myAgent() {
+        return (AgentParkoviska) super.myAgent();
     }
 
 }

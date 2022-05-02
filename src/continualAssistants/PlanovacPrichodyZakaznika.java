@@ -8,10 +8,14 @@ import myGenerators.RandExponential;
 import simulation.*;
 import agents.*;
 
+import java.util.Random;
+
 //meta! id="22"
 public class PlanovacPrichodyZakaznika extends Scheduler {
 
-    private static final RandExponential randPrichod = new RandExponential(450); //TODO
+    private static final Random seedGenerator = new Random();
+    private static final RandExponential randPrichod = new RandExponential(450, seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
+    private static final RandExponential randPrichodAutom = new RandExponential(450, seedGenerator); //TODO should be 450
 
     public PlanovacPrichodyZakaznika(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);
@@ -27,22 +31,42 @@ public class PlanovacPrichodyZakaznika extends Scheduler {
     public void processStart(MessageForm message) {
         message.setCode(Mc.novyZakaznik);
         hold(randPrichod.nextValue(), message);
+
+        MessageForm copy = message.createCopy();
+        copy.setCode(Mc.novyZakaznikAutom);
+        //hold(randPrichodAutom.nextValue(), copy); //TODO: uncomment this to start parking
     }
 
     //meta! userInfo="Process messages defined in code", id="0"
     public void processDefault(MessageForm message) {
+        double holdTime;
+        Zakaznik zakaznik;
         switch (message.code()) {
             case Mc.novyZakaznik:
-                double holdTime = randPrichod.nextValue();
+                holdTime = randPrichod.nextValue();
                 if (mySim().currentTime() + holdTime <= Config.endTime) {
                     MessageForm copy = message.createCopy();
                     hold(holdTime, copy);
                 }
 
-                Zakaznik zakaznik = new Zakaznik(mySim().currentTime(), mySim());
+                zakaznik = new Zakaznik(mySim().currentTime(), mySim(), false);
                 ((MyMessage) message).setZakaznik(zakaznik);
                 ((MySimulation) mySim()).getZakaznici().add(zakaznik);
                 zakaznik.setStavZakaznika(StavZakaznika.PRICHOD);
+                assistantFinished(message);
+                break;
+
+            case Mc.novyZakaznikAutom:
+                holdTime = randPrichodAutom.nextValue();
+                if (mySim().currentTime() + holdTime <= Config.endTime) {
+                    MessageForm copy = message.createCopy();
+                    hold(holdTime, copy);
+                }
+
+                zakaznik = new Zakaznik(mySim().currentTime(), mySim(), true);
+                ((MyMessage) message).setZakaznik(zakaznik);
+                ((MySimulation) mySim()).getZakaznici().add(zakaznik);
+                zakaznik.setStavZakaznika(StavZakaznika.PARKOVANIE);
                 assistantFinished(message);
                 break;
         }

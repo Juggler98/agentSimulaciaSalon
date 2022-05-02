@@ -21,11 +21,14 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
     private boolean hlbkoveLicenie = false;
     private boolean goToHlbkoveLicenie = false;
 
-    public Zakaznik(double casPrichodu, Simulation mySim) {
+    private final boolean autom;
+
+    public Zakaznik(double casPrichodu, Simulation mySim, boolean autom) {
         super(mySim);
         this.casPrichodu = casPrichodu;
         Arrays.fill(casZaciatkuObsluhy, 0.0);
         this.poradie = ++pocetZakaznikov;
+        this.autom = autom;
     }
 
 //    public Zakaznik(int id, Simulation mySim) {
@@ -94,6 +97,10 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
     public int getPoradie() {
         return poradie;
+    }
+
+    public boolean isAutom() {
+        return autom;
     }
 
     @Override

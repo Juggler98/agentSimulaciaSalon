@@ -32,10 +32,13 @@ public class MySimulation extends Simulation {
     public final int pocetKadernicok;
     public final int pocetKozmeticiek;
 
-    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek) {
+    public final boolean ajParkovisko;
+
+    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko) {
         this.pocetRecepcnych = pocetRecepcnych;
         this.pocetKadernicok = pocetKadernicok;
         this.pocetKozmeticiek = pocetKozmeticiek;
+        this.ajParkovisko = ajParkovisko;
         init();
     }
 
@@ -118,6 +121,7 @@ public class MySimulation extends Simulation {
         setAgentRecepcie(new AgentRecepcie(Id.agentRecepcie, this, agentSalonu()));
         setAgentUcesov(new AgentUcesov(Id.agentUcesov, this, agentSalonu()));
         setAgentLicenia(new AgentLicenia(Id.agentLicenia, this, agentSalonu()));
+        setAgentParkoviska(new AgentParkoviska(Id.agentParkoviska, this, agentSalonu()));
     }
 
     private AgentModelu _agentModelu;
@@ -178,6 +182,16 @@ public class MySimulation extends Simulation {
 
     public void setAgentLicenia(AgentLicenia agentLicenia) {
         _agentLicenia = agentLicenia;
+    }
+
+    private AgentParkoviska _agentParkoviska;
+
+    public AgentParkoviska agentParkoviska() {
+        return _agentParkoviska;
+    }
+
+    public void setAgentParkoviska(AgentParkoviska agentParkoviska) {
+        _agentParkoviska = agentParkoviska;
     }
     //meta! tag="end"
 

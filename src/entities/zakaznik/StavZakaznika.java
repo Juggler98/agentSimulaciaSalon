@@ -2,6 +2,7 @@ package entities.zakaznik;
 
 public enum StavZakaznika {
     PRICHOD,
+    PARKOVANIE,
     RADRECEPCIA,
     OBJEDNAVKA,
     RADUCES,

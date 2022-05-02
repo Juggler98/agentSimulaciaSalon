@@ -15,6 +15,7 @@ public class AgentOkolia extends Agent {
         init();
         addOwnMessage(Mc.novyZakaznik);
         addOwnMessage(Mc.zatvorenie);
+        addOwnMessage(Mc.novyZakaznikAutom);
     }
 
     @Override
@@ -26,8 +27,8 @@ public class AgentOkolia extends Agent {
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerOkolia(Id.managerOkolia, mySim(), this);
-        new PlanovacUzavretia(Id.planovacUzavretia, mySim(), this);
         new PlanovacPrichodyZakaznika(Id.planovacPrichodyZakaznika, mySim(), this);
+        new PlanovacUzavretia(Id.planovacUzavretia, mySim(), this);
         addOwnMessage(Mc.init);
         addOwnMessage(Mc.odchodZakaznika);
     }
