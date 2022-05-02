@@ -19,14 +19,13 @@ public class AgentModelu extends Agent {
         // Setup component for the next replication
     }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init()
-	{
-		new ManagerModelu(Id.managerModelu, mySim(), this);
-		addOwnMessage(Mc.obsluhaZakaznika);
-		addOwnMessage(Mc.prichodZakaznika);
-	}
-	//meta! tag="end"
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    private void init() {
+        new ManagerModelu(Id.managerModelu, mySim(), this);
+        addOwnMessage(Mc.obsluhaZakaznika);
+        addOwnMessage(Mc.prichodZakaznika);
+    }
+    //meta! tag="end"
 
     public void spustiSimulaciu() {
         MyMessage message = new MyMessage(mySim(), null);

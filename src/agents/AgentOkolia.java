@@ -1,6 +1,7 @@
 package agents;
 
 import OSPABA.*;
+import instantAssistants.AkciaZavretia;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
@@ -27,6 +28,7 @@ public class AgentOkolia extends Agent {
 	{
 		new ManagerOkolia(Id.managerOkolia, mySim(), this);
 		new PlanovacPrichodyZakaznika(Id.planovacPrichodyZakaznika, mySim(), this);
+		new AkciaZavretia(Id.akciaZavretia, mySim(), this);
 		addOwnMessage(Mc.init);
 		addOwnMessage(Mc.odchodZakaznika);
 	}

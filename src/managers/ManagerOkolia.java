@@ -64,16 +64,16 @@ public class ManagerOkolia extends Manager {
     @Override
     public void processMessage(MessageForm message) {
         switch (message.code()) {
-            case Mc.odchodZakaznika:
-                processOdchodZakaznika(message);
-                break;
-
             case Mc.init:
                 processInit(message);
                 break;
 
             case Mc.finish:
                 processFinish(message);
+                break;
+
+            case Mc.odchodZakaznika:
+                processOdchodZakaznika(message);
                 break;
 
             default:

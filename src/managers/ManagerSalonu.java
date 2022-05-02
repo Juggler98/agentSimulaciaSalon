@@ -132,20 +132,20 @@ public class ManagerSalonu extends Manager {
     @Override
     public void processMessage(MessageForm message) {
         switch (message.code()) {
-            case Mc.obsluhaUcesy:
-                processObsluhaUcesy(message);
-                break;
-
-            case Mc.obsluhaRecepia:
-                processObsluhaRecepia(message);
+            case Mc.obsluhaZakaznika:
+                processObsluhaZakaznika(message);
                 break;
 
             case Mc.obsluhaLicenie:
                 processObsluhaLicenie(message);
                 break;
 
-            case Mc.obsluhaZakaznika:
-                processObsluhaZakaznika(message);
+            case Mc.obsluhaRecepia:
+                processObsluhaRecepia(message);
+                break;
+
+            case Mc.obsluhaUcesy:
+                processObsluhaUcesy(message);
                 break;
 
             default:

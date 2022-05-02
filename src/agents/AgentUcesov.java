@@ -21,14 +21,13 @@ public class AgentUcesov extends AgentPracovnika {
         // Setup component for the next replication
     }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init()
-	{
-		new ManagerUcesov(Id.managerUcesov, mySim(), this);
-		setProces(new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this));
-		addOwnMessage(Mc.obsluhaUcesy);
-	}
-	//meta! tag="end"
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    private void init() {
+        new ManagerUcesov(Id.managerUcesov, mySim(), this);
+        setProces(new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this));
+        addOwnMessage(Mc.obsluhaUcesy);
+    }
+    //meta! tag="end"
 
     @Override
     public int getPocetPracovnikov() {
