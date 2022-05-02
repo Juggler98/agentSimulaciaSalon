@@ -25,7 +25,7 @@ public class GUI extends JFrame implements ISimDelegate {
 
     private int iterationCount = 0;
 
-    private int sleepTime = 1000 / 100;
+    private int sleepTime = 0;
     private int pocetRadov = 2;
 
     private final JLabel resultLabel;
@@ -86,7 +86,7 @@ public class GUI extends JFrame implements ISimDelegate {
         String[] spinnerData = {"x1", "x2", "x5", "x10", "x25", "x50", "x100", "x250", "x500", "x1000", "x2000", "Virtual"};
         SpinnerListModel spinnerListModel = new SpinnerListModel(spinnerData);
         JSpinner spinner = new JSpinner(spinnerListModel);
-        spinner.setValue("x100");
+        spinner.setValue("x500");
 
         int[] spinnerValues2 = {1, 2, 3};
         String[] spinnerData2 = {"1", "2", "3"};

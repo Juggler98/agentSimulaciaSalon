@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="agentSimulaciaSalon:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/agentSimulaciaSalon_jar</output-path>
+    <root id="archive" name="agentSimulaciaSalon.jar">
+      <element id="module-output" name="agentSimulaciaSalon" />
+      <element id="extracted-dir" path="D:/FRI/Ing/2. semester/DiskretnaSimulacia/DiskretnaSimulacia/ABACore_2.2/ABACore/ABACore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/jfreechart-demo-1.5.2-jar-with-dependencies.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
