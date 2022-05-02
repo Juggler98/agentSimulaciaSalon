@@ -2,6 +2,8 @@ package agents;
 
 import OSPABA.*;
 import entities.pracovnik.TypPracovnika;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
@@ -12,9 +14,10 @@ import java.util.PriorityQueue;
 public class AgentRecepcie extends AgentPracovnika {
 
     public AgentRecepcie(int id, Simulation mySim, Agent parent) {
-        super(id, mySim, parent, Config.pocetRecepcnych, TypPracovnika.RECEPCIA);
+        super(id, mySim, parent, TypPracovnika.RECEPCIA);
         rad = new PriorityQueue<>();
         init();
+        inicializuj(((MySimulation) mySim()).pocetRecepcnych);
         addOwnMessage(Mc.koniecObsluhyRecepcia);
     }
 
@@ -34,6 +37,19 @@ public class AgentRecepcie extends AgentPracovnika {
 
     @Override
     public int getPocetPracovnikov() {
-        return Config.pocetRecepcnych;
+        return ((MySimulation) mySim()).pocetRecepcnych;
     }
+
+    public void uzavri() {
+        for (Zakaznik z : rad) {
+            if (!z.isObsluzeny()) {
+                z.setStavZakaznika(StavZakaznika.ODCHOD);
+                z.setCasOdchodu(mySim().currentTime());
+            }
+        }
+        ((MySimulation) mySim()).addDlzkaRadu(0, rad.size() * (mySim().currentTime() - getLastRadChange()));
+        setLastRadChange(mySim().currentTime());
+        rad.removeIf(z -> !z.isObsluzeny());
+    }
+
 }

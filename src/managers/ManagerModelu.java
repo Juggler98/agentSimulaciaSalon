@@ -37,11 +37,6 @@ public class ManagerModelu extends Manager {
                 message.setAddressee(mySim().findAgent(Id.agentOkolia));
                 notice(message);
                 break;
-
-            case Mc.zatvorenie:
-                MyMessage msgCopy = new MyMessage((MyMessage) message);
-                notice(message);
-                break;
         }
     }
 

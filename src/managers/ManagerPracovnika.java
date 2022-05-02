@@ -28,7 +28,8 @@ public abstract class ManagerPracovnika extends Manager {
         AgentPracovnika agent = (AgentPracovnika) myAgent();
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         // Ak je rad prazdny a je volny zamestnanec zacne sa obsluha, inak ide zakaznik do radu
-        if (agent.isRadEmpty() && agent.jeNiektoVolny()) {
+        MySimulation mySimulation = ((MySimulation) mySim());
+        if (agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + mySimulation.getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
             Pracovnik novyPracovnik = agent.obsadZamestnanca();
 
             novyPracovnik.setObsluhujeZakaznika(zakaznik.getPoradie());

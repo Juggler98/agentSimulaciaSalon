@@ -5,6 +5,7 @@ import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
+import sun.plugin2.message.Message;
 
 //meta! id="2"
 public class ManagerOkolia extends Manager {
@@ -27,10 +28,14 @@ public class ManagerOkolia extends Manager {
     public void processInit(MessageForm message) {
         message.setAddressee(myAgent().findAssistant(Id.planovacPrichodyZakaznika));
         startContinualAssistant(message);
+
+        MyMessage msgCopy = new MyMessage((MyMessage) message);
+        msgCopy.setAddressee(myAgent().findAssistant(Id.planovacUzavretia));
+        startContinualAssistant(msgCopy);
     }
 
     //meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
-    public void processFinish(MessageForm message) {
+    public void processFinishPlanovacPrichodyZakaznika(MessageForm message) {
         message.setCode(Mc.prichodZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentModelu));
         notice(message);
@@ -57,6 +62,10 @@ public class ManagerOkolia extends Manager {
         }
     }
 
+    //meta! sender="PlanovacUzavretia", id="51", type="Finish"
+    public void processFinishPlanovacUzavretia(MessageForm message) {
+    }
+
     //meta! userInfo="Generated code: do not modify", tag="begin"
     public void init() {
     }
@@ -64,12 +73,20 @@ public class ManagerOkolia extends Manager {
     @Override
     public void processMessage(MessageForm message) {
         switch (message.code()) {
-            case Mc.init:
-                processInit(message);
+            case Mc.finish:
+                switch (message.sender().id()) {
+                    case Id.planovacUzavretia:
+                        processFinishPlanovacUzavretia(message);
+                        break;
+
+                    case Id.planovacPrichodyZakaznika:
+                        processFinishPlanovacPrichodyZakaznika(message);
+                        break;
+                }
                 break;
 
-            case Mc.finish:
-                processFinish(message);
+            case Mc.init:
+                processInit(message);
                 break;
 
             case Mc.odchodZakaznika:

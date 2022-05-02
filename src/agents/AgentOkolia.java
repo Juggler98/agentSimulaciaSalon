@@ -1,7 +1,6 @@
 package agents;
 
 import OSPABA.*;
-import instantAssistants.AkciaZavretia;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
@@ -15,6 +14,7 @@ public class AgentOkolia extends Agent {
         super(id, mySim, parent);
         init();
         addOwnMessage(Mc.novyZakaznik);
+        addOwnMessage(Mc.zatvorenie);
     }
 
     @Override
@@ -23,14 +23,13 @@ public class AgentOkolia extends Agent {
         // Setup component for the next replication
     }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	private void init()
-	{
-		new ManagerOkolia(Id.managerOkolia, mySim(), this);
-		new PlanovacPrichodyZakaznika(Id.planovacPrichodyZakaznika, mySim(), this);
-		new AkciaZavretia(Id.akciaZavretia, mySim(), this);
-		addOwnMessage(Mc.init);
-		addOwnMessage(Mc.odchodZakaznika);
-	}
-	//meta! tag="end"
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    private void init() {
+        new ManagerOkolia(Id.managerOkolia, mySim(), this);
+        new PlanovacUzavretia(Id.planovacUzavretia, mySim(), this);
+        new PlanovacPrichodyZakaznika(Id.planovacPrichodyZakaznika, mySim(), this);
+        addOwnMessage(Mc.init);
+        addOwnMessage(Mc.odchodZakaznika);
+    }
+    //meta! tag="end"
 }

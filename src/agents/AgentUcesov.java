@@ -9,7 +9,8 @@ import continualAssistants.*;
 //meta! id="9"
 public class AgentUcesov extends AgentPracovnika {
     public AgentUcesov(int id, Simulation mySim, Agent parent) {
-        super(id, mySim, parent, Config.pocetKadernicok, TypPracovnika.UCES);
+        super(id, mySim, parent, TypPracovnika.UCES);
+        inicializuj(((MySimulation) mySim()).pocetKadernicok);
         init();
         addOwnMessage(Mc.koniecObsluhyUcesy);
 
@@ -31,6 +32,6 @@ public class AgentUcesov extends AgentPracovnika {
 
     @Override
     public int getPocetPracovnikov() {
-        return Config.pocetKadernicok;
+        return ((MySimulation) mySim()).pocetKadernicok;
     }
 }

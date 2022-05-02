@@ -20,10 +20,9 @@ public abstract class AgentPracovnika extends Agent {
     private double lastRadChange;
     protected ContinualAssistant proces;
 
-    public AgentPracovnika(int id, Simulation mySim, Agent parent, int pocetZamestnancov, TypPracovnika typPracovnika) {
+    public AgentPracovnika(int id, Simulation mySim, Agent parent, TypPracovnika typPracovnika) {
         super(id, mySim, parent);
         this.typPracovnika = typPracovnika;
-        inicializuj(pocetZamestnancov);
     }
 
     public void inicializuj(int pocetZamestnancov) {
@@ -57,7 +56,7 @@ public abstract class AgentPracovnika extends Agent {
     }
 
     public boolean niktoNepracuje() {
-        return  volnyZamestnanci.size() == zamestnanci.length;
+        return volnyZamestnanci.size() == zamestnanci.length;
     }
 
     public Pracovnik getZamestnanec(int i) {

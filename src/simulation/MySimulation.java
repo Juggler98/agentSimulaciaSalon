@@ -28,7 +28,14 @@ public class MySimulation extends Simulation {
     private final ArrayList<Pracovnik> zamestnanci = new ArrayList<>();
     private final ArrayList<Zakaznik> zakaznici = new ArrayList<>();
 
-    public MySimulation() {
+    public final int pocetRecepcnych;
+    public final int pocetKadernicok;
+    public final int pocetKozmeticiek;
+
+    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek) {
+        this.pocetRecepcnych = pocetRecepcnych;
+        this.pocetKadernicok = pocetKadernicok;
+        this.pocetKozmeticiek = pocetKozmeticiek;
         init();
     }
 
@@ -43,9 +50,9 @@ public class MySimulation extends Simulation {
         super.prepareReplication();
         // Reset entities, queues, local statistics, etc...
 
-        agentRecepcie().inicializuj(Config.pocetRecepcnych);
-        agentUcesov().inicializuj(Config.pocetKadernicok);
-        agentLicenia().inicializuj(Config.pocetKozmeticiek);
+        agentRecepcie().inicializuj(pocetRecepcnych);
+        agentUcesov().inicializuj(pocetKadernicok);
+        agentLicenia().inicializuj(pocetKozmeticiek);
 
         Zakaznik.pocetZakaznikov = 0;
 
@@ -59,13 +66,13 @@ public class MySimulation extends Simulation {
 
         zamestnanci.clear();
         zakaznici.clear();
-        for (int i = 0; i < Config.pocetRecepcnych; i++) {
+        for (int i = 0; i < pocetRecepcnych; i++) {
             zamestnanci.add(agentRecepcie().getZamestnanec(i));
         }
-        for (int i = 0; i < Config.pocetKadernicok; i++) {
+        for (int i = 0; i < pocetKadernicok; i++) {
             zamestnanci.add(agentUcesov().getZamestnanec(i));
         }
-        for (int i = 0; i < Config.pocetKozmeticiek; i++) {
+        for (int i = 0; i < pocetKozmeticiek; i++) {
             zamestnanci.add(agentLicenia().getZamestnanec(i));
         }
 

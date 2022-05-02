@@ -84,17 +84,23 @@ public class ManagerSalonu extends Manager {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
 
+        MySimulation mySimulation = ((MySimulation) mySim());
+
         if (zakaznik.getTypZakaznika() == TypZakaznika.UCESAJLICENIE) {
-            ((MySimulation) mySim()).getStatsVykonov()[5]++;
+            mySimulation.getStatsVykonov()[5]++;
             message.setCode(Mc.obsluhaLicenie);
             message.setAddressee(mySim().findAgent(Id.agentLicenia));
+            request(message);
         } else {
-            ((MySimulation) mySim()).getStatsVykonov()[1]++;
+            mySimulation.getStatsVykonov()[1]++;
             zakaznik.setObsluzeny();
             message.setCode(Mc.obsluhaRecepia);
             message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+
+            request(message);
+            ((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
-        request(message);
+
     }
 
     //meta! sender="AgentLicenia", id="19", type="Response"
@@ -102,21 +108,27 @@ public class ManagerSalonu extends Manager {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
 
+        MySimulation mySimulation = ((MySimulation) mySim());
+
         if (zakaznik.getTypZakaznika() != TypZakaznika.UCESAJLICENIE && !zakaznik.isGoToHlbkoveLicenie()) {
-            ((MySimulation) mySim()).getStatsVykonov()[3]++;
+            mySimulation.getStatsVykonov()[3]++;
         }
         if (zakaznik.isGoToHlbkoveLicenie())
-            ((MySimulation) mySim()).getStatsVykonov()[7]++;
+            mySimulation.getStatsVykonov()[7]++;
         if (zakaznik.isGoToHlbkoveLicenie()) {
             message.setCode(Mc.obsluhaLicenie);
             message.setAddressee(mySim().findAgent(Id.agentLicenia));
             zakaznik.setGoToHlbkoveLicenie(false);
+            request(message);
         } else {
             zakaznik.setObsluzeny();
             message.setCode(Mc.obsluhaRecepia);
             message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+            request(message);
+
+            ((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
-        request(message);
+
     }
 
     //meta! userInfo="Process messages defined in code", id="0"

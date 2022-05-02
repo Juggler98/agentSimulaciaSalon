@@ -11,7 +11,7 @@ import agents.*;
 //meta! id="22"
 public class PlanovacPrichodyZakaznika extends Scheduler {
 
-    private static final RandExponential randPrichod = new RandExponential(450 - 350); //TODO
+    private static final RandExponential randPrichod = new RandExponential(450); //TODO
 
     public PlanovacPrichodyZakaznika(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);

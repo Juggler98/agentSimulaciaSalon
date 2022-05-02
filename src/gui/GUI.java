@@ -45,7 +45,7 @@ public class GUI extends JFrame implements ISimDelegate {
     MySimulation salonSimulation;
 
     public GUI() {
-        super("Salón krásy");
+        super("Salón krásy - (ABA - Agent Based Architecture)");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         GraphicsConfiguration config = this.getGraphicsConfiguration();
@@ -172,10 +172,7 @@ public class GUI extends JFrame implements ISimDelegate {
                     }
                 }
 
-                Config.pocetRecepcnych = recepcne;
-                Config.pocetKozmeticiek = kozmeticky;
-                Config.pocetKadernicok = kadernicky;
-                salonSimulation = new MySimulation();
+                salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky);
                 salonSimulation.registerDelegate(this);
 
                 String valueStr = (String) spinner.getValue();
@@ -360,10 +357,7 @@ public class GUI extends JFrame implements ISimDelegate {
         lineChart.pack();
         lineChart.setVisible(true);
         for (int recepcne = 1; recepcne <= 10; recepcne++) {
-            Config.pocetRecepcnych = recepcne;
-            Config.pocetKadernicok = kadernicky;
-            Config.pocetKozmeticiek = kozmeticky;
-            MySimulation salonSimulation = new MySimulation();
+            MySimulation salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky);
             salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
             lineChart.addPoint(recepcne, salonSimulation.getCelkoveDlzkyRadov()[0] / salonSimulation.currentReplication());
         }
@@ -377,10 +371,7 @@ public class GUI extends JFrame implements ISimDelegate {
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 10; j++) {
                 for (int k = 1; k <= 10; k++) {
-                    Config.pocetRecepcnych = i;
-                    Config.pocetKadernicok = j;
-                    Config.pocetKozmeticiek = k;
-                    MySimulation salonSimulation = new MySimulation();
+                    MySimulation salonSimulation = new MySimulation(i, j, k);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
 //                    System.out.println(i + "," + j + "," + k);
 //                    System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.getPocetReplikacii());
@@ -460,7 +451,7 @@ public class GUI extends JFrame implements ISimDelegate {
                 tables[0].getModel().setValueAt(salonSimulation.getDlzkyRadov()[i] / pracovisko.getLastRadChange(), i, 2);
             else
                 tables[0].getModel().setValueAt(0.0, i, 2);
-            tables[0].getModel().setValueAt(salonSimulation.getCelkoveDlzkyRadov()[i] / salonSimulation.currentReplication(), i, 3);
+            tables[0].getModel().setValueAt(salonSimulation.getCelkoveDlzkyRadov()[i] / (salonSimulation.currentReplication() + 1), i, 3);
         }
 
         for (int i = 0; i < salonSimulation.getZamestnanci().size(); i++) {
@@ -507,18 +498,18 @@ public class GUI extends JFrame implements ISimDelegate {
 
         for (int i = 0; i < salonSimulation.getStatsNames().length - 4; i++) {
             tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[i], i, 1);
-            tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[i] / salonSimulation.currentReplication(), i, 2);
+            tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[i] / (salonSimulation.currentReplication() + 1), i, 2);
         }
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[1] / salonSimulation.getStatsVykonov()[9]), 0), 10, 1);
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[1] / salonSimulation.currentReplication()), 0), 10, 2);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[1] / (salonSimulation.currentReplication() + 1)), 0), 10, 2);
 
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[0] / salonSimulation.getStatsVykonov()[9]), 0), 11, 1);
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[0] / salonSimulation.currentReplication()), 0), 11, 2);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[0] / (salonSimulation.currentReplication() + 1)), 0), 11, 2);
 
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[2] / (salonSimulation.getStatsVykonov()[0] + salonSimulation.getStatsVykonov()[4])), 0), 12, 1);
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[2] / salonSimulation.currentReplication()), 0), 12, 2);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[2] / (salonSimulation.currentReplication() + 1)), 0), 12, 2);
 
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / salonSimulation.currentReplication()), 0), 13, 2);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / (salonSimulation.currentReplication() + 1)), 0), 13, 2);
 
 //        }
     }

@@ -15,7 +15,8 @@ public class AgentLicenia extends AgentPracovnika {
 
 
     public AgentLicenia(int id, Simulation mySim, Agent parent) {
-        super(id, mySim, parent, Config.pocetKozmeticiek, TypPracovnika.LICENIE);
+        super(id, mySim, parent, TypPracovnika.LICENIE);
+        inicializuj(((MySimulation) mySim()).pocetKozmeticiek);
         init();
         addOwnMessage(Mc.koniecObsluhyLicenie);
     }
@@ -36,6 +37,6 @@ public class AgentLicenia extends AgentPracovnika {
 
     @Override
     public int getPocetPracovnikov() {
-        return Config.pocetKozmeticiek;
+        return ((MySimulation) mySim()).pocetKozmeticiek;
     }
 }
