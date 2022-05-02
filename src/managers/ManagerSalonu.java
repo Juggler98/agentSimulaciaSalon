@@ -33,9 +33,15 @@ public class ManagerSalonu extends Manager {
 
     //meta! sender="AgentModelu", id="37", type="Request"
     public void processObsluhaZakaznika(MessageForm message) {
-        message.setCode(Mc.obsluhaRecepia);
-        message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
+        if (zakaznik.isAutom()) {
+            message.setCode(Mc.parkovanie);
+            message.setAddressee(mySim().findAgent(Id.agentParkoviska));
+        } else {
+            message.setCode(Mc.obsluhaRecepia);
+            message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+        }
         request(message);
     }
 
@@ -139,6 +145,9 @@ public class ManagerSalonu extends Manager {
 
     //meta! sender="AgentParkoviska", id="62", type="Response"
     public void processParkovanie(MessageForm message) {
+        message.setCode(Mc.obsluhaRecepia);
+        message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+        request(message);
     }
 
     //meta! userInfo="Generated code: do not modify", tag="begin"

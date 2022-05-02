@@ -7,12 +7,13 @@ import entities.zakaznik.Zakaznik;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class MySimulation extends Simulation {
 
-    private final int[] statsVykonov = new int[10];
-    private final double[] statsAllVykonov = new double[10];
-    private final String[] statsNames = {"Zadané účesy", "Spravené účesy", "Zadané Líčenia", "Spravené Líčenia", "Zadané účesy aj líčenia", "Spravené účesy aj líčenia", "Zadané čistenia", "Spravené čistenia", "Zadané objednávky", "Dokončené objednávky", "Čas na objednávku", "Čas v sálone", "Čas účesu", "Po zatvorení ešte"};
+    private final int[] statsVykonov = new int[13];
+    private final double[] statsAllVykonov = new double[13]; //10 = autom 11 = zaparkovalo 12 = spokojnost
+    private final String[] statsNames = {"Zadané účesy", "Spravené účesy", "Zadané Líčenia", "Spravené Líčenia", "Zadané účesy aj líčenia", "Spravené účesy aj líčenia", "Zadané čistenia", "Spravené čistenia", "Zadané objednávky", "Dokončené objednávky", "Čas na objednávku", "Čas v sálone", "Čas účesu", "Po zatvorení ešte", "Autom", "Zaparkovalo", "Zaparkovalo %", "Spokojnost"};
 
     private final double[] casy = new double[5]; //casStravenyVSalone, dlzkaCakaniaNaObjednavku, robenieUcesov, poOtvaracejDobe
     private final double[] celkoveCasy = new double[5];
@@ -34,17 +35,23 @@ public class MySimulation extends Simulation {
 
     public final boolean ajParkovisko;
 
-    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko) {
+    private final int pocetRadov;
+
+    PriorityQueue<Integer> freeSlots;
+
+    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko, int pocetRadov) {
         this.pocetRecepcnych = pocetRecepcnych;
         this.pocetKadernicok = pocetKadernicok;
         this.pocetKozmeticiek = pocetKozmeticiek;
         this.ajParkovisko = ajParkovisko;
+        this.pocetRadov = pocetRadov;
         init();
     }
 
     @Override
     public void prepareSimulation() {
         super.prepareSimulation();
+        freeSlots = new PriorityQueue<>(pocetRadov * Config.pocetParkingMiestRadu);
         // Create global statistcis
     }
 
@@ -69,6 +76,12 @@ public class MySimulation extends Simulation {
 
         zamestnanci.clear();
         zakaznici.clear();
+        freeSlots.clear();
+
+        for (int i = 0; i < pocetRadov * Config.pocetParkingMiestRadu; i++) {
+            freeSlots.add(i);
+        }
+
         for (int i = 0; i < pocetRecepcnych; i++) {
             zamestnanci.add(agentRecepcie().getZamestnanec(i));
         }
@@ -194,6 +207,19 @@ public class MySimulation extends Simulation {
         _agentParkoviska = agentParkoviska;
     }
     //meta! tag="end"
+
+
+    public PriorityQueue<Integer> getFreeSlots() {
+        return freeSlots;
+    }
+
+    public boolean ajParkovisko() {
+        return ajParkovisko;
+    }
+
+    public int getPocetRadov() {
+        return pocetRadov;
+    }
 
     public int getDlzkaRaduUcesyLicenie() {
         return agentLicenia().getRadSize() + agentUcesov().getRadSize();

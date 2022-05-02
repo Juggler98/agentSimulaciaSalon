@@ -1,6 +1,8 @@
 package managers;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
@@ -24,7 +26,13 @@ public class ManagerRecepcie extends ManagerPracovnika {
 
     //meta! sender="AgentSalonu", id="17", type="Request"
     public void processObsluhaRecepia(MessageForm message) {
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        if (!zakaznik.isObsluzeny() && zakaznik.isAutom()) {
+            zakaznik.setCasPrichodu(mySim().currentTime());
+            zakaznik.setStavZakaznika(StavZakaznika.PRICHOD);
+        }
         zacniObsluhu(message);
+
         //message.setAddressee(myAgent().findAssistant(Id.procesObsluhyRecepcia));
         //startContinualAssistant(message);
     }

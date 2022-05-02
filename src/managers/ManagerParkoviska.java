@@ -1,6 +1,7 @@
 package managers;
 
 import OSPABA.*;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
 import continualAssistants.*;
@@ -24,10 +25,16 @@ public class ManagerParkoviska extends Manager {
 
     //meta! sender="ProcesParkovania", id="66", type="Finish"
     public void processFinish(MessageForm message) {
+        ((MySimulation) mySim()).getStatsVykonov()[11]++;
+        message.setCode(Mc.parkovanie);
+        message.setAddressee(mySim().findAgent(Id.agentSalonu));
+        response(message);
     }
 
     //meta! sender="AgentSalonu", id="62", type="Request"
     public void processParkovanie(MessageForm message) {
+        message.setAddressee(myAgent().findAssistant(Id.procesParkovania));
+        startContinualAssistant(message);
     }
 
     //meta! userInfo="Process messages defined in code", id="0"

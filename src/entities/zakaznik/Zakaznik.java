@@ -2,6 +2,8 @@ package entities.zakaznik;
 
 import OSPABA.Entity;
 import OSPABA.Simulation;
+import myGenerators.RandUniformContinuous;
+import myGenerators.RandUniformDiscrete;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -10,7 +12,7 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
     public static int pocetZakaznikov = 0;
 
-    private final double casPrichodu;
+    private double casPrichodu;
     private double casOdchodu;
     private final double[] casZaciatkuObsluhy = new double[5]; //Objednavka, Uces, HlbkoveCistenie, Licenie,  Platba
     private StavZakaznika stavZakaznika;
@@ -22,10 +24,10 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
     private boolean goToHlbkoveLicenie = false;
 
     private final boolean autom;
+    private int zaparkovane;
 
-    public Zakaznik(double casPrichodu, Simulation mySim, boolean autom) {
+    public Zakaznik(Simulation mySim, boolean autom) {
         super(mySim);
-        this.casPrichodu = casPrichodu;
         Arrays.fill(casZaciatkuObsluhy, 0.0);
         this.poradie = ++pocetZakaznikov;
         this.autom = autom;
@@ -101,6 +103,18 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
     public boolean isAutom() {
         return autom;
+    }
+
+    public int getZaparkovane() {
+        return zaparkovane;
+    }
+
+    public void setZaparkovane(int zaparkovane) {
+        this.zaparkovane = zaparkovane;
+    }
+
+    public void setCasPrichodu(double casPrichodu) {
+        this.casPrichodu = casPrichodu;
     }
 
     @Override

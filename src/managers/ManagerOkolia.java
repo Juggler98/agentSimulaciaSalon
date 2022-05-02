@@ -44,11 +44,16 @@ public class ManagerOkolia extends Manager {
     //meta! sender="AgentModelu", id="6", type="Notice"
     public void processOdchodZakaznika(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        MySimulation mySimulation = ((MySimulation) mySim());
         zakaznik.setCasOdchodu(mySim().currentTime());
         zakaznik.setStavZakaznika(StavZakaznika.ODCHOD);
-        ((MySimulation) mySim()).addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
-        ((MySimulation) mySim()).addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
-        ((MySimulation) mySim()).getStatsVykonov()[9]++;
+        mySimulation.addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+        mySimulation.addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+        mySimulation.getStatsVykonov()[9]++;
+
+        if (zakaznik.isAutom()) {
+            mySimulation.getFreeSlots().add(zakaznik.getZaparkovane());
+        }
 
         // Ak je po zaverecnej a vsetci su obsluzeny zastavuje replikaciu
         if (mySim().currentTime() > Config.endTime && ((MySimulation) mySim()).getStatsVykonov()[8] == ((MySimulation) mySim()).getStatsVykonov()[9]) {
