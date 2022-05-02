@@ -31,7 +31,9 @@ public class AgentRecepcie extends AgentPracovnika {
     private void init() {
         new ManagerRecepcie(Id.managerRecepcie, mySim(), this);
         setProces(new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this)); //TODO: setProces
+        addOwnMessage(Mc.zmenaRadu);
         addOwnMessage(Mc.obsluhaRecepia);
+        addOwnMessage(Mc.uzavri);
     }
     //meta! tag="end"
 

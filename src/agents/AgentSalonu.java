@@ -25,6 +25,7 @@ public class AgentSalonu extends Agent {
         addOwnMessage(Mc.obsluhaUcesy);
         addOwnMessage(Mc.parkovanie);
         addOwnMessage(Mc.obsluhaLicenie);
+        addOwnMessage(Mc.uzavri);
     }
     //meta! tag="end"
 }

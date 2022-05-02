@@ -52,6 +52,16 @@ public class ManagerRecepcie extends ManagerPracovnika {
         }
     }
 
+    //meta! sender="AgentSalonu", id="76", type="Notice"
+    public void processZmenaRadu(MessageForm message) {
+        obsluzDalsieho(message);
+    }
+
+    //meta! sender="AgentSalonu", id="80", type="Notice"
+    public void processUzavri(MessageForm message) {
+        myAgent().uzavri();
+    }
+
     //meta! userInfo="Generated code: do not modify", tag="begin"
     public void init() {
     }
@@ -59,12 +69,20 @@ public class ManagerRecepcie extends ManagerPracovnika {
     @Override
     public void processMessage(MessageForm message) {
         switch (message.code()) {
+            case Mc.obsluhaRecepia:
+                processObsluhaRecepia(message);
+                break;
+
+            case Mc.zmenaRadu:
+                processZmenaRadu(message);
+                break;
+
             case Mc.finish:
                 processFinish(message);
                 break;
 
-            case Mc.obsluhaRecepia:
-                processObsluhaRecepia(message);
+            case Mc.uzavri:
+                processUzavri(message);
                 break;
 
             default:

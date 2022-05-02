@@ -19,7 +19,6 @@ public class ProcesParkovania extends Process {
     private static final double toC = 8.0;
     private static final double parkingSize = width / 15;
 
-
     private final RandUniformContinuous randPersonSpeed = new RandUniformContinuous(2.5 - 0.7, 2.5 + 0.7);
 
     public ProcesParkovania(int id, Simulation mySim, CommonAgent myAgent) {

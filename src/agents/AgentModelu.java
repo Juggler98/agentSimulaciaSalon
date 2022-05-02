@@ -23,6 +23,7 @@ public class AgentModelu extends Agent {
         new ManagerModelu(Id.managerModelu, mySim(), this);
         addOwnMessage(Mc.obsluhaZakaznika);
         addOwnMessage(Mc.prichodZakaznika);
+        addOwnMessage(Mc.uzavri);
     }
     //meta! tag="end"
 

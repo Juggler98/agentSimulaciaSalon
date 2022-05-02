@@ -69,6 +69,9 @@ public class ManagerOkolia extends Manager {
 
     //meta! sender="PlanovacUzavretia", id="51", type="Finish"
     public void processFinishPlanovacUzavretia(MessageForm message) {
+        message.setCode(Mc.uzavri);
+        message.setAddressee(mySim().findAgent(Id.agentModelu));
+        notice(message);
     }
 
     //meta! userInfo="Generated code: do not modify", tag="begin"
@@ -90,12 +93,12 @@ public class ManagerOkolia extends Manager {
                 }
                 break;
 
-            case Mc.init:
-                processInit(message);
-                break;
-
             case Mc.odchodZakaznika:
                 processOdchodZakaznika(message);
+                break;
+
+            case Mc.init:
+                processInit(message);
                 break;
 
             default:

@@ -9,6 +9,8 @@ public class Mc extends IdList
 	public static final int prichodZakaznika = 1002;
 	public static final int obsluhaZakaznika = 1007;
 	public static final int odchodZakaznika = 1003;
+	public static final int zmenaRadu = 1011;
+	public static final int uzavri = 1012;
 	public static final int obsluhaRecepia = 1004;
 	public static final int obsluhaUcesy = 1005;
 	public static final int obsluhaLicenie = 1006;

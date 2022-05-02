@@ -26,7 +26,6 @@ public class PlanovacUzavretia extends Scheduler {
     public void processDefault(MessageForm message) {
         switch (message.code()) {
             case Mc.zatvorenie:
-                ((MySimulation) mySim()).agentRecepcie().uzavri();
                 assistantFinished(message);
                 break;
         }

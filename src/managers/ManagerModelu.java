@@ -23,15 +23,15 @@ public class ManagerModelu extends Manager {
         }
     }
 
-	//meta! sender="AgentOkolia", id="5", type="Notice"
-	public void processPrichodZakaznika(MessageForm message) {
+    //meta! sender="AgentOkolia", id="5", type="Notice"
+    public void processPrichodZakaznika(MessageForm message) {
         message.setCode(Mc.obsluhaZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentSalonu));
         request(message);
     }
 
-	//meta! userInfo="Process messages defined in code", id="0"
-	public void processDefault(MessageForm message) {
+    //meta! userInfo="Process messages defined in code", id="0"
+    public void processDefault(MessageForm message) {
         switch (message.code()) {
             case Mc.init:
                 message.setAddressee(mySim().findAgent(Id.agentOkolia));
@@ -40,38 +40,45 @@ public class ManagerModelu extends Manager {
         }
     }
 
-	//meta! sender="AgentSalonu", id="37", type="Response"
-	public void processObsluhaZakaznika(MessageForm message) {
+    //meta! sender="AgentSalonu", id="37", type="Response"
+    public void processObsluhaZakaznika(MessageForm message) {
         message.setCode(Mc.odchodZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentOkolia));
         message.setSender(myAgent());
         notice(message);
     }
 
-	//meta! userInfo="Generated code: do not modify", tag="begin"
-	public void init()
-	{
-	}
+    //meta! sender="AgentOkolia", id="78", type="Notice"
+    public void processUzavri(MessageForm message) {
+        message.setAddressee(mySim().findAgent(Id.agentSalonu));
+        notice(message);
+    }
 
-	@Override
-	public void processMessage(MessageForm message)
-	{
-		switch (message.code())
-		{
-		case Mc.prichodZakaznika:
-			processPrichodZakaznika(message);
-		break;
+    //meta! userInfo="Generated code: do not modify", tag="begin"
+    public void init() {
+    }
 
-		case Mc.obsluhaZakaznika:
-			processObsluhaZakaznika(message);
-		break;
+    @Override
+    public void processMessage(MessageForm message) {
+        switch (message.code()) {
+            case Mc.prichodZakaznika:
+                processPrichodZakaznika(message);
+                break;
 
-		default:
-			processDefault(message);
-		break;
-		}
-	}
-	//meta! tag="end"
+            case Mc.obsluhaZakaznika:
+                processObsluhaZakaznika(message);
+                break;
+
+            case Mc.uzavri:
+                processUzavri(message);
+                break;
+
+            default:
+                processDefault(message);
+                break;
+        }
+    }
+    //meta! tag="end"
 
     @Override
     public AgentModelu myAgent() {

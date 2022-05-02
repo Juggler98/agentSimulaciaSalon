@@ -104,7 +104,12 @@ public class ManagerSalonu extends Manager {
             message.setAddressee(mySim().findAgent(Id.agentRecepcie));
 
             request(message);
-            ((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
+
+            MyMessage msgCopy = new MyMessage((MyMessage) message);
+            msgCopy.setCode(Mc.zmenaRadu);
+            msgCopy.setAddressee(mySim().findAgent(Id.agentRecepcie));
+            notice(msgCopy);
+            //((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
 
     }
@@ -132,7 +137,12 @@ public class ManagerSalonu extends Manager {
             message.setAddressee(mySim().findAgent(Id.agentRecepcie));
             request(message);
 
-            ((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
+            MyMessage msgCopy = new MyMessage((MyMessage) message);
+            msgCopy.setCode(Mc.zmenaRadu);
+            msgCopy.setAddressee(mySim().findAgent(Id.agentRecepcie));
+            notice(msgCopy);
+
+            //((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
 
     }
@@ -150,6 +160,12 @@ public class ManagerSalonu extends Manager {
         request(message);
     }
 
+    //meta! sender="AgentModelu", id="79", type="Notice"
+    public void processUzavri(MessageForm message) {
+        message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+        notice(message);
+    }
+
     //meta! userInfo="Generated code: do not modify", tag="begin"
     public void init() {
     }
@@ -165,8 +181,8 @@ public class ManagerSalonu extends Manager {
                 processParkovanie(message);
                 break;
 
-            case Mc.obsluhaZakaznika:
-                processObsluhaZakaznika(message);
+            case Mc.uzavri:
+                processUzavri(message);
                 break;
 
             case Mc.obsluhaUcesy:
@@ -175,6 +191,10 @@ public class ManagerSalonu extends Manager {
 
             case Mc.obsluhaRecepia:
                 processObsluhaRecepia(message);
+                break;
+
+            case Mc.obsluhaZakaznika:
+                processObsluhaZakaznika(message);
                 break;
 
             default:

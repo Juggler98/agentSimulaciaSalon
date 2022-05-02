@@ -10,8 +10,8 @@ public class AgentParkoviska extends Agent {
     public AgentParkoviska(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
         init();
-		addOwnMessage(Mc.koniecParkovania);
-	}
+        addOwnMessage(Mc.koniecParkovania);
+    }
 
     @Override
     public void prepareReplication() {
