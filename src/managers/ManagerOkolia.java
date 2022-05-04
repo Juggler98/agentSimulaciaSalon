@@ -24,8 +24,8 @@ public class ManagerOkolia extends Manager {
         }
     }
 
-    //meta! sender="AgentModelu", id="4", type="Notice"
-    public void processInit(MessageForm message) {
+	//meta! sender="AgentModelu", id="4", type="Notice"
+	public void processInit(MessageForm message) {
         message.setAddressee(myAgent().findAssistant(Id.planovacPrichodyZakaznika));
         startContinualAssistant(message);
 
@@ -34,15 +34,15 @@ public class ManagerOkolia extends Manager {
         startContinualAssistant(msgCopy);
     }
 
-    //meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
-    public void processFinishPlanovacPrichodyZakaznika(MessageForm message) {
+	//meta! sender="PlanovacPrichodyZakaznika", id="23", type="Finish"
+	public void processFinishPlanovacPrichodyZakaznika(MessageForm message) {
         message.setCode(Mc.prichodZakaznika);
         message.setAddressee(mySim().findAgent(Id.agentModelu));
         notice(message);
     }
 
-    //meta! sender="AgentModelu", id="6", type="Notice"
-    public void processOdchodZakaznika(MessageForm message) {
+	//meta! sender="AgentModelu", id="6", type="Notice"
+	public void processOdchodZakaznika(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         MySimulation mySimulation = ((MySimulation) mySim());
         zakaznik.setCasOdchodu(mySim().currentTime());
@@ -61,52 +61,56 @@ public class ManagerOkolia extends Manager {
         }
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
         }
     }
 
-    //meta! sender="PlanovacUzavretia", id="51", type="Finish"
-    public void processFinishPlanovacUzavretia(MessageForm message) {
+	//meta! sender="PlanovacUzavretia", id="51", type="Finish"
+	public void processFinishPlanovacUzavretia(MessageForm message) {
         message.setCode(Mc.uzavri);
         message.setAddressee(mySim().findAgent(Id.agentModelu));
         notice(message);
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    public void init() {
-    }
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	public void init()
+	{
+	}
 
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.finish:
-                switch (message.sender().id()) {
-                    case Id.planovacUzavretia:
-                        processFinishPlanovacUzavretia(message);
-                        break;
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.finish:
+			switch (message.sender().id())
+			{
+			case Id.planovacPrichodyZakaznika:
+				processFinishPlanovacPrichodyZakaznika(message);
+			break;
 
-                    case Id.planovacPrichodyZakaznika:
-                        processFinishPlanovacPrichodyZakaznika(message);
-                        break;
-                }
-                break;
+			case Id.planovacUzavretia:
+				processFinishPlanovacUzavretia(message);
+			break;
+			}
+		break;
 
-            case Mc.odchodZakaznika:
-                processOdchodZakaznika(message);
-                break;
+		case Mc.init:
+			processInit(message);
+		break;
 
-            case Mc.init:
-                processInit(message);
-                break;
+		case Mc.odchodZakaznika:
+			processOdchodZakaznika(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentOkolia myAgent() {

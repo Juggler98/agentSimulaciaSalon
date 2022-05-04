@@ -23,13 +23,14 @@ public class AgentUcesov extends AgentPracovnika {
         inicializuj(((MySimulation) mySim()).pocetKadernicok);
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerUcesov(Id.managerUcesov, mySim(), this);
-        new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this);
-        addOwnMessage(Mc.obsluhaUcesy);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerUcesov(Id.managerUcesov, mySim(), this);
+		new ProcesObsluhyUcesy(Id.procesObsluhyUcesy, mySim(), this);
+		addOwnMessage(Mc.obsluhaUcesy);
+	}
+	//meta! tag="end"
 
     @Override
     public int getPocetPracovnikov() {

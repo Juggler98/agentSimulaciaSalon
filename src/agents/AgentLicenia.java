@@ -29,13 +29,14 @@ public class AgentLicenia extends AgentPracovnika {
         inicializuj(((MySimulation) mySim()).pocetKozmeticiek);
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerLicenia(Id.managerLicenia, mySim(), this);
-        new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this);
-        addOwnMessage(Mc.obsluhaLicenie);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerLicenia(Id.managerLicenia, mySim(), this);
+		new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this);
+		addOwnMessage(Mc.obsluhaLicenie);
+	}
+	//meta! tag="end"
 
     @Override
     public int getPocetPracovnikov() {

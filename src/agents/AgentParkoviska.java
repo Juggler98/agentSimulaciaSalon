@@ -30,13 +30,18 @@ public class AgentParkoviska extends Agent {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
-        new ProcesParkovania(Id.procesParkovania, mySim(), this);
-        addOwnMessage(Mc.parkovanie);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
+		new ProcesChodze(Id.procesChodze, mySim(), this);
+		new ProcesObchodzky(Id.procesObchodzky, mySim(), this);
+		new ProcesParkovania(Id.procesParkovania, mySim(), this);
+		new ProcesOdchodu(Id.procesOdchodu, mySim(), this);
+		new ProcesPrichodu(Id.procesPrichodu, mySim(), this);
+		addOwnMessage(Mc.parkovanie);
+	}
+	//meta! tag="end"
 
 
     public Miesto[][] parkovisko() {

@@ -32,15 +32,16 @@ public class AgentRecepcie extends AgentPracovnika {
         pocetObsluhovanychRecepcia = 0;
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerRecepcie(Id.managerRecepcie, mySim(), this);
-        new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this);
-        addOwnMessage(Mc.zmenaRadu);
-        addOwnMessage(Mc.obsluhaRecepia);
-        addOwnMessage(Mc.uzavri);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerRecepcie(Id.managerRecepcie, mySim(), this);
+		new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this);
+		addOwnMessage(Mc.zmenaRadu);
+		addOwnMessage(Mc.obsluhaRecepia);
+		addOwnMessage(Mc.uzavri);
+	}
+	//meta! tag="end"
 
     @Override
     public int getPocetPracovnikov() {

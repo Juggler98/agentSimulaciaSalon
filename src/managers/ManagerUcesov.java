@@ -22,45 +22,48 @@ public class ManagerUcesov extends ManagerPracovnika {
         }
     }
 
-    //meta! sender="AgentSalonu", id="18", type="Request"
-    public void processObsluhaUcesy(MessageForm message) {
+	//meta! sender="AgentSalonu", id="18", type="Request"
+	public void processObsluhaUcesy(MessageForm message) {
         zacniObsluhu(message);
     }
 
-    //meta! sender="ProcesObsluhyUcesy", id="29", type="Finish"
-    public void processFinish(MessageForm message) {
+	//meta! sender="ProcesObsluhyUcesy", id="29", type="Finish"
+	public void processFinish(MessageForm message) {
         ukonciObsluhu(message);
         message.setCode(Mc.obsluhaUcesy);
         response(message);
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    public void init() {
-    }
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	public void init()
+	{
+	}
 
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.finish:
-                processFinish(message);
-                break;
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.obsluhaUcesy:
+			processObsluhaUcesy(message);
+		break;
 
-            case Mc.obsluhaUcesy:
-                processObsluhaUcesy(message);
-                break;
+		case Mc.finish:
+			processFinish(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentUcesov myAgent() {

@@ -17,15 +17,16 @@ public class AgentSalonu extends Agent {
         // Setup component for the next replication
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerSalonu(Id.managerSalonu, mySim(), this);
-        addOwnMessage(Mc.obsluhaZakaznika);
-        addOwnMessage(Mc.obsluhaRecepia);
-        addOwnMessage(Mc.obsluhaUcesy);
-        addOwnMessage(Mc.parkovanie);
-        addOwnMessage(Mc.obsluhaLicenie);
-        addOwnMessage(Mc.uzavri);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerSalonu(Id.managerSalonu, mySim(), this);
+		addOwnMessage(Mc.obsluhaZakaznika);
+		addOwnMessage(Mc.obsluhaRecepia);
+		addOwnMessage(Mc.obsluhaUcesy);
+		addOwnMessage(Mc.parkovanie);
+		addOwnMessage(Mc.uzavri);
+		addOwnMessage(Mc.obsluhaLicenie);
+	}
+	//meta! tag="end"
 }

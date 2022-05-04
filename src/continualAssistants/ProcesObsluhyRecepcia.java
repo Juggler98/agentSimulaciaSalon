@@ -27,8 +27,8 @@ public class ProcesObsluhyRecepcia extends Process {
         // Setup component for the next replication
     }
 
-    //meta! sender="AgentRecepcie", id="26", type="Start"
-    public void processStart(MessageForm message) {
+	//meta! sender="AgentRecepcie", id="26", type="Start"
+	public void processStart(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setCode(Mc.koniecObsluhyRecepcia);
         double holdTime;
@@ -48,8 +48,8 @@ public class ProcesObsluhyRecepcia extends Process {
         hold(holdTime, message);
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
             case Mc.koniecObsluhyRecepcia:
                 assistantFinished(message);
@@ -57,20 +57,22 @@ public class ProcesObsluhyRecepcia extends Process {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.start:
-                processStart(message);
-                break;
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.start:
+			processStart(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentRecepcie myAgent() {

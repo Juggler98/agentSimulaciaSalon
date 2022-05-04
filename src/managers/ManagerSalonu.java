@@ -31,8 +31,8 @@ public class ManagerSalonu extends Manager {
         }
     }
 
-    //meta! sender="AgentModelu", id="37", type="Request"
-    public void processObsluhaZakaznika(MessageForm message) {
+	//meta! sender="AgentModelu", id="37", type="Request"
+	public void processObsluhaZakaznika(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
         if (zakaznik.isAutom()) {
@@ -45,8 +45,8 @@ public class ManagerSalonu extends Manager {
         request(message);
     }
 
-    //meta! sender="AgentRecepcie", id="17", type="Response"
-    public void processObsluhaRecepia(MessageForm message) {
+	//meta! sender="AgentRecepcie", id="17", type="Response"
+	public void processObsluhaRecepia(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
         if (zakaznik.isObsluzeny()) {
@@ -83,8 +83,8 @@ public class ManagerSalonu extends Manager {
         }
     }
 
-    //meta! sender="AgentUcesov", id="18", type="Response"
-    public void processObsluhaUcesy(MessageForm message) {
+	//meta! sender="AgentUcesov", id="18", type="Response"
+	public void processObsluhaUcesy(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
 
@@ -111,8 +111,8 @@ public class ManagerSalonu extends Manager {
 
     }
 
-    //meta! sender="AgentLicenia", id="19", type="Response"
-    public void processObsluhaLicenie(MessageForm message) {
+	//meta! sender="AgentLicenia", id="19", type="Response"
+	public void processObsluhaLicenie(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
 
@@ -142,62 +142,65 @@ public class ManagerSalonu extends Manager {
 
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
         }
     }
 
-    //meta! sender="AgentParkoviska", id="62", type="Response"
-    public void processParkovanie(MessageForm message) {
+	//meta! sender="AgentParkoviska", id="62", type="Response"
+	public void processParkovanie(MessageForm message) {
         message.setCode(Mc.obsluhaRecepia);
         message.setAddressee(mySim().findAgent(Id.agentRecepcie));
         request(message);
     }
 
-    //meta! sender="AgentModelu", id="79", type="Notice"
-    public void processUzavri(MessageForm message) {
+	//meta! sender="AgentModelu", id="79", type="Notice"
+	public void processUzavri(MessageForm message) {
         message.setAddressee(mySim().findAgent(Id.agentRecepcie));
         notice(message);
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    public void init() {
-    }
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	public void init()
+	{
+	}
 
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.obsluhaLicenie:
-                processObsluhaLicenie(message);
-                break;
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.obsluhaUcesy:
+			processObsluhaUcesy(message);
+		break;
 
-            case Mc.parkovanie:
-                processParkovanie(message);
-                break;
+		case Mc.uzavri:
+			processUzavri(message);
+		break;
 
-            case Mc.uzavri:
-                processUzavri(message);
-                break;
+		case Mc.parkovanie:
+			processParkovanie(message);
+		break;
 
-            case Mc.obsluhaUcesy:
-                processObsluhaUcesy(message);
-                break;
+		case Mc.obsluhaLicenie:
+			processObsluhaLicenie(message);
+		break;
 
-            case Mc.obsluhaRecepia:
-                processObsluhaRecepia(message);
-                break;
+		case Mc.obsluhaRecepia:
+			processObsluhaRecepia(message);
+		break;
 
-            case Mc.obsluhaZakaznika:
-                processObsluhaZakaznika(message);
-                break;
+		case Mc.obsluhaZakaznika:
+			processObsluhaZakaznika(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentSalonu myAgent() {

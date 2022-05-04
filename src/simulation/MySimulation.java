@@ -109,87 +109,74 @@ public class MySimulation extends Simulation {
         super.simulationFinished();
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        setAgentModelu(new AgentModelu(Id.agentModelu, this, null));
-        setAgentOkolia(new AgentOkolia(Id.agentOkolia, this, agentModelu()));
-        setAgentSalonu(new AgentSalonu(Id.agentSalonu, this, agentModelu()));
-        setAgentRecepcie(new AgentRecepcie(Id.agentRecepcie, this, agentSalonu()));
-        setAgentUcesov(new AgentUcesov(Id.agentUcesov, this, agentSalonu()));
-        setAgentLicenia(new AgentLicenia(Id.agentLicenia, this, agentSalonu()));
-        setAgentParkoviska(new AgentParkoviska(Id.agentParkoviska, this, agentSalonu()));
-    }
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		setAgentModelu(new AgentModelu(Id.agentModelu, this, null));
+		setAgentOkolia(new AgentOkolia(Id.agentOkolia, this, agentModelu()));
+		setAgentSalonu(new AgentSalonu(Id.agentSalonu, this, agentModelu()));
+		setAgentRecepcie(new AgentRecepcie(Id.agentRecepcie, this, agentSalonu()));
+		setAgentUcesov(new AgentUcesov(Id.agentUcesov, this, agentSalonu()));
+		setAgentLicenia(new AgentLicenia(Id.agentLicenia, this, agentSalonu()));
+		setAgentParkoviska(new AgentParkoviska(Id.agentParkoviska, this, agentSalonu()));
+	}
 
-    private AgentModelu _agentModelu;
+	private AgentModelu _agentModelu;
 
-    public AgentModelu agentModelu() {
-        return _agentModelu;
-    }
+public AgentModelu agentModelu()
+	{ return _agentModelu; }
 
-    public void setAgentModelu(AgentModelu agentModelu) {
-        _agentModelu = agentModelu;
-    }
+	public void setAgentModelu(AgentModelu agentModelu)
+	{_agentModelu = agentModelu; }
 
-    private AgentOkolia _agentOkolia;
+	private AgentOkolia _agentOkolia;
 
-    public AgentOkolia agentOkolia() {
-        return _agentOkolia;
-    }
+public AgentOkolia agentOkolia()
+	{ return _agentOkolia; }
 
-    public void setAgentOkolia(AgentOkolia agentOkolia) {
-        _agentOkolia = agentOkolia;
-    }
+	public void setAgentOkolia(AgentOkolia agentOkolia)
+	{_agentOkolia = agentOkolia; }
 
-    private AgentSalonu _agentSalonu;
+	private AgentSalonu _agentSalonu;
 
-    public AgentSalonu agentSalonu() {
-        return _agentSalonu;
-    }
+public AgentSalonu agentSalonu()
+	{ return _agentSalonu; }
 
-    public void setAgentSalonu(AgentSalonu agentSalonu) {
-        _agentSalonu = agentSalonu;
-    }
+	public void setAgentSalonu(AgentSalonu agentSalonu)
+	{_agentSalonu = agentSalonu; }
 
-    private AgentRecepcie _agentRecepcie;
+	private AgentRecepcie _agentRecepcie;
 
-    public AgentRecepcie agentRecepcie() {
-        return _agentRecepcie;
-    }
+public AgentRecepcie agentRecepcie()
+	{ return _agentRecepcie; }
 
-    public void setAgentRecepcie(AgentRecepcie agentRecepcie) {
-        _agentRecepcie = agentRecepcie;
-    }
+	public void setAgentRecepcie(AgentRecepcie agentRecepcie)
+	{_agentRecepcie = agentRecepcie; }
 
-    private AgentUcesov _agentUcesov;
+	private AgentUcesov _agentUcesov;
 
-    public AgentUcesov agentUcesov() {
-        return _agentUcesov;
-    }
+public AgentUcesov agentUcesov()
+	{ return _agentUcesov; }
 
-    public void setAgentUcesov(AgentUcesov agentUcesov) {
-        _agentUcesov = agentUcesov;
-    }
+	public void setAgentUcesov(AgentUcesov agentUcesov)
+	{_agentUcesov = agentUcesov; }
 
-    private AgentLicenia _agentLicenia;
+	private AgentLicenia _agentLicenia;
 
-    public AgentLicenia agentLicenia() {
-        return _agentLicenia;
-    }
+public AgentLicenia agentLicenia()
+	{ return _agentLicenia; }
 
-    public void setAgentLicenia(AgentLicenia agentLicenia) {
-        _agentLicenia = agentLicenia;
-    }
+	public void setAgentLicenia(AgentLicenia agentLicenia)
+	{_agentLicenia = agentLicenia; }
 
-    private AgentParkoviska _agentParkoviska;
+	private AgentParkoviska _agentParkoviska;
 
-    public AgentParkoviska agentParkoviska() {
-        return _agentParkoviska;
-    }
+public AgentParkoviska agentParkoviska()
+	{ return _agentParkoviska; }
 
-    public void setAgentParkoviska(AgentParkoviska agentParkoviska) {
-        _agentParkoviska = agentParkoviska;
-    }
-    //meta! tag="end"
+	public void setAgentParkoviska(AgentParkoviska agentParkoviska)
+	{_agentParkoviska = agentParkoviska; }
+	//meta! tag="end"
 
     public boolean ajParkovisko() {
         return ajParkovisko;
