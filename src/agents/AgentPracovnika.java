@@ -6,6 +6,7 @@ import OSPABA.Simulation;
 import entities.pracovnik.Pracovnik;
 import entities.pracovnik.TypPracovnika;
 import entities.zakaznik.Zakaznik;
+import simulation.MySimulation;
 
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -23,6 +24,12 @@ public abstract class AgentPracovnika extends Agent {
     public AgentPracovnika(int id, Simulation mySim, Agent parent, TypPracovnika typPracovnika) {
         super(id, mySim, parent);
         this.typPracovnika = typPracovnika;
+    }
+
+    @Override
+    public void prepareReplication() {
+        super.prepareReplication();
+
     }
 
     public void inicializuj(int pocetZamestnancov) {

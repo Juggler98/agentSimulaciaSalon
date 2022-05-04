@@ -52,7 +52,7 @@ public class ManagerOkolia extends Manager {
         mySimulation.getStatsVykonov()[9]++;
 
         if (zakaznik.isAutom()) {
-            mySimulation.getFreeSlots().add(zakaznik.getZaparkovane());
+            //mySimulation.getFreeSlots().add(zakaznik.getZaparkovane());
         }
 
         // Ak je po zaverecnej a vsetci su obsluzeny zastavuje replikaciu

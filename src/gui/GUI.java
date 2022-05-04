@@ -129,10 +129,10 @@ public class GUI extends JFrame implements ISimDelegate {
             panel.add(tablesScrollPane[i]);
         }
         tables[0].setModel(new DefaultTableModel(new Object[][]{{"Recepcia", 0, 0.0, 0.0}, {"Ucesy", 0, 0.0, 0.0}, {"Licenie", 0, 0.0, 0.0}}, new String[]{"Pracovisko", "Aktualny rad", "Priemerna dlzka", "Celkova priemerna dlzka"}));
-        String[] table4Data = new String[Config.pocetParkingMiestRadu + 1];
+        String[] table4Data = new String[Config.miestRadu + 1];
         table4Data[0] = "Rad";
         for (int i = 1; i < table4Data.length; i++) {
-            table4Data[i] = Config.pocetParkingMiestRadu - i + 1 + "";
+            table4Data[i] = Config.miestRadu - i + 1 + "";
         }
         tables[4].setModel(new DefaultTableModel(new Object[][]{{"Rad 1"}, {"Rad 2"}, {"Rad 3"}}, table4Data));
 
@@ -576,14 +576,14 @@ public class GUI extends JFrame implements ISimDelegate {
 
 //        }
 
-        int p = Config.pocetParkingMiestRadu;
+        int p = Config.miestRadu;
         for (int i = 0; i < 3 * p; i++) {
             if (i < salonSimulation.getPocetRadov() * p) {
-                if (!salonSimulation.getFreeSlots().contains(i)) {
-                    tables[4].getModel().setValueAt("X", i / p, p - i % p);
-                } else {
-                    tables[4].getModel().setValueAt("", i / p, p - i % p);
-                }
+//                if (!salonSimulation.getFreeSlots().contains(i)) {
+//                    tables[4].getModel().setValueAt("X", i / p, p - i % p);
+//                } else {
+//                    tables[4].getModel().setValueAt("", i / p, p - i % p);
+//                }
             } else {
                 tables[4].getModel().setValueAt("", i / p, p - i % p);
             }

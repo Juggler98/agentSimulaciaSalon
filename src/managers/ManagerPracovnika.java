@@ -5,6 +5,7 @@ import OSPABA.Manager;
 import OSPABA.MessageForm;
 import OSPABA.Simulation;
 import agents.AgentPracovnika;
+import agents.AgentRecepcie;
 import entities.pracovnik.Pracovnik;
 import entities.pracovnik.TypPracovnika;
 import entities.zakaznik.StavZakaznika;
@@ -29,7 +30,7 @@ public abstract class ManagerPracovnika extends Manager {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         // Ak je rad prazdny a je volny zamestnanec zacne sa obsluha, inak ide zakaznik do radu
         MySimulation mySimulation = ((MySimulation) mySim());
-        if (agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + mySimulation.getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
+        if (agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + ((AgentRecepcie) agent).getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
             Pracovnik novyPracovnik = agent.obsadZamestnanca();
 
             novyPracovnik.setObsluhujeZakaznika(zakaznik.getPoradie());
@@ -80,7 +81,7 @@ public abstract class ManagerPracovnika extends Manager {
         AgentPracovnika agent = (AgentPracovnika) myAgent();
         // Ak je niekto v rade a je volny pracovnik spusti obsluhu dalsieho zakaznika
         MySimulation mySimulation = ((MySimulation) mySim());
-        if (!agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + mySimulation.getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
+        if (!agent.isRadEmpty() && agent.jeNiektoVolny() && ((agent.getTypPracovnika() != TypPracovnika.RECEPCIA) || (mySimulation.getDlzkaRaduUcesyLicenie() + ((AgentRecepcie) agent).getPocetObsluhovanychRecepcia() <= 10 || agent.ideNiektoPlatit()))) {
             Zakaznik novyZakaznik = agent.vyberZRadu();
             Pracovnik novyPracovnik = agent.obsadZamestnanca();
 

@@ -38,7 +38,7 @@ public class ProcesObsluhyRecepcia extends Process {
             zakaznik.setStavZakaznika(StavZakaznika.PLATBA);
         } else {
             holdTime = randObjednavka.nextValue();
-            ((MySimulation) mySim()).incPocetObsluhovanychRecepcia(1);
+            myAgent().incPocetObsluhovanychRecepcia(1);
             ((MySimulation) mySim()).getStatsVykonov()[8]++;
 
             zakaznik.setCasZaciatkuObsluhy(0, mySim().currentTime());

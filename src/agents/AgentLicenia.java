@@ -16,21 +16,23 @@ public class AgentLicenia extends AgentPracovnika {
 
     public AgentLicenia(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent, TypPracovnika.LICENIE);
-        inicializuj(((MySimulation) mySim()).pocetKozmeticiek);
         init();
         addOwnMessage(Mc.koniecObsluhyLicenie);
+        setProces((ContinualAssistant) findAssistant(Id.procesObsluhyLicenie));
     }
 
     @Override
     public void prepareReplication() {
         super.prepareReplication();
         // Setup component for the next replication
+
+        inicializuj(((MySimulation) mySim()).pocetKozmeticiek);
     }
 
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerLicenia(Id.managerLicenia, mySim(), this);
-        setProces(new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this)); //TODO: setProces
+        new ProcesObsluhyLicenie(Id.procesObsluhyLicenie, mySim(), this);
         addOwnMessage(Mc.obsluhaLicenie);
     }
     //meta! tag="end"

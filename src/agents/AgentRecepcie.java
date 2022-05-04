@@ -13,24 +13,29 @@ import java.util.PriorityQueue;
 //meta! id="8"
 public class AgentRecepcie extends AgentPracovnika {
 
+    int pocetObsluhovanychRecepcia = 0;
+
     public AgentRecepcie(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent, TypPracovnika.RECEPCIA);
         rad = new PriorityQueue<>();
         init();
-        inicializuj(((MySimulation) mySim()).pocetRecepcnych);
         addOwnMessage(Mc.koniecObsluhyRecepcia);
+        setProces((ContinualAssistant) findAssistant(Id.procesObsluhyRecepcia));
     }
 
     @Override
     public void prepareReplication() {
         super.prepareReplication();
         // Setup component for the next replication
+
+        inicializuj(((MySimulation) mySim()).pocetRecepcnych);
+        pocetObsluhovanychRecepcia = 0;
     }
 
     //meta! userInfo="Generated code: do not modify", tag="begin"
     private void init() {
         new ManagerRecepcie(Id.managerRecepcie, mySim(), this);
-        setProces(new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this)); //TODO: setProces
+        new ProcesObsluhyRecepcia(Id.procesObsluhyRecepcia, mySim(), this);
         addOwnMessage(Mc.zmenaRadu);
         addOwnMessage(Mc.obsluhaRecepia);
         addOwnMessage(Mc.uzavri);
@@ -49,7 +54,8 @@ public class AgentRecepcie extends AgentPracovnika {
                 z.setCasOdchodu(mySim().currentTime());
 
                 if (z.isAutom()) {
-                    ((MySimulation) mySim()).getFreeSlots().add(z.getZaparkovane());
+                    //TODO:
+//                    ((MySimulation) mySim()).getFreeSlots().add(z.getZaparkovane());
                 }
             }
         }
@@ -58,4 +64,11 @@ public class AgentRecepcie extends AgentPracovnika {
         rad.removeIf(z -> !z.isObsluzeny());
     }
 
+    public void incPocetObsluhovanychRecepcia(int dlzka) {
+        this.pocetObsluhovanychRecepcia += dlzka;
+    }
+
+    public int getPocetObsluhovanychRecepcia() {
+        return pocetObsluhovanychRecepcia;
+    }
 }

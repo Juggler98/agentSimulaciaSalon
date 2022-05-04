@@ -27,7 +27,6 @@ public class ManagerParkoviska extends Manager {
     public void processFinish(MessageForm message) {
         ((MySimulation) mySim()).getStatsVykonov()[11]++;
         message.setCode(Mc.parkovanie);
-        message.setAddressee(mySim().findAgent(Id.agentSalonu));
         response(message);
     }
 

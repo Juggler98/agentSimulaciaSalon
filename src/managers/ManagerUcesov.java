@@ -25,15 +25,12 @@ public class ManagerUcesov extends ManagerPracovnika {
     //meta! sender="AgentSalonu", id="18", type="Request"
     public void processObsluhaUcesy(MessageForm message) {
         zacniObsluhu(message);
-//        message.setAddressee(myAgent().findAssistant(Id.procesObsluhyUcesy));
-//        startContinualAssistant(message);
     }
 
     //meta! sender="ProcesObsluhyUcesy", id="29", type="Finish"
     public void processFinish(MessageForm message) {
         ukonciObsluhu(message);
         message.setCode(Mc.obsluhaUcesy);
-        message.setAddressee(mySim().findAgent(Id.agentSalonu));
         response(message);
     }
 

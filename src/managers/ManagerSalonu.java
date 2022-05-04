@@ -51,10 +51,8 @@ public class ManagerSalonu extends Manager {
         message.setSender(myAgent());
         if (zakaznik.isObsluzeny()) {
             message.setCode(Mc.obsluhaZakaznika);
-            message.setAddressee(mySim().findAgent(Id.agentModelu));
             response(message);
         } else {
-            ((MySimulation) mySim()).incPocetObsluhovanychRecepcia(-1);
             double percentage = randPercentageTypZakaznika.nextDouble();
             if (percentage < 0.2) {
                 zakaznik.setTypZakaznika(TypZakaznika.UCES);
@@ -109,7 +107,6 @@ public class ManagerSalonu extends Manager {
             msgCopy.setCode(Mc.zmenaRadu);
             msgCopy.setAddressee(mySim().findAgent(Id.agentRecepcie));
             notice(msgCopy);
-            //((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
 
     }
@@ -141,8 +138,6 @@ public class ManagerSalonu extends Manager {
             msgCopy.setCode(Mc.zmenaRadu);
             msgCopy.setAddressee(mySim().findAgent(Id.agentRecepcie));
             notice(msgCopy);
-
-            //((ManagerPracovnika) mySimulation.agentRecepcie().manager()).obsluzDalsieho(message);
         }
 
     }

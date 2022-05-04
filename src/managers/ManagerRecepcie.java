@@ -32,17 +32,16 @@ public class ManagerRecepcie extends ManagerPracovnika {
             zakaznik.setStavZakaznika(StavZakaznika.PRICHOD);
         }
         zacniObsluhu(message);
-
-        //message.setAddressee(myAgent().findAssistant(Id.procesObsluhyRecepcia));
-        //startContinualAssistant(message);
     }
 
     //meta! sender="ProcesObsluhyRecepcia", id="26", type="Finish"
     public void processFinish(MessageForm message) {
         ukonciObsluhu(message);
 
+        if (!((MyMessage) message).getZakaznik().isObsluzeny())
+            myAgent().incPocetObsluhovanychRecepcia(-1);
+
         message.setCode(Mc.obsluhaRecepia);
-        message.setAddressee(mySim().findAgent(Id.agentSalonu));
         response(message);
     }
 

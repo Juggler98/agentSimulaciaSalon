@@ -1,12 +1,16 @@
 package agents;
 
 import OSPABA.*;
+import entities.pracovnik.Miesto;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
 
 //meta! id="57"
 public class AgentParkoviska extends Agent {
+
+    protected Miesto[][] parkovisko;
+
     public AgentParkoviska(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
         init();
@@ -17,6 +21,13 @@ public class AgentParkoviska extends Agent {
     public void prepareReplication() {
         super.prepareReplication();
         // Setup component for the next replication
+
+        parkovisko = new Miesto[((MySimulation) mySim()).getPocetRadov()][Config.miestRadu];
+        for (int i = 0; i < parkovisko.length; i++) {
+            for (int j = 0; j < parkovisko[0].length; j++) {
+                parkovisko[i][j] = new Miesto(i + 1, j + 1);
+            }
+        }
     }
 
     //meta! userInfo="Generated code: do not modify", tag="begin"
@@ -26,4 +37,9 @@ public class AgentParkoviska extends Agent {
         addOwnMessage(Mc.parkovanie);
     }
     //meta! tag="end"
+
+
+    public Miesto[][] parkovisko() {
+        return parkovisko;
+    }
 }

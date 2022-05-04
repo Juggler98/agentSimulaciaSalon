@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
-    public static int pocetZakaznikov = 0;
+    private static int pocetZakaznikov = 0;
 
     private double casPrichodu;
     private double casOdchodu;
@@ -115,6 +115,10 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
     public void setCasPrichodu(double casPrichodu) {
         this.casPrichodu = casPrichodu;
+    }
+
+    public static void init() {
+        Zakaznik.pocetZakaznikov = 0;
     }
 
     @Override

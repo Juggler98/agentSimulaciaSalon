@@ -24,8 +24,6 @@ public class MySimulation extends Simulation {
     private final double[] xI = new double[2];
     private double xAvg = 0;
 
-    private int pocetObsluhovanychRecepcia = 0;
-
     private final ArrayList<Pracovnik> zamestnanci = new ArrayList<>();
     private final ArrayList<Zakaznik> zakaznici = new ArrayList<>();
 
@@ -34,10 +32,7 @@ public class MySimulation extends Simulation {
     public final int pocetKozmeticiek;
 
     public final boolean ajParkovisko;
-
     private final int pocetRadov;
-
-    PriorityQueue<Integer> freeSlots;
 
     public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko, int pocetRadov) {
         this.pocetRecepcnych = pocetRecepcnych;
@@ -51,7 +46,6 @@ public class MySimulation extends Simulation {
     @Override
     public void prepareSimulation() {
         super.prepareSimulation();
-        freeSlots = new PriorityQueue<>(pocetRadov * Config.pocetParkingMiestRadu);
         // Create global statistcis
     }
 
@@ -60,11 +54,7 @@ public class MySimulation extends Simulation {
         super.prepareReplication();
         // Reset entities, queues, local statistics, etc...
 
-        agentRecepcie().inicializuj(pocetRecepcnych);
-        agentUcesov().inicializuj(pocetKadernicok);
-        agentLicenia().inicializuj(pocetKozmeticiek);
-
-        Zakaznik.pocetZakaznikov = 0;
+        Zakaznik.init();
 
         Arrays.fill(statsVykonov, 0);
         Arrays.fill(casy, 0);
@@ -72,15 +62,8 @@ public class MySimulation extends Simulation {
 
         xAvg = 0;
 
-        pocetObsluhovanychRecepcia = 0;
-
         zamestnanci.clear();
         zakaznici.clear();
-        freeSlots.clear();
-
-        for (int i = 0; i < pocetRadov * Config.pocetParkingMiestRadu; i++) {
-            freeSlots.add(i);
-        }
 
         for (int i = 0; i < pocetRecepcnych; i++) {
             zamestnanci.add(agentRecepcie().getZamestnanec(i));
@@ -208,11 +191,6 @@ public class MySimulation extends Simulation {
     }
     //meta! tag="end"
 
-
-    public PriorityQueue<Integer> getFreeSlots() {
-        return freeSlots;
-    }
-
     public boolean ajParkovisko() {
         return ajParkovisko;
     }
@@ -223,14 +201,6 @@ public class MySimulation extends Simulation {
 
     public int getDlzkaRaduUcesyLicenie() {
         return agentLicenia().getRadSize() + agentUcesov().getRadSize();
-    }
-
-    public int getPocetObsluhovanychRecepcia() {
-        return pocetObsluhovanychRecepcia;
-    }
-
-    public void incPocetObsluhovanychRecepcia(int dlzka) {
-        this.pocetObsluhovanychRecepcia += dlzka;
     }
 
     public String[] getStatsNames() {
