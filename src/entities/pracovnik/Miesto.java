@@ -6,7 +6,6 @@ public class Miesto {
 
     private final int pozicia;
     private final int rad;
-    private boolean volne;
     private Zakaznik zakaznik;
 
     public Miesto(int rad, int pozicia) {
@@ -18,16 +17,8 @@ public class Miesto {
         return pozicia;
     }
 
-    public boolean isVolne() {
-        return volne;
-    }
-
     public Zakaznik getZakaznik() {
         return zakaznik;
-    }
-
-    public void setVolne(boolean volne) {
-        this.volne = volne;
     }
 
     public void setZakaznik(Zakaznik zakaznik) {

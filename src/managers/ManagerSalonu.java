@@ -49,7 +49,12 @@ public class ManagerSalonu extends Manager {
 	public void processObsluhaRecepia(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         message.setSender(myAgent());
-        if (zakaznik.isObsluzeny()) {
+        if (zakaznik.isObsluzeny() && zakaznik.isAutom()) {
+            zakaznik.setOdchadza();
+            message.setCode(Mc.parkovanie);
+            message.setAddressee(mySim().findAgent(Id.agentParkoviska));
+            request(message);
+        } else if (zakaznik.isObsluzeny()) {
             message.setCode(Mc.obsluhaZakaznika);
             response(message);
         } else {
@@ -150,9 +155,15 @@ public class ManagerSalonu extends Manager {
 
 	//meta! sender="AgentParkoviska", id="62", type="Response"
 	public void processParkovanie(MessageForm message) {
-        message.setCode(Mc.obsluhaRecepia);
-        message.setAddressee(mySim().findAgent(Id.agentRecepcie));
-        request(message);
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        if (zakaznik.odchadza()) {
+            message.setCode(Mc.obsluhaZakaznika);
+            response(message);
+        } else {
+            message.setCode(Mc.obsluhaRecepia);
+            message.setAddressee(mySim().findAgent(Id.agentRecepcie));
+            request(message);
+        }
     }
 
 	//meta! sender="AgentModelu", id="79", type="Notice"

@@ -5,7 +5,6 @@ import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
-import continualAssistants.*;
 
 //meta! id="8"
 public class ManagerRecepcie extends ManagerPracovnika {
@@ -29,7 +28,7 @@ public class ManagerRecepcie extends ManagerPracovnika {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         if (!zakaznik.isObsluzeny() && zakaznik.isAutom()) {
             zakaznik.setCasPrichodu(mySim().currentTime());
-            zakaznik.setStavZakaznika(StavZakaznika.PRICHOD);
+            zakaznik.setStavZakaznika(StavZakaznika.PRICHADZA);
         }
         zacniObsluhu(message);
     }
@@ -38,8 +37,12 @@ public class ManagerRecepcie extends ManagerPracovnika {
 	public void processFinish(MessageForm message) {
         ukonciObsluhu(message);
 
-        if (!((MyMessage) message).getZakaznik().isObsluzeny())
-            myAgent().incPocetObsluhovanychRecepcia(-1);
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        if (!zakaznik.isObsluzeny()) {
+			myAgent().incPocetObsluhovanychRecepcia(-1);
+		} else {
+			zakaznik.setCasOdchodu(mySim().currentTime());
+		}
 
         message.setCode(Mc.obsluhaRecepia);
         response(message);

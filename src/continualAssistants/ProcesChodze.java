@@ -1,6 +1,9 @@
 package continualAssistants;
 
 import OSPABA.*;
+import entities.pracovnik.Miesto;
+import entities.zakaznik.StavZakaznika;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
 import OSPABA.Process;
@@ -23,6 +26,25 @@ public class ProcesChodze extends Process
 	//meta! sender="AgentParkoviska", id="100", type="Start"
 	public void processStart(MessageForm message)
 	{
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+		zakaznik.setStavZakaznika(StavZakaznika.KRACA);
+		message.setCode(Mc.koniecChodze);
+		Miesto miesto = zakaznik.getMiesto();
+		double distance = 0;
+		switch (miesto.getRad()) {
+			case 0:
+				distance = AgentParkoviska.toA;
+				break;
+			case 1:
+				distance = AgentParkoviska.toA + AgentParkoviska.toB;
+				break;
+			case 2:
+				distance = AgentParkoviska.toA + AgentParkoviska.toB + AgentParkoviska.toC;
+				break;
+		}
+		distance += (Config.miestRadu - miesto.getPozicia()) * AgentParkoviska.parkingSize;
+
+		hold(distance / zakaznik.getSpeed(), message);
 	}
 
 	//meta! userInfo="Process messages defined in code", id="0"
@@ -30,6 +52,9 @@ public class ProcesChodze extends Process
 	{
 		switch (message.code())
 		{
+			case Mc.koniecChodze:
+				assistantFinished(message);
+				break;
 		}
 	}
 

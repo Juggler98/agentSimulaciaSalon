@@ -2,11 +2,10 @@ package entities.zakaznik;
 
 import OSPABA.Entity;
 import OSPABA.Simulation;
-import myGenerators.RandUniformContinuous;
-import myGenerators.RandUniformDiscrete;
+import entities.pracovnik.Miesto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Zakaznik extends Entity implements Comparable<Zakaznik> {
 
@@ -23,14 +22,25 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
     private boolean hlbkoveLicenie = false;
     private boolean goToHlbkoveLicenie = false;
 
-    private final boolean autom;
-    private int zaparkovane;
+    private boolean odchadza = false;
 
-    public Zakaznik(Simulation mySim, boolean autom) {
+    private final boolean autom;
+    private boolean zaparkoval = true;
+    private PolohaZakaznika poloha;
+    private Miesto miesto;
+
+    private int spokojnost = 0;
+
+    private final ArrayList<Integer> preskumane = new ArrayList<>();
+
+    private final double speed;
+
+    public Zakaznik(Simulation mySim, boolean autom, double speed) {
         super(mySim);
         Arrays.fill(casZaciatkuObsluhy, 0.0);
         this.poradie = ++pocetZakaznikov;
         this.autom = autom;
+        this.speed = speed;
     }
 
 //    public Zakaznik(int id, Simulation mySim) {
@@ -105,20 +115,63 @@ public class Zakaznik extends Entity implements Comparable<Zakaznik> {
         return autom;
     }
 
-    public int getZaparkovane() {
-        return zaparkovane;
-    }
-
-    public void setZaparkovane(int zaparkovane) {
-        this.zaparkovane = zaparkovane;
-    }
-
     public void setCasPrichodu(double casPrichodu) {
         this.casPrichodu = casPrichodu;
     }
 
     public static void init() {
         Zakaznik.pocetZakaznikov = 0;
+    }
+
+    public PolohaZakaznika getPoloha() {
+        return poloha;
+    }
+
+    public void setPoloha(PolohaZakaznika poloha) {
+        this.poloha = poloha;
+    }
+
+    public double getSpeed() {
+        if (speed < 0) {
+            throw new IllegalStateException("When using getSpeed() speed should be > 0");
+        }
+        return speed;
+    }
+
+    public Miesto getMiesto() {
+        return miesto;
+    }
+
+    public void setMiesto(Miesto miesto) {
+        this.miesto = miesto;
+    }
+
+    public ArrayList<Integer> preskumane() {
+        return preskumane;
+    }
+
+    public boolean zaparkoval() {
+        return zaparkoval;
+    }
+
+    public void setZaparkoval(boolean zaparkoval) {
+        this.zaparkoval = zaparkoval;
+    }
+
+    public boolean odchadza() {
+        return odchadza;
+    }
+
+    public void setOdchadza() {
+        this.odchadza = true;
+    }
+
+    public int getSpokojnost() {
+        return spokojnost;
+    }
+
+    public void incSpokojnost(int spokojnost) {
+        this.spokojnost += spokojnost;
     }
 
     @Override

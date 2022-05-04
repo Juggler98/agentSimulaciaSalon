@@ -5,7 +5,6 @@ import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
-import sun.plugin2.message.Message;
 
 //meta! id="2"
 public class ManagerOkolia extends Manager {
@@ -45,13 +44,17 @@ public class ManagerOkolia extends Manager {
 	public void processOdchodZakaznika(MessageForm message) {
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
         MySimulation mySimulation = ((MySimulation) mySim());
-        zakaznik.setCasOdchodu(mySim().currentTime());
-        zakaznik.setStavZakaznika(StavZakaznika.ODCHOD);
-        mySimulation.addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
-        mySimulation.addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
-        mySimulation.getStatsVykonov()[9]++;
 
-        if (zakaznik.isAutom()) {
+        zakaznik.setStavZakaznika(StavZakaznika.ODISIEL);
+
+        if (zakaznik.isObsluzeny()) {
+            mySimulation.addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+            mySimulation.addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+            mySimulation.getStatsVykonov()[9]++;
+        }
+
+        if (zakaznik.isAutom() && !zakaznik.zaparkoval()) {
+            zakaznik.setStavZakaznika(StavZakaznika.NEZAPARKOVANE);
             //mySimulation.getFreeSlots().add(zakaznik.getZaparkovane());
         }
 

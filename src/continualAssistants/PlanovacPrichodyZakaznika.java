@@ -1,10 +1,11 @@
 package continualAssistants;
 
 import OSPABA.*;
-import OSPRNG.ExponentialRNG;
+import entities.zakaznik.PolohaZakaznika;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import myGenerators.RandExponential;
+import myGenerators.RandUniformContinuous;
 import simulation.*;
 import agents.*;
 
@@ -14,8 +15,10 @@ import java.util.Random;
 public class PlanovacPrichodyZakaznika extends Scheduler {
 
     private static final Random seedGenerator = new Random();
-    private static final RandExponential randPrichod = new RandExponential(450, seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
+    private static final RandExponential randPrichod = new RandExponential(720, seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
     private static final RandExponential randPrichodAutom = new RandExponential(450, seedGenerator); //should be 450
+
+    private final RandUniformContinuous randPersonSpeed = new RandUniformContinuous(2.5 - 0.7, 2.5 + 0.7, seedGenerator);
 
     public PlanovacPrichodyZakaznika(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);
@@ -53,11 +56,11 @@ public class PlanovacPrichodyZakaznika extends Scheduler {
                     hold(holdTime, copy);
                 }
 
-                zakaznik = new Zakaznik(mySim(), false);
+                zakaznik = new Zakaznik(mySim(), false, -1);
                 zakaznik.setCasPrichodu(mySim().currentTime());
                 ((MyMessage) message).setZakaznik(zakaznik);
                 ((MySimulation) mySim()).getZakaznici().add(zakaznik);
-                zakaznik.setStavZakaznika(StavZakaznika.PRICHOD);
+                zakaznik.setStavZakaznika(StavZakaznika.PRICHADZA);
                 assistantFinished(message);
                 break;
 
@@ -69,10 +72,11 @@ public class PlanovacPrichodyZakaznika extends Scheduler {
                     hold(holdTime, copy);
                 }
 
-                zakaznik = new Zakaznik(mySim(), true);
+                zakaznik = new Zakaznik(mySim(), true, randPersonSpeed.nextValue());
                 ((MyMessage) message).setZakaznik(zakaznik);
                 ((MySimulation) mySim()).getZakaznici().add(zakaznik);
                 zakaznik.setStavZakaznika(StavZakaznika.PARKOVANIE);
+                zakaznik.setPoloha(PolohaZakaznika.START);
                 assistantFinished(message);
                 break;
         }

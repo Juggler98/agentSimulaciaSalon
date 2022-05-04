@@ -23,6 +23,8 @@ public class Mc extends IdList
 	public static final int koniecObsluhyUcesy = 3;
 	public static final int koniecObsluhyLicenie = 4;
 	public static final int zatvorenie = 5;
-	public static final int koniecParkovania = 6;
+	public static final int parkuj = 6;
 	public static final int novyZakaznikAutom = 7;
+	public static final int koniecJazdy = 8;
+	public static final int koniecChodze = 9;
 }

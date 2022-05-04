@@ -5,6 +5,7 @@ import OSPABA.SimState;
 import OSPABA.Simulation;
 import agents.AgentPracovnika;
 import charts.LineChart;
+import entities.pracovnik.Miesto;
 import entities.pracovnik.Pracovnik;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
@@ -108,8 +109,8 @@ public class GUI extends JFrame implements ISimDelegate {
         zamestnanciField[2].setToolTipText("Kozmeticky");
         pocetOpakovani.setText("1000");
         zamestnanciField[0].setText("2");
-        zamestnanciField[1].setText("6");
-        zamestnanciField[2].setText("5");
+        zamestnanciField[1].setText("9");
+        zamestnanciField[2].setText("8");
 
         spinner.setToolTipText("Rychlost");
         spinner2.setToolTipText("Pocet radov");
@@ -175,11 +176,11 @@ public class GUI extends JFrame implements ISimDelegate {
                     }
                 }
                 tables[1].setModel(new DefaultTableModel(tableData, new String[]{"Zamestnanec", "Obsluhuje", "Zákaznika č.", "Odpracovaný čas", "Využitie"}));
-                tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas", "Autom", "Parkuje"}));
+                tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas", "Autom", "Parkuje", "Poloha"}));
                 tables[2].getColumnModel().getColumn(0).setPreferredWidth(buttonWidth + 50);
-                tables[2].getColumnModel().getColumn(1).setPreferredWidth(buttonWidth + 70);
+                tables[2].getColumnModel().getColumn(1).setPreferredWidth(buttonWidth + 80);
                 tables[2].getColumnModel().getColumn(3).setPreferredWidth(buttonWidth + 40);
-                tables[2].getColumnModel().getColumn(5).setPreferredWidth(buttonWidth + 65);
+                tables[2].getColumnModel().getColumn(5).setPreferredWidth(buttonWidth + 60);
                 tables[2].getColumnModel().getColumn(9).setPreferredWidth(buttonWidth + 60);
                 tables[2].getColumnModel().getColumn(10).setPreferredWidth(buttonWidth - 10);
                 tables[2].getColumnModel().getColumn(11).setPreferredWidth(buttonWidth - 5);
@@ -329,7 +330,7 @@ public class GUI extends JFrame implements ISimDelegate {
         intervalSpolahlivostiLabel.setBounds(space + buttonWidth + 160, height - buttonHeight - 60, buttonWidth * 2, buttonHeight);
         tablesScrollPane[0].setBounds(space, space + buttonHeight * 5, 480, 72);
         tablesScrollPane[1].setBounds(space, space * 4 + buttonHeight * 5 + 72, 480, 232);
-        tablesScrollPane[2].setBounds(space, space * 8 + buttonHeight * 5 + 72 + 232, 920, 300);
+        tablesScrollPane[2].setBounds(space, space * 8 + buttonHeight * 5 + 72 + 232, 960, 300);
         tablesScrollPane[3].setBounds(space * 4 + 480, space + buttonHeight * 5, 360, 248 + 16 * 4);
         tablesScrollPane[4].setBounds(space, space * 8 + buttonHeight * 5 + 72 + 232 + 320, 840, 72);
 
@@ -409,17 +410,17 @@ public class GUI extends JFrame implements ISimDelegate {
         String solution = "";
         BufferedWriter writer = new BufferedWriter(new FileWriter("resultData.txt"));
         writer.write("Recepcne,Kadernicky,Kozmeticky,Cas na objednavku (min),Cas v salone (hod)\n");
-        for (int i = 1; i <= 10; i++) {
-            for (int j = 1; j <= 10; j++) {
-                for (int k = 1; k <= 10; k++) {
+        for (int i = 2; i <= 4; i++) {
+            for (int j = 6; j <= 12; j++) {
+                for (int k = 6; k <= 12; k++) {
                     MySimulation salonSimulation = new MySimulation(i, j, k, jCheckBoxParkovisko.isSelected(), pocetRadov);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
-//                    System.out.println(i + "," + j + "," + k);
-//                    System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.getPocetReplikacii());
-//                    System.out.println(salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.getPocetReplikacii());
-//                    System.out.println();
+                    System.out.println(i + "," + j + "," + k);
+                    System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication());
+                    System.out.println(salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication());
+                    System.out.println();
                     writer.write(i + "," + j + "," + k + "," + salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() + "," + salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() + "\n");
-                    if (salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() <= 3 && salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() <= 4) {
+                    if (salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() <= 3 && salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() <= 5.5) {
                         if (i + j + k < min) {
                             min = i + j + k;
                             solution = i + " " + j + " " + k;
@@ -504,11 +505,11 @@ public class GUI extends JFrame implements ISimDelegate {
         }
 
         if (salonSimulation.getZakaznici().size() <= 1 && pocetZakaznikov > 1) {
-            tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas", "Autom", "Parkuje"}));
+            tables[2].setModel(new DefaultTableModel(null, new String[]{"Zákaznik", "Stav", "Prichod", "Objednávka", "Účes", "Hlbkové čistenie", "Líčenie", "Platba", "Odchod", "Celkový čas", "Autom", "Parkuje", "Poloha"}));
             tables[2].getColumnModel().getColumn(0).setPreferredWidth(72 + 50);
-            tables[2].getColumnModel().getColumn(1).setPreferredWidth(72 + 70);
+            tables[2].getColumnModel().getColumn(1).setPreferredWidth(72 + 80);
             tables[2].getColumnModel().getColumn(3).setPreferredWidth(72 + 40);
-            tables[2].getColumnModel().getColumn(5).setPreferredWidth(72 + 65);
+            tables[2].getColumnModel().getColumn(5).setPreferredWidth(72 + 60);
             tables[2].getColumnModel().getColumn(9).setPreferredWidth(72 + 60);
             tables[2].getColumnModel().getColumn(10).setPreferredWidth(72 - 10);
             tables[2].getColumnModel().getColumn(11).setPreferredWidth(72 - 5);
@@ -536,7 +537,8 @@ public class GUI extends JFrame implements ISimDelegate {
             }
 
             tables[2].getModel().setValueAt(zakaznikSalonu.isAutom() ? "X" : "", i, 10);
-            tables[2].getModel().setValueAt(zakaznikSalonu.isAutom() && zakaznikSalonu.getStavZakaznika() != StavZakaznika.ODCHOD && zakaznikSalonu.getStavZakaznika() != StavZakaznika.NEZAPARKOVANE ? zakaznikSalonu.getZaparkovane() + 1 : "", i, 11);
+            tables[2].getModel().setValueAt(zakaznikSalonu.isAutom() && zakaznikSalonu.getStavZakaznika() != StavZakaznika.ODISIEL && zakaznikSalonu.getStavZakaznika() != StavZakaznika.PARKOVANIE && zakaznikSalonu.getStavZakaznika() != StavZakaznika.NEZAPARKOVANE && zakaznikSalonu.getMiesto() != null ? "R" + (zakaznikSalonu.getMiesto().getRad() + 1) + " P" + (zakaznikSalonu.getMiesto().getPozicia() + 1) : "", i, 11);
+            tables[2].getModel().setValueAt(zakaznikSalonu.getMiesto() != null ? "R" + (zakaznikSalonu.getMiesto().getRad() + 1) + " P" + (zakaznikSalonu.getMiesto().getPozicia() + 1) : "", i, 12);
 
             for (int j = 0; j < 5; j++) {
                 if (zakaznikSalonu.getCasZaciatkuObsluhy(j) > 0) {
@@ -576,16 +578,15 @@ public class GUI extends JFrame implements ISimDelegate {
 
 //        }
 
-        int p = Config.miestRadu;
-        for (int i = 0; i < 3 * p; i++) {
-            if (i < salonSimulation.getPocetRadov() * p) {
-//                if (!salonSimulation.getFreeSlots().contains(i)) {
-//                    tables[4].getModel().setValueAt("X", i / p, p - i % p);
-//                } else {
-//                    tables[4].getModel().setValueAt("", i / p, p - i % p);
-//                }
-            } else {
-                tables[4].getModel().setValueAt("", i / p, p - i % p);
+
+        Miesto[][] parkovisko = salonSimulation.agentParkoviska().parkovisko();
+        for (int i = 0; i < parkovisko.length; i++) {
+            for (int j = 0; j < parkovisko[0].length; j++) {
+                if (parkovisko[i][j].getZakaznik() == null) {
+                    tables[4].getModel().setValueAt("", i, parkovisko[0].length - j);
+                } else {
+                    tables[4].getModel().setValueAt("Z" + parkovisko[i][j].getZakaznik().getPoradie(), i, parkovisko[0].length - j);
+                }
             }
         }
 

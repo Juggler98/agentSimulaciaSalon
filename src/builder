@@ -2,23 +2,6 @@
 <ABAsim>
   <Agents>
     <Agent>
-      <SimId>4</SimId>
-      <InternalId>9</InternalId>
-      <Name>AgentUcesov</Name>
-      <Bounds>1657,931,180,180</Bounds>
-      <Reasoner>ManagerUcesov</Reasoner>
-      <ReasonerBounds>74,25,32,25</ReasonerBounds>
-      <UsePetriNet>false</UsePetriNet>
-      <Components>
-        <Process>
-          <SimId>1003</SimId>
-          <InternalId>28</InternalId>
-          <Name>ProcesObsluhyUcesy</Name>
-          <Bounds>22,68,35,18</Bounds>
-        </Process>
-      </Components>
-    </Agent>
-    <Agent>
       <SimId>3</SimId>
       <InternalId>8</InternalId>
       <Name>AgentRecepcie</Name>
@@ -36,45 +19,13 @@
       </Components>
     </Agent>
     <Agent>
-      <SimId>8</SimId>
-      <InternalId>57</InternalId>
-      <Name>AgentParkoviska</Name>
-      <Bounds>2210,529,190,190</Bounds>
-      <Reasoner>ManagerParkoviska</Reasoner>
+      <SimId>1</SimId>
+      <InternalId>1</InternalId>
+      <Name>AgentModelu</Name>
+      <Bounds>1104,55,180,180</Bounds>
+      <Reasoner>ManagerModelu</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
-      <Components>
-        <Process>
-          <SimId>1008</SimId>
-          <InternalId>95</InternalId>
-          <Name>ProcesPrichodu</Name>
-          <Bounds>142,59,35,18</Bounds>
-        </Process>
-        <Process>
-          <SimId>1009</SimId>
-          <InternalId>97</InternalId>
-          <Name>ProcesOdchodu</Name>
-          <Bounds>140,94,35,18</Bounds>
-        </Process>
-        <Process>
-          <SimId>1007</SimId>
-          <InternalId>65</InternalId>
-          <Name>ProcesParkovania</Name>
-          <Bounds>13,70,35,18</Bounds>
-        </Process>
-        <Process>
-          <SimId>1010</SimId>
-          <InternalId>99</InternalId>
-          <Name>ProcesChodze</Name>
-          <Bounds>41,100,35,18</Bounds>
-        </Process>
-        <Process>
-          <SimId>1012</SimId>
-          <InternalId>103</InternalId>
-          <Name>ProcesObchodzky</Name>
-          <Bounds>92,105,35,18</Bounds>
-        </Process>
-      </Components>
     </Agent>
     <Agent>
       <SimId>7</SimId>
@@ -84,6 +35,52 @@
       <Reasoner>ManagerSalonu</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
+    </Agent>
+    <Agent>
+      <SimId>8</SimId>
+      <InternalId>57</InternalId>
+      <Name>AgentParkoviska</Name>
+      <Bounds>2210,529,190,190</Bounds>
+      <Reasoner>ManagerParkoviska</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
+      <Components>
+        <Process>
+          <SimId>1010</SimId>
+          <InternalId>99</InternalId>
+          <Name>ProcesChodze</Name>
+          <Bounds>70,98,35,18</Bounds>
+        </Process>
+        <Process>
+          <SimId>1012</SimId>
+          <InternalId>103</InternalId>
+          <Name>ProcesJazdy</Name>
+          <Bounds>129,92,35,18</Bounds>
+        </Process>
+        <Process>
+          <SimId>1007</SimId>
+          <InternalId>65</InternalId>
+          <Name>ProcesParkovania</Name>
+          <Bounds>19,82,35,18</Bounds>
+        </Process>
+      </Components>
+    </Agent>
+    <Agent>
+      <SimId>4</SimId>
+      <InternalId>9</InternalId>
+      <Name>AgentUcesov</Name>
+      <Bounds>1657,931,180,180</Bounds>
+      <Reasoner>ManagerUcesov</Reasoner>
+      <ReasonerBounds>74,25,32,25</ReasonerBounds>
+      <UsePetriNet>false</UsePetriNet>
+      <Components>
+        <Process>
+          <SimId>1003</SimId>
+          <InternalId>28</InternalId>
+          <Name>ProcesObsluhyUcesy</Name>
+          <Bounds>22,68,35,18</Bounds>
+        </Process>
+      </Components>
     </Agent>
     <Agent>
       <SimId>5</SimId>
@@ -112,27 +109,18 @@
       <UsePetriNet>false</UsePetriNet>
       <Components>
         <Scheduler>
-          <SimId>1001</SimId>
-          <InternalId>22</InternalId>
-          <Name>PlanovacPrichodyZakaznika</Name>
-          <Bounds>17,70,40,13</Bounds>
-        </Scheduler>
-        <Scheduler>
           <SimId>1006</SimId>
           <InternalId>50</InternalId>
           <Name>PlanovacUzavretia</Name>
           <Bounds>103,84,35,13</Bounds>
         </Scheduler>
+        <Scheduler>
+          <SimId>1001</SimId>
+          <InternalId>22</InternalId>
+          <Name>PlanovacPrichodyZakaznika</Name>
+          <Bounds>17,70,40,13</Bounds>
+        </Scheduler>
       </Components>
-    </Agent>
-    <Agent>
-      <SimId>1</SimId>
-      <InternalId>1</InternalId>
-      <Name>AgentModelu</Name>
-      <Bounds>1104,55,180,180</Bounds>
-      <Reasoner>ManagerModelu</Reasoner>
-      <ReasonerBounds>74,25,32,25</ReasonerBounds>
-      <UsePetriNet>false</UsePetriNet>
     </Agent>
   </Agents>
   <Messages>
@@ -265,22 +253,10 @@
       <Destination>28</Destination>
     </Message>
     <Message>
-      <InternalId>96</InternalId>
-      <Type>StartFinish</Type>
-      <Source>57</Source>
-      <Destination>95</Destination>
-    </Message>
-    <Message>
       <InternalId>32</InternalId>
       <Type>StartFinish</Type>
       <Source>10</Source>
       <Destination>31</Destination>
-    </Message>
-    <Message>
-      <InternalId>98</InternalId>
-      <Type>StartFinish</Type>
-      <Source>57</Source>
-      <Destination>97</Destination>
     </Message>
     <Message>
       <InternalId>100</InternalId>
@@ -329,5 +305,5 @@
       <Destination>57</Destination>
     </Message>
   </Messages>
-  <IID>110</IID>
+  <IID>114</IID>
 </ABAsim>

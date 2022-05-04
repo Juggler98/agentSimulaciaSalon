@@ -2,6 +2,7 @@ package agents;
 
 import OSPABA.*;
 import entities.pracovnik.Miesto;
+import entities.zakaznik.Zakaznik;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
@@ -9,12 +10,22 @@ import continualAssistants.*;
 //meta! id="57"
 public class AgentParkoviska extends Agent {
 
+
+    public static final double toA = 13.0;
+    public static final double toB = 10.0;
+    public static final double toC = 8.0;
+    public static final double width = 35.0;
+    public static final double parkingSize = width / Config.miestRadu;
+
     protected Miesto[][] parkovisko;
 
     public AgentParkoviska(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
+        parkovisko = new Miesto[((MySimulation) mySim()).getPocetRadov()][Config.miestRadu];
         init();
-        addOwnMessage(Mc.koniecParkovania);
+        addOwnMessage(Mc.parkuj);
+        addOwnMessage(Mc.koniecJazdy);
+        addOwnMessage(Mc.koniecChodze);
     }
 
     @Override
@@ -22,10 +33,9 @@ public class AgentParkoviska extends Agent {
         super.prepareReplication();
         // Setup component for the next replication
 
-        parkovisko = new Miesto[((MySimulation) mySim()).getPocetRadov()][Config.miestRadu];
         for (int i = 0; i < parkovisko.length; i++) {
             for (int j = 0; j < parkovisko[0].length; j++) {
-                parkovisko[i][j] = new Miesto(i + 1, j + 1);
+                parkovisko[i][j] = new Miesto(i, j);
             }
         }
     }
@@ -35,10 +45,8 @@ public class AgentParkoviska extends Agent {
 	{
 		new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
 		new ProcesChodze(Id.procesChodze, mySim(), this);
-		new ProcesObchodzky(Id.procesObchodzky, mySim(), this);
+		new ProcesJazdy(Id.procesJazdy, mySim(), this);
 		new ProcesParkovania(Id.procesParkovania, mySim(), this);
-		new ProcesOdchodu(Id.procesOdchodu, mySim(), this);
-		new ProcesPrichodu(Id.procesPrichodu, mySim(), this);
 		addOwnMessage(Mc.parkovanie);
 	}
 	//meta! tag="end"

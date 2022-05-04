@@ -1,8 +1,9 @@
 package entities.zakaznik;
 
 public enum StavZakaznika {
-    PRICHOD,
+    PRICHADZA,
     PARKOVANIE,
+    ZAPARKOVANE,
     NEZAPARKOVANE,
     RADRECEPCIA,
     OBJEDNAVKA,
@@ -12,5 +13,9 @@ public enum StavZakaznika {
     LICENIE,
     HLBKOVECISTENIE,
     PLATBA,
-    ODCHOD,
+    ODISIEL,
+    //ODCHADZA,
+    IDEOKOLO,
+    NEOBSLUZENY,
+    KRACA,
 }

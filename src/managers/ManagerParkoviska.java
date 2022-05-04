@@ -1,6 +1,7 @@
 package managers;
 
 import OSPABA.*;
+import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
@@ -25,14 +26,23 @@ public class ManagerParkoviska extends Manager {
 
 	//meta! sender="ProcesParkovania", id="66", type="Finish"
 	public void processFinishProcesParkovania(MessageForm message) {
-        ((MySimulation) mySim()).getStatsVykonov()[11]++;
-        message.setCode(Mc.parkovanie);
-        response(message);
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+		if (zakaznik.getMiesto() != null) {
+			message.setAddressee(myAgent().findAssistant(Id.procesChodze));
+		} else {
+			message.setAddressee(myAgent().findAssistant(Id.procesJazdy));
+		}
+		startContinualAssistant(message);
     }
 
 	//meta! sender="AgentSalonu", id="62", type="Request"
 	public void processParkovanie(MessageForm message) {
-        message.setAddressee(myAgent().findAssistant(Id.procesParkovania));
+        Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+        if (zakaznik.odchadza()) {
+            message.setAddressee(myAgent().findAssistant(Id.procesChodze));
+        } else {
+            message.setAddressee(myAgent().findAssistant(Id.procesJazdy));
+        }
         startContinualAssistant(message);
     }
 
@@ -42,24 +52,31 @@ public class ManagerParkoviska extends Manager {
         }
     }
 
-	//meta! sender="ProcesObchodzky", id="104", type="Finish"
-	public void processFinishProcesObchodzky(MessageForm message)
+	//meta! sender="ProcesJazdy", id="104", type="Finish"
+	public void processFinishProcesJazdy(MessageForm message)
 	{
-	}
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+		if (zakaznik.odchadza()) {
+			message.setCode(Mc.parkovanie);
+			response(message);
+		} else {
+			message.setAddressee(myAgent().findAssistant(Id.procesParkovania));
+			startContinualAssistant(message);
+		}
 
-	//meta! sender="ProcesOdchodu", id="98", type="Finish"
-	public void processFinishProcesOdchodu(MessageForm message)
-	{
 	}
 
 	//meta! sender="ProcesChodze", id="100", type="Finish"
 	public void processFinishProcesChodze(MessageForm message)
 	{
-	}
-
-	//meta! sender="ProcesPrichodu", id="96", type="Finish"
-	public void processFinishProcesPrichodu(MessageForm message)
-	{
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+		if (zakaznik.odchadza()) {
+            message.setAddressee(myAgent().findAssistant(Id.procesParkovania));
+            startContinualAssistant(message);
+		} else {
+			message.setCode(Mc.parkovanie);
+            response(message);
+		}
 	}
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -75,24 +92,16 @@ public class ManagerParkoviska extends Manager {
 		case Mc.finish:
 			switch (message.sender().id())
 			{
-			case Id.procesObchodzky:
-				processFinishProcesObchodzky(message);
+			case Id.procesJazdy:
+				processFinishProcesJazdy(message);
 			break;
 
 			case Id.procesParkovania:
 				processFinishProcesParkovania(message);
 			break;
 
-			case Id.procesOdchodu:
-				processFinishProcesOdchodu(message);
-			break;
-
 			case Id.procesChodze:
 				processFinishProcesChodze(message);
-			break;
-
-			case Id.procesPrichodu:
-				processFinishProcesPrichodu(message);
 			break;
 			}
 		break;

@@ -51,11 +51,13 @@ public class AgentRecepcie extends AgentPracovnika {
     public void uzavri() {
         for (Zakaznik z : rad) {
             if (!z.isObsluzeny()) {
-                z.setStavZakaznika(StavZakaznika.ODCHOD);
+                z.setStavZakaznika(StavZakaznika.NEOBSLUZENY);
                 z.setCasOdchodu(mySim().currentTime());
 
                 if (z.isAutom()) {
                     //TODO:
+                    z.getMiesto().setZakaznik(null);
+                    z.setMiesto(null);
 //                    ((MySimulation) mySim()).getFreeSlots().add(z.getZaparkovane());
                 }
             }
