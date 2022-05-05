@@ -12,7 +12,7 @@ import OSPABA.Process;
 //meta! id="65"
 public class ProcesParkovania extends Process {
 
-    public static final double speed = 12.0 / 3.6;
+    private static final double speed = 12.0 / 3.6;
     private Miesto[][] parkovisko;
 
     public ProcesParkovania(int id, Simulation mySim, CommonAgent myAgent) {
@@ -51,31 +51,79 @@ public class ProcesParkovania extends Process {
             hold((Config.miestRadu - miesto.getPozicia()) * AgentParkoviska.parkingSize / speed, message);
             zakaznik.setMiesto(null);
         } else {
-            //TODO: create some strategies
+            double holdTime = 0;
 
             int strategia = 0;
-            if (strategia == 0) {
-                if (zakaznik.preskumane().contains(0) && zakaznik.preskumane().contains(1)) {
-                    zakaznik.setMiesto(parkovisko[2][0]);
-                } else if (zakaznik.preskumane().contains(0)) {
-                    zakaznik.setMiesto(parkovisko[1][0]);
-                } else {
+
+            switch (zakaznik.getPoloha()) {
+                case A:
                     zakaznik.setMiesto(parkovisko[0][0]);
-                }
-            } else if (strategia == 1) {
-                //Ak je nejake miesto z prvych piatich volne ide dalej
-                for (int i = 0; i < 5; i++) {
-
-                    if (parkovisko[zakaznik.getMiesto().getRad()][i].getZakaznik() == null) {
-                        zakaznik.setMiesto(parkovisko[zakaznik.getMiesto().getRad()][zakaznik.getMiesto().getPozicia() + 1]);
-                        hold(AgentParkoviska.parkingSize / speed, message);
-                        return;
-                    }
-                }
-            } else {
-
+                    break;
+                case B:
+                    zakaznik.setMiesto(parkovisko[1][0]);
+                    break;
+                case C:
+                    zakaznik.setMiesto(parkovisko[2][0]);
+                    break;
+                default:
+                    throw new IllegalStateException("This should not happened");
             }
-            hold(0, message);
+
+            // Ak je nejake miesto z prvych 5 volne, idem tam
+            for (int i = 0; i < 5; i++) {
+                if (parkovisko[zakaznik.getMiesto().getRad()][i].getZakaznik() == null) {
+                    hold(holdTime, message);
+                    return;
+                }
+            }
+
+            if (strategia == 0) {
+                //Strategia prechadzam rady rad za radom
+                switch (zakaznik.getPoloha()) {
+                    case A:
+                        if (zakaznik.preskumane().contains(0)) {
+                            zakaznik.setMiesto(null);
+                            assistantFinished(message);
+                            return;
+                        }
+                        break;
+                    case B:
+                        if (zakaznik.preskumane().contains(1)) {
+                            zakaznik.setMiesto(null);
+                            assistantFinished(message);
+                            return;
+                        }
+                        break;
+                    case C:
+                        break;
+                    default:
+                        throw new IllegalStateException("This should not happened");
+                }
+                hold(holdTime, message);
+            } else if (strategia == 1) {
+                //Strategia ak je prvych 5 miest obsadenych a este som nepreskumal dalsie rady idem dalej
+                switch (zakaznik.getPoloha()) {
+                    case A:
+                        if (zakaznik.preskumane().contains(0) || zakaznik.preskumane().size() + 1 < parkovisko.length) {
+                            zakaznik.setMiesto(null);
+                            assistantFinished(message);
+                            return;
+                        }
+                        break;
+                    case B:
+                        if (zakaznik.preskumane().contains(1) || zakaznik.preskumane().size() + 1 < parkovisko.length && parkovisko.length == 3) {
+                            zakaznik.setMiesto(null);
+                            assistantFinished(message);
+                            return;
+                        }
+                        break;
+                    case C:
+                        break;
+                    default:
+                        throw new IllegalStateException("This should not happened");
+                }
+                hold(holdTime, message);
+            }
         }
     }
 
@@ -84,8 +132,11 @@ public class ProcesParkovania extends Process {
         switch (message.code()) {
             case Mc.parkuj:
                 Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
-                //parkovisko[1][3].setZakaznik(zakaznik);
-                //parkovisko[0][7].setZakaznik(zakaznik);
+
+                //for testing, reserve some slots permanently
+//                parkovisko[1][3].setZakaznik(new Zakaznik(mySim(), true, 5));
+//                parkovisko[0][7].setZakaznik(new Zakaznik(mySim(), true, 5));
+
                 //Ak zakaznik neodchadza ide hladat volne miesto
                 if (!zakaznik.odchadza()) {
                     //Ak je nejake miesto z prvych piatich volne ide dalej

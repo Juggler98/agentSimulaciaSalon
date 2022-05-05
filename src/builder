@@ -40,7 +40,7 @@
       <SimId>8</SimId>
       <InternalId>57</InternalId>
       <Name>AgentParkoviska</Name>
-      <Bounds>2210,529,190,190</Bounds>
+      <Bounds>2180,567,190,190</Bounds>
       <Reasoner>ManagerParkoviska</Reasoner>
       <ReasonerBounds>74,25,32,25</ReasonerBounds>
       <UsePetriNet>false</UsePetriNet>
@@ -305,5 +305,5 @@
       <Destination>57</Destination>
     </Message>
   </Messages>
-  <IID>114</IID>
+  <IID>115</IID>
 </ABAsim>

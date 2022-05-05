@@ -35,18 +35,22 @@ public class ProcesJazdy extends Process
 		zakaznik.setStavZakaznika(StavZakaznika.IDEOKOLO);
 		switch (zakaznik.getPoloha()) {
 			case START:
+				zakaznik.setPoloha(PolohaZakaznika.A);
 				hold((AgentParkoviska.width + AgentParkoviska.toA) / speed, message);
 				break;
 			case A:
+				zakaznik.setPoloha(PolohaZakaznika.B);
 				hold(AgentParkoviska.toB / speed, message);
 				break;
 			case B:
+				zakaznik.setPoloha(PolohaZakaznika.C);
 				hold(AgentParkoviska.toC / speed, message);
 				break;
 			case A_END:
 				if (zakaznik.odchadza()) {
 					hold(AgentParkoviska.toA / speed, message);
 				} else {
+					zakaznik.setPoloha(PolohaZakaznika.A);
 					hold((AgentParkoviska.width + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;
@@ -54,6 +58,7 @@ public class ProcesJazdy extends Process
 				if (zakaznik.odchadza()) {
 					hold((AgentParkoviska.toA + AgentParkoviska.toB) / speed, message);
 				} else {
+					zakaznik.setPoloha(PolohaZakaznika.A);
 					hold((AgentParkoviska.width + AgentParkoviska.toB + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;
@@ -61,9 +66,12 @@ public class ProcesJazdy extends Process
 				if (zakaznik.odchadza()) {
 					hold((AgentParkoviska.toA + AgentParkoviska.toB + AgentParkoviska.toC) / speed, message);
 				} else {
+					zakaznik.setPoloha(PolohaZakaznika.A);
 					hold((AgentParkoviska.width + AgentParkoviska.toB + AgentParkoviska.toC + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;
+			default:
+				throw new IllegalStateException("This should not happened");
 		}
 
 	}
