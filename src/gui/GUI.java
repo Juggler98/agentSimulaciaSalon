@@ -47,6 +47,7 @@ public class GUI extends JFrame implements ISimDelegate {
     private final JTextField[] zamestnanciField = new JTextField[3];
     private final JTextField pocetOpakovani;
     private final JCheckBox jCheckBoxParkovisko = new JCheckBox("Parkovisko");
+    private final JCheckBox jCheckBoxReklamy = new JCheckBox("Reklamy");
 
     private static final Calendar calendar = Calendar.getInstance();
 
@@ -212,7 +213,7 @@ public class GUI extends JFrame implements ISimDelegate {
                     }
                 }
 
-                Properties properties = new Properties(recepcne, kadernicky, kozmeticky, jCheckBoxParkovisko.isSelected(), pocetRadov, strategia);
+                Properties properties = new Properties(recepcne, kadernicky, kozmeticky, jCheckBoxParkovisko.isSelected(), pocetRadov, strategia, jCheckBoxReklamy.isSelected());
                 salonSimulation = new MySimulation(properties);
                 salonSimulation.registerDelegate(this);
 
@@ -355,6 +356,7 @@ public class GUI extends JFrame implements ISimDelegate {
         }
         pocetOpakovani.setBounds(space, space + buttonHeight, 120, buttonHeight);
         spinner.setBounds(space, 2 * space + buttonHeight * 2, buttonWidth - 5, buttonHeight + 10);
+        jCheckBoxReklamy.setBounds(space, 3 * space + buttonHeight * 3 + 8, buttonWidth + 10, buttonHeight);
         resultLabelHint.setBounds((width / 4) - (buttonWidth / 2), space + buttonHeight + 1, buttonWidth + 20, buttonHeight);
         resultLabel.setBounds((width / 4) - (buttonWidth / 2) + buttonWidth + 20, space + buttonHeight + 1, buttonWidth * 2, buttonHeight);
         replicationLabelHint.setBounds((width / 4) - (buttonWidth / 2), space + 1, buttonWidth + 20, buttonHeight);
@@ -391,6 +393,7 @@ public class GUI extends JFrame implements ISimDelegate {
         panel.add(replicationLabelHint);
         panel.add(intervalSpolahlivostiLabelHint);
         panel.add(jCheckBoxParkovisko);
+        panel.add(jCheckBoxReklamy);
         panel.add(strategia1);
         panel.add(strategia2);
 
@@ -437,10 +440,11 @@ public class GUI extends JFrame implements ISimDelegate {
         lineChart.pack();
         lineChart.setVisible(true);
         boolean parkovisko = jCheckBoxParkovisko.isSelected();
+        boolean reklamy = jCheckBoxReklamy.isSelected();
         int pocetRadov = this.pocetRadov;
         int strategia = this.strategia;
         for (int recepcne = 1; recepcne <= 10; recepcne++) {
-            Properties properties = new Properties(recepcne, kadernicky, kozmeticky, parkovisko, pocetRadov, strategia);
+            Properties properties = new Properties(recepcne, kadernicky, kozmeticky, parkovisko, pocetRadov, strategia, reklamy);
             MySimulation salonSimulation = new MySimulation(properties);
             salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
             lineChart.addPoint(recepcne, salonSimulation.getCelkoveDlzkyRadov()[0] / salonSimulation.currentReplication());
@@ -453,12 +457,13 @@ public class GUI extends JFrame implements ISimDelegate {
         BufferedWriter writer = new BufferedWriter(new FileWriter("resultData.txt"));
         writer.write("Recepcne,Kadernicky,Kozmeticky,Cas na objednavku (min),Cas v salone (hod)\n");
         boolean parkovisko = jCheckBoxParkovisko.isSelected();
+        boolean reklamy = jCheckBoxReklamy.isSelected();
         int pocetRadov = this.pocetRadov;
         int strategia = this.strategia;
         for (int i = 2; i <= 4; i++) {
             for (int j = 6; j <= 12; j++) {
                 for (int k = 6; k <= 12; k++) {
-                    Properties properties = new Properties(i, j, k, parkovisko, pocetRadov, strategia);
+                    Properties properties = new Properties(i, j, k, parkovisko, pocetRadov, strategia, reklamy);
                     MySimulation salonSimulation = new MySimulation(properties);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
                     System.out.println(i + "," + j + "," + k);

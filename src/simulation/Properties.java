@@ -8,14 +8,16 @@ public class Properties {
     private final boolean ajParkovisko;
     private final int pocetRadov;
     private final int strategia;
+    private final boolean reklamy;
 
-    public Properties(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko, int pocetRadov, int strategia) {
+    public Properties(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko, int pocetRadov, int strategia, boolean reklamy) {
         this.pocetRecepcnych = pocetRecepcnych;
         this.pocetKadernicok = pocetKadernicok;
         this.pocetKozmeticiek = pocetKozmeticiek;
         this.ajParkovisko = ajParkovisko;
         this.pocetRadov = pocetRadov;
         this.strategia = strategia;
+        this.reklamy = reklamy;
     }
 
     public int getPocetRecepcnych() {
@@ -40,5 +42,9 @@ public class Properties {
 
     public int getStrategia() {
         return strategia;
+    }
+
+    public boolean isReklamy() {
+        return reklamy;
     }
 }

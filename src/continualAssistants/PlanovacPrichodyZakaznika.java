@@ -14,14 +14,22 @@ import java.util.Random;
 //meta! id="22"
 public class PlanovacPrichodyZakaznika extends Scheduler {
 
-
-    private static final RandExponential randPrichod = new RandExponential(720, Config.seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
-    private static final RandExponential randPrichodAutom = new RandExponential(450, Config.seedGenerator); //should be 450
+    private static RandExponential randPrichod = new RandExponential(720, Config.seedGenerator); //should be 720 in Sem 3 but 450 in Sem 2
+    private static RandExponential randPrichodAutom = new RandExponential(450, Config.seedGenerator); //should be 450
 
     private static final RandUniformContinuous randPersonSpeed = new RandUniformContinuous(2.5 - 0.7, 2.5 + 0.7, Config.seedGenerator);
 
     public PlanovacPrichodyZakaznika(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);
+        boolean sem2 = false;
+        boolean ad = ((MySimulation) mySim()).properties().isReklamy();
+        double viacPrichodov = (ad ? 1.2 : 1);
+        if (sem2) {
+            randPrichod = new RandExponential(450 / viacPrichodov, Config.seedGenerator);
+        } else {
+            randPrichod = new RandExponential(720 / viacPrichodov, Config.seedGenerator);
+        }
+        randPrichodAutom = new RandExponential(450 / viacPrichodov, Config.seedGenerator);
     }
 
     @Override
