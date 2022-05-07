@@ -14,11 +14,11 @@ import java.util.Random;
 //meta! id="22"
 public class PlanovacPrichodyZakaznika extends Scheduler {
 
-    private static final Random seedGenerator = new Random();
-    private static final RandExponential randPrichod = new RandExponential(720, seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
-    private static final RandExponential randPrichodAutom = new RandExponential(450, seedGenerator); //should be 450
 
-    private final RandUniformContinuous randPersonSpeed = new RandUniformContinuous(2.5 - 0.7, 2.5 + 0.7, seedGenerator);
+    private static final RandExponential randPrichod = new RandExponential(720, Config.seedGenerator); //TODO should be 720 in Sem 3 but 450 in Sem 2
+    private static final RandExponential randPrichodAutom = new RandExponential(450, Config.seedGenerator); //should be 450
+
+    private static final RandUniformContinuous randPersonSpeed = new RandUniformContinuous(2.5 - 0.7, 2.5 + 0.7, Config.seedGenerator);
 
     public PlanovacPrichodyZakaznika(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);

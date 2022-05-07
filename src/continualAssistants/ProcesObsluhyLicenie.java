@@ -14,10 +14,10 @@ import java.util.Random;
 //meta! id="31"
 public class ProcesObsluhyLicenie extends Process {
 
-	private final RandTriangular randHlbkoveCistenie = new RandTriangular(360, 900, 540);
-	private final RandUniformDiscrete randLicenieJednoduche = new RandUniformDiscrete(10, 25);
-	private final RandUniformDiscrete randLicenieZlozite = new RandUniformDiscrete(20, 100);
-	private final Random randPercentageTypLicenia = new Random();
+	private static final RandTriangular randHlbkoveCistenie = new RandTriangular(360, 900, 540, Config.seedGenerator);
+	private static final RandUniformDiscrete randLicenieJednoduche = new RandUniformDiscrete(10, 25, Config.seedGenerator);
+	private static final RandUniformDiscrete randLicenieZlozite = new RandUniformDiscrete(20, 100, Config.seedGenerator);
+	private static final Random randPercentageTypLicenia = new Random(Config.seedGenerator.nextLong());
 
     public ProcesObsluhyLicenie(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);

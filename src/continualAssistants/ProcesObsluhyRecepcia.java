@@ -13,9 +13,8 @@ import java.util.Random;
 //meta! id="25"
 public class ProcesObsluhyRecepcia extends Process {
 
-    private static final Random seedGenerator = new Random();
-    private static final RandUniformContinuous randObjednavka = new RandUniformContinuous(200 - 120, 200 + 120, seedGenerator);
-    private static final RandUniformContinuous randPlatba = new RandUniformContinuous(180 - 50, 180 + 50, seedGenerator);
+    private static final RandUniformContinuous randObjednavka = new RandUniformContinuous(200 - 120, 200 + 120, Config.seedGenerator);
+    private static final RandUniformContinuous randPlatba = new RandUniformContinuous(180 - 50, 180 + 50, Config.seedGenerator);
 
     public ProcesObsluhyRecepcia(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);

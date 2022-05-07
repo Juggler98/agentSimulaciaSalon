@@ -15,13 +15,12 @@ import java.util.Random;
 //meta! id="28"
 public class ProcesObsluhyUcesy extends Process {
 
-    private static final Random seedGenerator = new Random();
     private static final EmpiricDiscrete[] empiricDiscretesUcesZlozity = {new EmpiricDiscrete(30, 60, 0.4), new EmpiricDiscrete(61, 120, 0.6)};
     private static final EmpiricDiscrete[] empiricDiscretesUcesSvadobny = {new EmpiricDiscrete(50, 60, 0.2), new EmpiricDiscrete(61, 100, 0.3), new EmpiricDiscrete(101, 150, 0.5)};
-    private static final RandUniformDiscrete randUcesJednoduchy = new RandUniformDiscrete(10, 30, seedGenerator);
-    private static final RandEmpiricDiscrete randUcesZlozity = new RandEmpiricDiscrete(empiricDiscretesUcesZlozity, seedGenerator);
-    private static final RandEmpiricDiscrete randUcesSvadobny = new RandEmpiricDiscrete(empiricDiscretesUcesSvadobny, seedGenerator);
-    private final Random randPercentageTypUcesu = new Random(seedGenerator.nextLong());
+    private static final RandUniformDiscrete randUcesJednoduchy = new RandUniformDiscrete(10, 30, Config.seedGenerator);
+    private static final RandEmpiricDiscrete randUcesZlozity = new RandEmpiricDiscrete(empiricDiscretesUcesZlozity, Config.seedGenerator);
+    private static final RandEmpiricDiscrete randUcesSvadobny = new RandEmpiricDiscrete(empiricDiscretesUcesSvadobny, Config.seedGenerator);
+    private static final Random randPercentageTypUcesu = new Random(Config.seedGenerator.nextLong());
 
     public ProcesObsluhyUcesy(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);

@@ -55,10 +55,8 @@ public class AgentRecepcie extends AgentPracovnika {
                 z.setCasOdchodu(mySim().currentTime());
 
                 if (z.isAutom()) {
-                    //TODO:
                     z.getMiesto().setZakaznik(null);
                     z.setMiesto(null);
-//                    ((MySimulation) mySim()).getFreeSlots().add(z.getZaparkovane());
                 }
             }
         }
