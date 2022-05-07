@@ -3,10 +3,9 @@ package agents;
 import OSPABA.Agent;
 import OSPABA.ContinualAssistant;
 import OSPABA.Simulation;
-import entities.pracovnik.Pracovnik;
-import entities.pracovnik.TypPracovnika;
+import entities.Pracovnik;
 import entities.zakaznik.Zakaznik;
-import simulation.MySimulation;
+import stats.WeightStat;
 
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -15,15 +14,13 @@ import java.util.Queue;
 public abstract class AgentPracovnika extends Agent {
 
     protected Queue<Zakaznik> rad = new LinkedList<>();
-    private final TypPracovnika typPracovnika;
     private final PriorityQueue<Pracovnik> volnyZamestnanci = new PriorityQueue<>();
     private Pracovnik[] zamestnanci;
-    private double lastRadChange;
+    private final WeightStat dlzkaRaduStat = new WeightStat();
     protected ContinualAssistant proces;
 
-    public AgentPracovnika(int id, Simulation mySim, Agent parent, TypPracovnika typPracovnika) {
+    public AgentPracovnika(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
-        this.typPracovnika = typPracovnika;
     }
 
     @Override
@@ -36,21 +33,14 @@ public abstract class AgentPracovnika extends Agent {
         zamestnanci = new Pracovnik[pocetZamestnancov];
         volnyZamestnanci.clear();
         rad.clear();
-        lastRadChange = 0;
+        dlzkaRaduStat.init();
         for (int i = 0; i < pocetZamestnancov; i++) {
             zamestnanci[i] = new Pracovnik(mySim());
             volnyZamestnanci.add(zamestnanci[i]);
         }
     }
 
-    public abstract int getPocetPracovnikov();
-
-    public int getPocetZamestnancov() {
-        return zamestnanci.length;
-    }
-
     public Pracovnik obsadZamestnanca() {
-        //System.out.println(volnyZamestnanci.size());
         return volnyZamestnanci.poll();
     }
 
@@ -62,20 +52,8 @@ public abstract class AgentPracovnika extends Agent {
         return !volnyZamestnanci.isEmpty();
     }
 
-    public boolean niktoNepracuje() {
-        return volnyZamestnanci.size() == zamestnanci.length;
-    }
-
     public Pracovnik getZamestnanec(int i) {
         return zamestnanci[i];
-    }
-
-    public double getLastRadChange() {
-        return lastRadChange;
-    }
-
-    public void setLastRadChange(double lastRadChange) {
-        this.lastRadChange = lastRadChange;
     }
 
     public void pridajDoRadu(Zakaznik zakaznik) {
@@ -96,10 +74,6 @@ public abstract class AgentPracovnika extends Agent {
         return rad.peek().isObsluzeny();
     }
 
-    public TypPracovnika getTypPracovnika() {
-        return typPracovnika;
-    }
-
     public ContinualAssistant getProces() {
         return proces;
     }
@@ -112,4 +86,7 @@ public abstract class AgentPracovnika extends Agent {
         return rad.size();
     }
 
+    public WeightStat getDlzkaRaduStat() {
+        return dlzkaRaduStat;
+    }
 }

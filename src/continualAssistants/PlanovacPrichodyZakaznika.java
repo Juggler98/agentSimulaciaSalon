@@ -39,7 +39,7 @@ public class PlanovacPrichodyZakaznika extends Scheduler {
         copy.setCode(Mc.novyZakaznikAutom);
 
         //if false -> without parking
-        if (((MySimulation) mySim()).ajParkovisko()) {
+        if (((MySimulation) mySim()).properties().ajParkovisko()) {
             hold(randPrichodAutom.nextValue(), copy);
         }
     }
@@ -65,7 +65,6 @@ public class PlanovacPrichodyZakaznika extends Scheduler {
                 break;
 
             case Mc.novyZakaznikAutom:
-                ((MySimulation) mySim()).getStatsVykonov()[10]++;
                 holdTime = randPrichodAutom.nextValue();
                 if (mySim().currentTime() + holdTime <= Config.endTime) {
                     MessageForm copy = message.createCopy();

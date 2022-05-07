@@ -1,7 +1,7 @@
 package continualAssistants;
 
 import OSPABA.*;
-import entities.pracovnik.Miesto;
+import entities.Miesto;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;

@@ -1,7 +1,6 @@
 package managers;
 
 import OSPABA.*;
-import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
@@ -41,6 +40,7 @@ public class ManagerParkoviska extends Manager {
         if (zakaznik.odchadza()) {
             message.setAddressee(myAgent().findAssistant(Id.procesChodze));
         } else {
+        	myAgent().getAutom().addValue(1);
             message.setAddressee(myAgent().findAssistant(Id.procesJazdy));
         }
         startContinualAssistant(message);

@@ -2,24 +2,19 @@ package simulation;
 
 import OSPABA.*;
 import agents.*;
-import entities.pracovnik.Pracovnik;
+import entities.Pracovnik;
 import entities.zakaznik.Zakaznik;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 public class MySimulation extends Simulation {
 
-    private final int[] statsVykonov = new int[13];
-    private final double[] statsAllVykonov = new double[13]; //10 = autom 11 = zaparkovalo 12 = spokojnost
-    private final String[] statsNames = {"Zadané účesy", "Spravené účesy", "Zadané Líčenia", "Spravené Líčenia", "Zadané účesy aj líčenia", "Spravené účesy aj líčenia", "Zadané čistenia", "Spravené čistenia", "Zadané objednávky", "Dokončené objednávky", "Čas na objednávku", "Čas v sálone", "Čas účesu", "Po zatvorení ešte", "Autom", "Zaparkovalo", "Zaparkovalo %", "Spokojnost"};
-
-    private final double[] casy = new double[5]; //casStravenyVSalone, dlzkaCakaniaNaObjednavku, robenieUcesov, poOtvaracejDobe
-    private final double[] celkoveCasy = new double[5];
-
-    private final double[] dlzkyRadov = new double[3]; //recepcia, ucesy, licenie
-    private final double[] celkoveDlzkyRadov = new double[3];
+    private final double[] statsAllVykonov = new double[14]; //10 = autom 11 = zaparkovalo 12 = spokojnost 13 = obsadenost
+    private final int[] statsVykonov = new int[10];
+    private final String[] statsNames = {"Zadané účesy", "Spravené účesy", "Zadané Líčenia", "Spravené Líčenia", "Zadané účesy aj líčenia", "Spravené účesy aj líčenia", "Zadané čistenia", "Spravené čistenia", "Zadané objednávky", "Dokončené objednávky", "Čas na objednávku", "Čas v sálone", "Čas účesu", "Po zatvorení ešte", "Autom", "Zaparkovalo", "Zaparkovalo %", "Spokojnost", "Obsadenost %"};
+    private final double[] celkoveCasy = new double[4];  //casStravenyVSalone, dlzkaCakaniaNaObjednavku, robenieUcesov, poOtvaracejDobe
+    private final double[] celkoveDlzkyRadov = new double[3]; //recepcia, ucesy, licenie
 
     private final double[] xI = new double[2];
     private double xAvg = 0;
@@ -27,19 +22,10 @@ public class MySimulation extends Simulation {
     private final ArrayList<Pracovnik> zamestnanci = new ArrayList<>();
     private final ArrayList<Zakaznik> zakaznici = new ArrayList<>();
 
-    public final int pocetRecepcnych;
-    public final int pocetKadernicok;
-    public final int pocetKozmeticiek;
+    Properties properties;
 
-    public final boolean ajParkovisko;
-    private final int pocetRadov;
-
-    public MySimulation(int pocetRecepcnych, int pocetKadernicok, int pocetKozmeticiek, boolean ajParkovisko, int pocetRadov) {
-        this.pocetRecepcnych = pocetRecepcnych;
-        this.pocetKadernicok = pocetKadernicok;
-        this.pocetKozmeticiek = pocetKozmeticiek;
-        this.ajParkovisko = ajParkovisko;
-        this.pocetRadov = pocetRadov;
+    public MySimulation(Properties properties) {
+        this.properties = properties;
         init();
     }
 
@@ -55,23 +41,19 @@ public class MySimulation extends Simulation {
         // Reset entities, queues, local statistics, etc...
 
         Zakaznik.init();
-
         Arrays.fill(statsVykonov, 0);
-        Arrays.fill(casy, 0);
-        Arrays.fill(dlzkyRadov, 0);
-
         xAvg = 0;
 
         zamestnanci.clear();
         zakaznici.clear();
 
-        for (int i = 0; i < pocetRecepcnych; i++) {
+        for (int i = 0; i < properties.getPocetRecepcnych(); i++) {
             zamestnanci.add(agentRecepcie().getZamestnanec(i));
         }
-        for (int i = 0; i < pocetKadernicok; i++) {
+        for (int i = 0; i < properties.getPocetKadernicok(); i++) {
             zamestnanci.add(agentUcesov().getZamestnanec(i));
         }
-        for (int i = 0; i < pocetKozmeticiek; i++) {
+        for (int i = 0; i < properties.getPocetKozmeticiek(); i++) {
             zamestnanci.add(agentLicenia().getZamestnanec(i));
         }
 
@@ -81,18 +63,23 @@ public class MySimulation extends Simulation {
     @Override
     public void replicationFinished() {
         // Collect local statistics into global, update UI, etc...
-        celkoveCasy[0] += casy[0] / statsVykonov[9];
-        celkoveCasy[1] += casy[1] / statsVykonov[9];
-        celkoveCasy[2] += casy[2] / (statsVykonov[0] + statsVykonov[4]);
+        celkoveCasy[0] += agentOkolia().getCasVSalone() / statsVykonov[9];
+        celkoveCasy[1] += agentRecepcie().getCasObjednavky() / statsVykonov[9];
+        celkoveCasy[2] += agentUcesov().getCasUcesov() / (statsVykonov[0] + statsVykonov[4]);
         celkoveCasy[3] += currentTime() - Config.endTime;
 
-        celkoveDlzkyRadov[0] += dlzkyRadov[0] / (Config.endTime + 1);
-        celkoveDlzkyRadov[1] += dlzkyRadov[1] / (Config.endTime + 1);
-        celkoveDlzkyRadov[2] += dlzkyRadov[2] / (Config.endTime + 1);
+        celkoveDlzkyRadov[0] += agentRecepcie().getDlzkaRaduStat().getValue();
+        celkoveDlzkyRadov[1] += agentUcesov().getDlzkaRaduStat().getValue();
+        celkoveDlzkyRadov[2] += agentLicenia().getDlzkaRaduStat().getValue();
 
         for (int i = 0; i < statsVykonov.length; i++) {
             statsAllVykonov[i] += statsVykonov[i];
         }
+
+        statsAllVykonov[10] += agentParkoviska().getAutom().getValue();
+        statsAllVykonov[11] += agentParkoviska().getZaparkovalo().getValue();
+        statsAllVykonov[12] += agentParkoviska().getSpokojnost().getValue();
+        statsAllVykonov[13] += agentParkoviska().getObsadenostStat().getValue();
 
         xI[0] += Math.pow(xAvg / statsVykonov[9], 2);
         xI[1] += xAvg / statsVykonov[9];
@@ -178,12 +165,9 @@ public AgentParkoviska agentParkoviska()
 	{_agentParkoviska = agentParkoviska; }
 	//meta! tag="end"
 
-    public boolean ajParkovisko() {
-        return ajParkovisko;
-    }
 
-    public int getPocetRadov() {
-        return pocetRadov;
+    public Properties properties() {
+        return properties;
     }
 
     public int getDlzkaRaduUcesyLicenie() {
@@ -202,24 +186,8 @@ public AgentParkoviska agentParkoviska()
         return statsVykonov;
     }
 
-    public void addCas(int index, double cas) {
-        casy[index] += cas;
-    }
-
-    public void addDlzkaRadu(int index, double dlzkaRadu) {
-        dlzkyRadov[index] += dlzkaRadu;
-    }
-
-    public double[] getDlzkyRadov() {
-        return dlzkyRadov;
-    }
-
     public double[] getCelkoveDlzkyRadov() {
         return celkoveDlzkyRadov;
-    }
-
-    public double[] getCasy() {
-        return casy;
     }
 
     public double[] getCelkoveCasy() {

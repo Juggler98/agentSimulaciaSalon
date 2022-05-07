@@ -8,7 +8,7 @@ import continualAssistants.*;
 //meta! id="2"
 public class AgentOkolia extends Agent {
 
-    private ContinualAssistant planovacPrichodovZakaznikov;
+    double casVSalone = 0;
 
     public AgentOkolia(int id, Simulation mySim, Agent parent) {
         super(id, mySim, parent);
@@ -22,6 +22,7 @@ public class AgentOkolia extends Agent {
     public void prepareReplication() {
         super.prepareReplication();
         // Setup component for the next replication
+        casVSalone = 0;
     }
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -34,4 +35,12 @@ public class AgentOkolia extends Agent {
 		addOwnMessage(Mc.odchodZakaznika);
 	}
 	//meta! tag="end"
+
+    public void addCasVSalone(double cas) {
+        casVSalone += cas;
+    }
+
+    public double getCasVSalone() {
+        return casVSalone;
+    }
 }

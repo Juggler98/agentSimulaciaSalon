@@ -30,7 +30,16 @@ public class ManagerRecepcie extends ManagerPracovnika {
             zakaznik.setCasPrichodu(mySim().currentTime());
             zakaznik.setStavZakaznika(StavZakaznika.PRICHADZA);
         }
-        zacniObsluhu(message);
+        if (myAgent().isZavrete() && !zakaznik.isObsluzeny()) {
+			zakaznik.setStavZakaznika(StavZakaznika.NEOBSLUZENY);
+			zakaznik.setCasOdchodu(mySim().currentTime());
+			if (zakaznik.isAutom()) {
+				zakaznik.getMiesto().setZakaznik(null);
+				zakaznik.setMiesto(null);
+			}
+		} else {
+			zacniObsluhu(message);
+		}
     }
 
 	//meta! sender="ProcesObsluhyRecepcia", id="26", type="Finish"

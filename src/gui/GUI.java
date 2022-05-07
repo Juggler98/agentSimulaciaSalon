@@ -5,18 +5,20 @@ import OSPABA.SimState;
 import OSPABA.Simulation;
 import agents.AgentPracovnika;
 import charts.LineChart;
-import entities.pracovnik.Miesto;
-import entities.pracovnik.Pracovnik;
+import entities.Miesto;
+import entities.Pracovnik;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.Config;
 import simulation.MySimulation;
+import simulation.Properties;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class GUI extends JFrame implements ISimDelegate {
 
     private int sleepTime = 0;
     private int pocetRadov = 2;
+    private int strategia;
 
     private final JLabel resultLabel;
     private final JLabel replicationLabel;
@@ -78,6 +81,15 @@ public class GUI extends JFrame implements ISimDelegate {
         pause = new JButton("Pause");
         JButton test = new JButton("Test");
         JButton graf = new JButton("Graf");
+        JRadioButton strategia1 = new JRadioButton("Strategia 1");
+        JRadioButton strategia2 = new JRadioButton("Strategia 2");
+        strategia1.setToolTipText("Prechadza rady rad za radom");
+        strategia2.setToolTipText("Ak je prvych 5 miest obsadenych a este som nepreskumal dalsie rady, idem dalej");
+        strategia2.setSelected(true);
+        strategia = 2;
+        ButtonGroup group = new ButtonGroup();
+        group.add(strategia1);
+        group.add(strategia2);
         pocetOpakovani = new JTextField();
         for (int i = 0; i < 3; i++) {
             zamestnanciField[i] = new JTextField();
@@ -185,6 +197,8 @@ public class GUI extends JFrame implements ISimDelegate {
                 tables[2].getColumnModel().getColumn(10).setPreferredWidth(buttonWidth - 10);
                 tables[2].getColumnModel().getColumn(11).setPreferredWidth(buttonWidth - 5);
 
+                tables[4].setModel(new DefaultTableModel(new Object[][]{{"Rad 1"}, {"Rad 2"}, {"Rad 3"}}, table4Data));
+
                 pocetZakaznikov = 0;
 
                 for (int i = 0; i < 4; i++) {
@@ -198,7 +212,8 @@ public class GUI extends JFrame implements ISimDelegate {
                     }
                 }
 
-                salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky, jCheckBoxParkovisko.isSelected(), pocetRadov);
+                Properties properties = new Properties(recepcne, kadernicky, kozmeticky, jCheckBoxParkovisko.isSelected(), pocetRadov, strategia);
+                salonSimulation = new MySimulation(properties);
                 salonSimulation.registerDelegate(this);
 
                 String valueStr = (String) spinner.getValue();
@@ -311,6 +326,24 @@ public class GUI extends JFrame implements ISimDelegate {
             this.pocetRadov = value;
         });
 
+        ActionListener actionListener = e -> {
+            switch (e.getActionCommand()) {
+                case "1":
+                    strategia = 1;
+                    break;
+                case "2":
+                    strategia = 2;
+                    break;
+
+            }
+        };
+
+        strategia1.setActionCommand("1");
+        strategia2.setActionCommand("2");
+
+        strategia1.addActionListener(actionListener);
+        strategia2.addActionListener(actionListener);
+
         start.setBounds(130, space, buttonWidth, buttonHeight);
         stop.setBounds(130, space + buttonHeight, buttonWidth, buttonHeight);
         pause.setBounds(130, space + buttonHeight * 2, buttonWidth, buttonHeight);
@@ -329,13 +362,16 @@ public class GUI extends JFrame implements ISimDelegate {
         intervalSpolahlivostiLabelHint.setBounds(space, height - buttonHeight - 60, buttonWidth + 160, buttonHeight);
         intervalSpolahlivostiLabel.setBounds(space + buttonWidth + 160, height - buttonHeight - 60, buttonWidth * 2, buttonHeight);
         tablesScrollPane[0].setBounds(space, space + buttonHeight * 5, 480, 72);
-        tablesScrollPane[1].setBounds(space, space * 4 + buttonHeight * 5 + 72, 480, 232);
+        tablesScrollPane[1].setBounds(space, space * 4 + buttonHeight * 5 + 72, 480, 232 + 9);
         tablesScrollPane[2].setBounds(space, space * 8 + buttonHeight * 5 + 72 + 232, 960, 300);
-        tablesScrollPane[3].setBounds(space * 4 + 480, space + buttonHeight * 5, 360, 248 + 16 * 4);
+        tablesScrollPane[3].setBounds(space * 4 + 480, space + buttonHeight * 5, 360, 248 + 16 * 5);
         tablesScrollPane[4].setBounds(space, space * 8 + buttonHeight * 5 + 72 + 232 + 320, 840, 72);
 
         jCheckBoxParkovisko.setBounds(space * 4 + 480, space, buttonWidth * 4, buttonHeight);
         spinner2.setBounds(space * 4 + 480 + space, space + buttonHeight + 5, buttonWidth - 15, buttonHeight + 10);
+
+        strategia1.setBounds(space * 4 + 480, space + buttonHeight * 3, buttonWidth + 20, buttonHeight);
+        strategia2.setBounds(space * 4 + 480 + buttonWidth + 20, space + buttonHeight * 3, buttonWidth + 20, buttonHeight);
 
         panel.add(pocetOpakovani);
         panel.add(start);
@@ -355,6 +391,8 @@ public class GUI extends JFrame implements ISimDelegate {
         panel.add(replicationLabelHint);
         panel.add(intervalSpolahlivostiLabelHint);
         panel.add(jCheckBoxParkovisko);
+        panel.add(strategia1);
+        panel.add(strategia2);
 
         setContentPane(panel);
 
@@ -398,8 +436,12 @@ public class GUI extends JFrame implements ISimDelegate {
         lineChart.setSize(740, 620);
         lineChart.pack();
         lineChart.setVisible(true);
+        boolean parkovisko = jCheckBoxParkovisko.isSelected();
+        int pocetRadov = this.pocetRadov;
+        int strategia = this.strategia;
         for (int recepcne = 1; recepcne <= 10; recepcne++) {
-            MySimulation salonSimulation = new MySimulation(recepcne, kadernicky, kozmeticky, jCheckBoxParkovisko.isSelected(), pocetRadov);
+            Properties properties = new Properties(recepcne, kadernicky, kozmeticky, parkovisko, pocetRadov, strategia);
+            MySimulation salonSimulation = new MySimulation(properties);
             salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
             lineChart.addPoint(recepcne, salonSimulation.getCelkoveDlzkyRadov()[0] / salonSimulation.currentReplication());
         }
@@ -410,10 +452,14 @@ public class GUI extends JFrame implements ISimDelegate {
         String solution = "";
         BufferedWriter writer = new BufferedWriter(new FileWriter("resultData.txt"));
         writer.write("Recepcne,Kadernicky,Kozmeticky,Cas na objednavku (min),Cas v salone (hod)\n");
+        boolean parkovisko = jCheckBoxParkovisko.isSelected();
+        int pocetRadov = this.pocetRadov;
+        int strategia = this.strategia;
         for (int i = 2; i <= 4; i++) {
             for (int j = 6; j <= 12; j++) {
                 for (int k = 6; k <= 12; k++) {
-                    MySimulation salonSimulation = new MySimulation(i, j, k, jCheckBoxParkovisko.isSelected(), pocetRadov);
+                    Properties properties = new Properties(i, j, k, parkovisko, pocetRadov, strategia);
+                    MySimulation salonSimulation = new MySimulation(properties);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
                     System.out.println(i + "," + j + "," + k);
                     System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication());
@@ -489,10 +535,7 @@ public class GUI extends JFrame implements ISimDelegate {
                 pracovisko = salonSimulation.agentUcesov();
             else
                 pracovisko = salonSimulation.agentLicenia();
-            if (pracovisko.getLastRadChange() != 0)
-                tables[0].getModel().setValueAt(salonSimulation.getDlzkyRadov()[i] / pracovisko.getLastRadChange(), i, 2);
-            else
-                tables[0].getModel().setValueAt(0.0, i, 2);
+            tables[0].getModel().setValueAt(pracovisko.getDlzkaRaduStat().getValue(), i, 2);
             tables[0].getModel().setValueAt(salonSimulation.getCelkoveDlzkyRadov()[i] / (salonSimulation.currentReplication() + 1), i, 3);
         }
 
@@ -547,25 +590,28 @@ public class GUI extends JFrame implements ISimDelegate {
             }
         }
 
-        for (int i = 0; i < salonSimulation.getStatsNames().length - 8; i++) {
+        for (int i = 0; i < salonSimulation.getStatsNames().length - 9; i++) {
             tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[i], i, 1);
             tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[i] / (salonSimulation.currentReplication() + 1), i, 2);
         }
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[1] / salonSimulation.getStatsVykonov()[9]), 0), 10, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.agentRecepcie().getCasObjednavky() / salonSimulation.getStatsVykonov()[9]), 0), 10, 1);
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[1] / (salonSimulation.currentReplication() + 1)), 0), 10, 2);
 
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[0] / salonSimulation.getStatsVykonov()[9]), 0), 11, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.agentOkolia().getCasVSalone() / salonSimulation.getStatsVykonov()[9]), 0), 11, 1);
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[0] / (salonSimulation.currentReplication() + 1)), 0), 11, 2);
 
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCasy()[2] / (salonSimulation.getStatsVykonov()[0] + salonSimulation.getStatsVykonov()[4])), 0), 12, 1);
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.agentUcesov().getCasUcesov() / (salonSimulation.getStatsVykonov()[0] + salonSimulation.getStatsVykonov()[4])), 0), 12, 1);
         tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[2] / (salonSimulation.currentReplication() + 1)), 0), 12, 2);
 
-        tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[10], 14, 1);
-        tables[3].getModel().setValueAt(salonSimulation.getStatsVykonov()[11], 15, 1);
-        if (salonSimulation.getStatsVykonov()[10] != 0)
-            tables[3].getModel().setValueAt(1.0 * salonSimulation.getStatsVykonov()[11] / salonSimulation.getStatsVykonov()[10] * 100.0 + " %", 16, 1);
-        if (salonSimulation.getStatsVykonov()[9] != 0)
-            tables[3].getModel().setValueAt((1.0 * salonSimulation.getStatsVykonov()[12] / salonSimulation.getStatsVykonov()[11]), 17, 1);
+        tables[3].getModel().setValueAt(salonSimulation.agentParkoviska().getAutom().getValue(), 14, 1);
+        tables[3].getModel().setValueAt(salonSimulation.agentParkoviska().getZaparkovalo().getValue(), 15, 1);
+        if (salonSimulation.agentParkoviska().getAutom().getValue() != 0)
+            tables[3].getModel().setValueAt(1.0 * salonSimulation.agentParkoviska().getZaparkovalo().getValue() / salonSimulation.agentParkoviska().getAutom().getValue() * 100.0 + " %", 16, 1);
+        if (salonSimulation.agentParkoviska().getZaparkovalo().getValue() != 0)
+            tables[3].getModel().setValueAt(1.0 * salonSimulation.agentParkoviska().getSpokojnost().getValue() / salonSimulation.agentParkoviska().getZaparkovalo().getValue(), 17, 1);
+        tables[3].getModel().setValueAt(salonSimulation.agentParkoviska().getAktualObsadenost() * 100 + " %", 18, 1);
+
+        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / (salonSimulation.currentReplication() + 1)), 0), 13, 2);
 
         tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[10] / (salonSimulation.currentReplication() + 1), 14, 2);
         tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[11] / (salonSimulation.currentReplication() + 1), 15, 2);
@@ -574,9 +620,7 @@ public class GUI extends JFrame implements ISimDelegate {
         if (salonSimulation.getStatsAllVykonov()[11] != 0)
             tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[12] / salonSimulation.getStatsAllVykonov()[11], 17, 2);
 
-        tables[3].getModel().setValueAt(getTime((int) (salonSimulation.getCelkoveCasy()[3] / (salonSimulation.currentReplication() + 1)), 0), 13, 2);
-
-//        }
+        tables[3].getModel().setValueAt(salonSimulation.getStatsAllVykonov()[13] / (salonSimulation.currentReplication() + 1) * 100 + " %", 18, 2);
 
 
         Miesto[][] parkovisko = salonSimulation.agentParkoviska().parkovisko();

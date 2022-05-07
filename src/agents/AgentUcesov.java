@@ -1,15 +1,17 @@
 package agents;
 
 import OSPABA.*;
-import entities.pracovnik.TypPracovnika;
 import simulation.*;
 import managers.*;
 import continualAssistants.*;
 
 //meta! id="9"
 public class AgentUcesov extends AgentPracovnika {
+
+    double casUcesov = 0;
+
     public AgentUcesov(int id, Simulation mySim, Agent parent) {
-        super(id, mySim, parent, TypPracovnika.UCES);
+        super(id, mySim, parent);
         init();
         addOwnMessage(Mc.koniecObsluhyUcesy);
         setProces((ContinualAssistant) findAssistant(Id.procesObsluhyUcesy));
@@ -20,7 +22,8 @@ public class AgentUcesov extends AgentPracovnika {
         super.prepareReplication();
 
         // Setup component for the next replication
-        inicializuj(((MySimulation) mySim()).pocetKadernicok);
+        inicializuj(((MySimulation) mySim()).properties().getPocetKadernicok());
+        casUcesov = 0;
     }
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -32,8 +35,11 @@ public class AgentUcesov extends AgentPracovnika {
 	}
 	//meta! tag="end"
 
-    @Override
-    public int getPocetPracovnikov() {
-        return ((MySimulation) mySim()).pocetKadernicok;
+    public void addCasUcesov(double cas) {
+        casUcesov += cas;
+    }
+
+    public double getCasUcesov() {
+        return casUcesov;
     }
 }

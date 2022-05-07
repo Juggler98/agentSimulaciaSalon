@@ -48,14 +48,13 @@ public class ManagerOkolia extends Manager {
         zakaznik.setStavZakaznika(StavZakaznika.ODISIEL);
 
         if (zakaznik.isObsluzeny()) {
-            mySimulation.addCas(0, zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
+            myAgent().addCasVSalone(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
             mySimulation.addXAvg(zakaznik.getCasOdchodu() - zakaznik.getCasPrichodu());
             mySimulation.getStatsVykonov()[9]++;
         }
 
         if (zakaznik.isAutom() && !zakaznik.zaparkoval()) {
             zakaznik.setStavZakaznika(StavZakaznika.NEZAPARKOVANE);
-            //mySimulation.getFreeSlots().add(zakaznik.getZaparkovane());
         }
 
         // Ak je po zaverecnej a vsetci su obsluzeny zastavuje replikaciu

@@ -42,7 +42,8 @@ public class ProcesObsluhyRecepcia extends Process {
 
             zakaznik.setCasZaciatkuObsluhy(0, mySim().currentTime());
             zakaznik.setStavZakaznika(StavZakaznika.OBJEDNAVKA);
-            ((MySimulation) mySim()).addCas(1, mySim().currentTime() - zakaznik.getCasPrichodu());
+
+            myAgent().addCasObjednavky(mySim().currentTime() - zakaznik.getCasPrichodu());
         }
         hold(holdTime, message);
     }

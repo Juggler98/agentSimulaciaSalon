@@ -2,7 +2,7 @@ package entities.zakaznik;
 
 import OSPABA.Entity;
 import OSPABA.Simulation;
-import entities.pracovnik.Miesto;
+import entities.Miesto;
 
 import java.util.ArrayList;
 import java.util.Arrays;

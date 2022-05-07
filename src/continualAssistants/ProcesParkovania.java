@@ -1,7 +1,7 @@
 package continualAssistants;
 
 import OSPABA.*;
-import entities.pracovnik.Miesto;
+import entities.Miesto;
 import entities.zakaznik.PolohaZakaznika;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
@@ -14,10 +14,12 @@ public class ProcesParkovania extends Process {
 
     private static final double speed = 12.0 / 3.6;
     private Miesto[][] parkovisko;
+    private final int strategia;
 
     public ProcesParkovania(int id, Simulation mySim, CommonAgent myAgent) {
         super(id, mySim, myAgent);
         parkovisko = myAgent().parkovisko();
+        this.strategia = ((MySimulation) mySim()).properties().getStrategia();
     }
 
     @Override
@@ -50,10 +52,12 @@ public class ProcesParkovania extends Process {
             miesto.setZakaznik(null);
             hold((Config.miestRadu - miesto.getPozicia()) * AgentParkoviska.parkingSize / speed, message);
             zakaznik.setMiesto(null);
+
+            if (mySim().currentTime() <= Config.endTime) {
+                myAgent().obsadenostChange(1);
+            }
         } else {
             double holdTime = 0;
-
-            int strategia = 0;
 
             switch (zakaznik.getPoloha()) {
                 case A:
@@ -77,7 +81,7 @@ public class ProcesParkovania extends Process {
                 }
             }
 
-            if (strategia == 0) {
+            if (strategia == 1) {
                 //Strategia prechadzam rady rad za radom
                 switch (zakaznik.getPoloha()) {
                     case A:
@@ -100,7 +104,7 @@ public class ProcesParkovania extends Process {
                         throw new IllegalStateException("This should not happened");
                 }
                 hold(holdTime, message);
-            } else if (strategia == 1) {
+            } else if (strategia == 2) {
                 //Strategia ak je prvych 5 miest obsadenych a este som nepreskumal dalsie rady idem dalej
                 switch (zakaznik.getPoloha()) {
                     case A:
@@ -111,7 +115,7 @@ public class ProcesParkovania extends Process {
                         }
                         break;
                     case B:
-                        if (zakaznik.preskumane().contains(1) || zakaznik.preskumane().size() + 1 < parkovisko.length && parkovisko.length == 3) {
+                        if (zakaznik.preskumane().contains(1) || (parkovisko.length == 3 && !zakaznik.preskumane().contains(2))) {
                             zakaznik.setMiesto(null);
                             assistantFinished(message);
                             return;
@@ -176,17 +180,19 @@ public class ProcesParkovania extends Process {
                             return;
                         }
                     } else {
-                        //Obsadi miesto
+                        //Obsadi miesto alebo ak je volne o jedno dalej, ide tam
                         if (zakaznik.getMiesto().getPozicia() + 1 < Config.miestRadu && parkovisko[zakaznik.getMiesto().getRad()][zakaznik.getMiesto().getPozicia() + 1].getZakaznik() == null) {
                             zakaznik.setMiesto(parkovisko[zakaznik.getMiesto().getRad()][zakaznik.getMiesto().getPozicia() + 1]);
                             hold(AgentParkoviska.parkingSize / speed, message);
                             return;
                         } else {
-                            ((MySimulation) mySim()).getStatsVykonov()[11]++;
+                            myAgent().obsadenostChange(0);
+
+                            myAgent().getZaparkovalo().addValue(1);
                             zakaznik.setStavZakaznika(StavZakaznika.ZAPARKOVANE);
                             zakaznik.getMiesto().setZakaznik(zakaznik);
                             zakaznik.incSpokojnost((zakaznik.getMiesto().getRad() + 1) * Config.miestRadu - (zakaznik.getMiesto().getPozicia()));
-                            ((MySimulation) mySim()).getStatsVykonov()[12] += zakaznik.getSpokojnost();
+                            myAgent().getSpokojnost().addValue(zakaznik.getSpokojnost());
                         }
                     }
                 }

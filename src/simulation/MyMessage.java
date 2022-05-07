@@ -1,7 +1,7 @@
 package simulation;
 
 import OSPABA.*;
-import entities.pracovnik.Pracovnik;
+import entities.Pracovnik;
 import entities.zakaznik.Zakaznik;
 
 public class MyMessage extends MessageForm {

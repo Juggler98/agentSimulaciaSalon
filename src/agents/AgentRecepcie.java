@@ -1,7 +1,6 @@
 package agents;
 
 import OSPABA.*;
-import entities.pracovnik.TypPracovnika;
 import entities.zakaznik.StavZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
@@ -14,9 +13,11 @@ import java.util.PriorityQueue;
 public class AgentRecepcie extends AgentPracovnika {
 
     int pocetObsluhovanychRecepcia = 0;
+    boolean zavrete = false;
+    double casObjednavky = 0;
 
     public AgentRecepcie(int id, Simulation mySim, Agent parent) {
-        super(id, mySim, parent, TypPracovnika.RECEPCIA);
+        super(id, mySim, parent);
         rad = new PriorityQueue<>();
         init();
         addOwnMessage(Mc.koniecObsluhyRecepcia);
@@ -28,8 +29,10 @@ public class AgentRecepcie extends AgentPracovnika {
         super.prepareReplication();
         // Setup component for the next replication
 
-        inicializuj(((MySimulation) mySim()).pocetRecepcnych);
+        inicializuj(((MySimulation) mySim()).properties().getPocetRecepcnych());
         pocetObsluhovanychRecepcia = 0;
+        zavrete = false;
+        casObjednavky = 0;
     }
 
 	//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -43,12 +46,8 @@ public class AgentRecepcie extends AgentPracovnika {
 	}
 	//meta! tag="end"
 
-    @Override
-    public int getPocetPracovnikov() {
-        return ((MySimulation) mySim()).pocetRecepcnych;
-    }
-
     public void uzavri() {
+        zavrete = true;
         for (Zakaznik z : rad) {
             if (!z.isObsluzeny()) {
                 z.setStavZakaznika(StavZakaznika.NEOBSLUZENY);
@@ -60,8 +59,7 @@ public class AgentRecepcie extends AgentPracovnika {
                 }
             }
         }
-        ((MySimulation) mySim()).addDlzkaRadu(0, rad.size() * (mySim().currentTime() - getLastRadChange()));
-        setLastRadChange(mySim().currentTime());
+        getDlzkaRaduStat().addValue(mySim().currentTime(), rad.size());
         rad.removeIf(z -> !z.isObsluzeny());
     }
 
@@ -71,5 +69,17 @@ public class AgentRecepcie extends AgentPracovnika {
 
     public int getPocetObsluhovanychRecepcia() {
         return pocetObsluhovanychRecepcia;
+    }
+
+    public boolean isZavrete() {
+        return zavrete;
+    }
+
+    public void addCasObjednavky(double cas) {
+        casObjednavky += cas;
+    }
+
+    public double getCasObjednavky() {
+        return casObjednavky;
     }
 }

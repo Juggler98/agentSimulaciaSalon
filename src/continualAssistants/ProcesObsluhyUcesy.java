@@ -51,7 +51,8 @@ public class ProcesObsluhyUcesy extends Process {
 
         zakaznik.setStavZakaznika(StavZakaznika.UCES);
         zakaznik.setCasZaciatkuObsluhy(1, mySim().currentTime());
-        ((MySimulation) mySim()).addCas(2, holdTime);
+
+        myAgent().addCasUcesov(holdTime);
 
         hold(holdTime, message);
     }

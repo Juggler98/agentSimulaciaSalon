@@ -1,4 +1,4 @@
-package entities.pracovnik;
+package entities;
 
 import entities.zakaznik.Zakaznik;
 
