@@ -249,17 +249,11 @@ public class GUI extends JFrame implements ISimDelegate {
                 salonSimulation.onSimulationWillStart(s -> {
                 });
 
-                salonSimulation.onReplicationWillStart(s -> {
-                    replicationLabel.setText(salonSimulation.currentReplication() + 1 + "");
-                });
+                salonSimulation.onReplicationWillStart(s -> replicationLabel.setText(salonSimulation.currentReplication() + 1 + ""));
 
-                salonSimulation.onReplicationDidFinish(s -> {
-                    setSleepTime(this.sleepTime);
-                });
+                salonSimulation.onReplicationDidFinish(s -> setSleepTime(this.sleepTime));
 
-                salonSimulation.onSimulationDidFinish(s -> {
-                    this.refresh(salonSimulation);
-                });
+                salonSimulation.onSimulationDidFinish(s -> this.refresh(salonSimulation));
 
                 stop.setEnabled(true);
                 pause.setEnabled(true);
@@ -502,16 +496,9 @@ public class GUI extends JFrame implements ISimDelegate {
     public void simStateChanged(Simulation simulation, SimState simState) {
         switch (simState) {
             case running:
-                break;
-
             case replicationRunning:
-                // noop
-                break;
-
             case replicationStopped:
-                // noop
                 break;
-
             case stopped:
                 this.stop();
                 break;
