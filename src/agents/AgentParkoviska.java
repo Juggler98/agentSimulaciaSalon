@@ -82,28 +82,27 @@ public class AgentParkoviska extends Agent {
     }
 
     public void obsadenostChange(int start) {
-        int obsadenost = start;
-        int kapacita = parkovisko.length * parkovisko[0].length;
-        for (int i = 0; i < parkovisko.length; i++) {
-            for (int j = 0; j < parkovisko[0].length; j++) {
-                if (parkovisko[i][j].getZakaznik() != null) {
-                    obsadenost++;
-                }
-            }
-        }
-        obsadenostStat.addValue(mySim().currentTime(), 1.0 * obsadenost / kapacita);
+        double pocetObsadenych = start + obsadene();
+        obsadenostStat.addValue(mySim().currentTime(), pocetObsadenych / kapacita());
     }
 
     public double getAktualObsadenost() {
-        int obsadenost = 0;
-        int kapacita = parkovisko.length * parkovisko[0].length;
+        return obsadene() / kapacita();
+    }
+
+    private double obsadene() {
+        int pocetObsadenych = 0;
         for (int i = 0; i < parkovisko.length; i++) {
             for (int j = 0; j < parkovisko[0].length; j++) {
                 if (parkovisko[i][j].getZakaznik() != null) {
-                    obsadenost++;
+                    pocetObsadenych++;
                 }
             }
         }
-        return 1.0 * obsadenost / kapacita;
+        return 1.0 * pocetObsadenych;
+    }
+
+    private double kapacita() {
+        return parkovisko.length * parkovisko[0].length;
     }
 }

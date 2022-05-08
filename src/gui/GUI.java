@@ -125,6 +125,9 @@ public class GUI extends JFrame implements ISimDelegate {
         zamestnanciField[1].setText("9");
         zamestnanciField[2].setText("8");
 
+        jCheckBoxReklamy.setToolTipText("Ak su zapnute, prichadza o 20% viac zakaznikov");
+        jCheckBoxParkovisko.setToolTipText("Ak je zapnute, prichadzaju zakaznici aj na aute");
+
         spinner.setToolTipText("Rychlost");
         spinner2.setToolTipText("Pocet radov");
         ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
