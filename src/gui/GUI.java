@@ -20,6 +20,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
@@ -253,10 +254,36 @@ public class GUI extends JFrame implements ISimDelegate {
 
                 salonSimulation.onReplicationDidFinish(s -> setSleepTime(this.sleepTime));
 
-                salonSimulation.onSimulationDidFinish(s -> this.refresh(salonSimulation));
+                salonSimulation.onSimulationDidFinish(s -> {
+                    this.refresh(salonSimulation);
+                    stop.setEnabled(true);
+                    pause.setEnabled(true);
 
-                stop.setEnabled(true);
-                pause.setEnabled(true);
+                    BufferedWriter writer;
+                    BufferedWriter writer2;
+                    try {
+                        File f = new File("statistiky.csv");
+                        if (!f.exists()) {
+                            writer = new BufferedWriter(new FileWriter("statistiky.csv", true));
+                            writer.write("Recepčné,Kaderníčky,Kozmetičky,Čas v salóne (hod),Čas na objednávku (min),Zaparkovalo (%),Obslúžených\n");
+                        } else {
+                            writer = new BufferedWriter(new FileWriter("statistiky.csv", true));
+                        }
+                        f = new File("spokojnost.csv");
+                        if (!f.exists()) {
+                            writer2 = new BufferedWriter(new FileWriter("spokojnost.csv", true));
+                            writer2.write("Recepčné,Kaderníčky,Kozmetičky,Spokojnosť,Počet radov,Stratégia\n");
+                        } else {
+                            writer2 = new BufferedWriter(new FileWriter("spokojnost.csv", true));
+                        }
+                        writer.write(recepcne + "," + kadernicky + "," + kozmeticky + "," + salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() + "," + salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() + "," + salonSimulation.getStatsAllVykonov()[11] / salonSimulation.getStatsAllVykonov()[10] * 100.0 + "," + salonSimulation.getStatsAllVykonov()[9] / salonSimulation.currentReplication() + "\n");
+                        writer2.write(recepcne + "," + kadernicky + "," + kozmeticky + "," + salonSimulation.getStatsAllVykonov()[12] / salonSimulation.getStatsAllVykonov()[11] + "," + pocetRadov + "," + strategia + "\n");
+                        writer.close();
+                        writer2.close();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                });
             }
         });
 
@@ -451,29 +478,30 @@ public class GUI extends JFrame implements ISimDelegate {
     private void test() throws IOException {
         int min = Integer.MAX_VALUE;
         String solution = "";
-        BufferedWriter writer = new BufferedWriter(new FileWriter("resultData.txt"));
-        writer.write("Recepcne,Kadernicky,Kozmeticky,Cas na objednavku (min),Cas v salone (hod)\n");
+        BufferedWriter writer = new BufferedWriter(new FileWriter("testData.csv"));
+        writer.write("Recepčné,Kaderníčky,Kozmetičky,Čas v salóne (hod),Čas na objednávku (min),Zaparkovalo (%)\n");
         boolean parkovisko = jCheckBoxParkovisko.isSelected();
         boolean reklamy = jCheckBoxReklamy.isSelected();
         int pocetRadov = this.pocetRadov;
         int strategia = this.strategia;
-        for (int i = 2; i <= 4; i++) {
-            for (int j = 6; j <= 12; j++) {
-                for (int k = 6; k <= 12; k++) {
-                    Properties properties = new Properties(i, j, k, parkovisko, pocetRadov, strategia, reklamy);
+        for (int r = 1; r <= 5; r++) {
+            for (int u = 5; u <= 15; u++) {
+                for (int l = 5; l <= 15; l++) {
+                    Properties properties = new Properties(r, u, l, parkovisko, pocetRadov, strategia, reklamy);
                     MySimulation salonSimulation = new MySimulation(properties);
                     salonSimulation.simulate(Integer.parseInt(pocetOpakovani.getText()));
-                    System.out.println(i + "," + j + "," + k);
+                    System.out.println(r + "," + u + "," + l);
                     System.out.println(salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication());
                     System.out.println(salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication());
+                    System.out.println(salonSimulation.getStatsAllVykonov()[11] / salonSimulation.getStatsAllVykonov()[10] * 100.0);
                     System.out.println();
-                    writer.write(i + "," + j + "," + k + "," + salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() + "," + salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() + "\n");
-                    if (salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() <= 3 && salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() <= 5.5) {
-                        if (i + j + k < min) {
-                            min = i + j + k;
-                            solution = i + " " + j + " " + k;
-                        } else if (i + j + k == min) {
-                            solution += "\n" + i + " " + j + " " + k;
+                    writer.write(r + "," + u + "," + l + "," + salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() + "," + salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() + "," + salonSimulation.getStatsAllVykonov()[11] / salonSimulation.getStatsAllVykonov()[10] * 100.0 + "\n");
+                    if (salonSimulation.getCelkoveCasy()[0] / 3600 / salonSimulation.currentReplication() <= 3 && salonSimulation.getCelkoveCasy()[1] / 60 / salonSimulation.currentReplication() <= 5.5 && salonSimulation.getStatsAllVykonov()[11] / salonSimulation.getStatsAllVykonov()[10] * 100.0 >= 80) {
+                        if (r + u + l < min) {
+                            min = r + u + l;
+                            solution = r + " " + u + " " + l;
+                        } else if (r + u + l == min) {
+                            solution += "\n" + r + " " + u + " " + l;
                         }
                     }
                 }
