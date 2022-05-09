@@ -265,14 +265,14 @@ public class GUI extends JFrame implements ISimDelegate {
                         File f = new File("statistiky.csv");
                         if (!f.exists()) {
                             writer = new BufferedWriter(new FileWriter("statistiky.csv", true));
-                            writer.write("Recepčné,Kaderníčky,Kozmetičky,Čas v salóne (hod),Čas na objednávku (min),Zaparkovalo (%),Obslúžených\n");
+                            writer.write("Recepcne,Kadernicky,Kozmeticky,Cas v salone (hod),Cas na objednavku (min),Zaparkovalo (%),Obsluzenych\n");
                         } else {
                             writer = new BufferedWriter(new FileWriter("statistiky.csv", true));
                         }
                         f = new File("spokojnost.csv");
                         if (!f.exists()) {
                             writer2 = new BufferedWriter(new FileWriter("spokojnost.csv", true));
-                            writer2.write("Recepčné,Kaderníčky,Kozmetičky,Spokojnosť,Počet radov,Stratégia\n");
+                            writer2.write("Recepcne,Kadernicky,Kozmeticky,Spokojnost,Pocet radov,Strategia\n");
                         } else {
                             writer2 = new BufferedWriter(new FileWriter("spokojnost.csv", true));
                         }
@@ -479,7 +479,7 @@ public class GUI extends JFrame implements ISimDelegate {
         int min = Integer.MAX_VALUE;
         String solution = "";
         BufferedWriter writer = new BufferedWriter(new FileWriter("testData.csv"));
-        writer.write("Recepčné,Kaderníčky,Kozmetičky,Čas v salóne (hod),Čas na objednávku (min),Zaparkovalo (%)\n");
+        writer.write("Recepcne,Kadernicky,Kozmeticky,Cas v salone (hod),Cas na objednavku (min),Zaparkovalo (%)\n");
         boolean parkovisko = jCheckBoxParkovisko.isSelected();
         boolean reklamy = jCheckBoxReklamy.isSelected();
         int pocetRadov = this.pocetRadov;
