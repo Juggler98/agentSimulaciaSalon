@@ -8,4 +8,5 @@ public enum PolohaZakaznika {
     A_END,
     B_END,
     C_END,
+    RAMPA
 }

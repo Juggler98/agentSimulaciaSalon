@@ -18,4 +18,5 @@ public enum StavZakaznika {
     IDEOKOLO,
     NEOBSLUZENY,
     KRACA,
+    RAMPA,
 }

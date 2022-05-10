@@ -31,6 +31,7 @@ public class AgentParkoviska extends Agent {
         addOwnMessage(Mc.parkuj);
         addOwnMessage(Mc.koniecJazdy);
         addOwnMessage(Mc.koniecChodze);
+        addOwnMessage(Mc.koniecRampy);
     }
 
     @Override
@@ -50,15 +51,17 @@ public class AgentParkoviska extends Agent {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    private void init() {
-        new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
-        new ProcesChodze(Id.procesChodze, mySim(), this);
-        new ProcesJazdy(Id.procesJazdy, mySim(), this);
-        new ProcesParkovania(Id.procesParkovania, mySim(), this);
-        addOwnMessage(Mc.parkovanie);
-    }
-    //meta! tag="end"
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	private void init()
+	{
+		new ManagerParkoviska(Id.managerParkoviska, mySim(), this);
+		new ProcesChodze(Id.procesChodze, mySim(), this);
+		new ProcesJazdy(Id.procesJazdy, mySim(), this);
+		new ProcesParkovania(Id.procesParkovania, mySim(), this);
+		new ProcesRampy(Id.procesRampy, mySim(), this);
+		addOwnMessage(Mc.parkovanie);
+	}
+	//meta! tag="end"
 
 
     public Miesto[][] parkovisko() {

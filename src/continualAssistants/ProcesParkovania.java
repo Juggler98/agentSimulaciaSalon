@@ -9,6 +9,8 @@ import simulation.*;
 import agents.*;
 import OSPABA.Process;
 
+import java.security.spec.RSAOtherPrimeInfo;
+
 //meta! id="65"
 public class ProcesParkovania extends Process {
 
@@ -29,12 +31,18 @@ public class ProcesParkovania extends Process {
         parkovisko = myAgent().parkovisko();
     }
 
-    //meta! sender="AgentParkoviska", id="66", type="Start"
-    public void processStart(MessageForm message) {
+	//meta! sender="AgentParkoviska", id="66", type="Start"
+	public void processStart(MessageForm message) {
         message.setCode(Mc.parkuj);
         Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
 
         zakaznik.setStavZakaznika(StavZakaznika.PARKOVANIE);
+
+        if (!zakaznik.odchadza() && zakaznik.getPoloha() == PolohaZakaznika.RAMPA) {
+            zakaznik.setMiesto(null);
+            assistantFinished(message);
+            return;
+        }
 
         if (zakaznik.odchadza()) {
             Miesto miesto = zakaznik.getMiesto();
@@ -131,8 +139,8 @@ public class ProcesParkovania extends Process {
         }
     }
 
-    //meta! userInfo="Process messages defined in code", id="0"
-    public void processDefault(MessageForm message) {
+	//meta! userInfo="Process messages defined in code", id="0"
+	public void processDefault(MessageForm message) {
         switch (message.code()) {
             case Mc.parkuj:
                 Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
@@ -201,20 +209,22 @@ public class ProcesParkovania extends Process {
         }
     }
 
-    //meta! userInfo="Generated code: do not modify", tag="begin"
-    @Override
-    public void processMessage(MessageForm message) {
-        switch (message.code()) {
-            case Mc.start:
-                processStart(message);
-                break;
+	//meta! userInfo="Generated code: do not modify", tag="begin"
+	@Override
+	public void processMessage(MessageForm message)
+	{
+		switch (message.code())
+		{
+		case Mc.start:
+			processStart(message);
+		break;
 
-            default:
-                processDefault(message);
-                break;
-        }
-    }
-    //meta! tag="end"
+		default:
+			processDefault(message);
+		break;
+		}
+	}
+	//meta! tag="end"
 
     @Override
     public AgentParkoviska myAgent() {

@@ -182,6 +182,14 @@ public class ManagerSalonu extends Manager {
 	{
 		switch (message.code())
 		{
+		case Mc.obsluhaRecepia:
+			processObsluhaRecepia(message);
+		break;
+
+		case Mc.parkovanie:
+			processParkovanie(message);
+		break;
+
 		case Mc.obsluhaUcesy:
 			processObsluhaUcesy(message);
 		break;
@@ -190,16 +198,8 @@ public class ManagerSalonu extends Manager {
 			processUzavri(message);
 		break;
 
-		case Mc.parkovanie:
-			processParkovanie(message);
-		break;
-
 		case Mc.obsluhaLicenie:
 			processObsluhaLicenie(message);
-		break;
-
-		case Mc.obsluhaRecepia:
-			processObsluhaRecepia(message);
 		break;
 
 		case Mc.obsluhaZakaznika:

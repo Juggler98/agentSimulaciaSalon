@@ -27,4 +27,5 @@ public class Mc extends IdList
 	public static final int novyZakaznikAutom = 7;
 	public static final int koniecJazdy = 8;
 	public static final int koniecChodze = 9;
+	public static final int koniecRampy = 10;
 }

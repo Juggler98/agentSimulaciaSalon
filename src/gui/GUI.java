@@ -30,7 +30,7 @@ public class GUI extends JFrame implements ISimDelegate {
     private int iterationCount = 0;
 
     private int sleepTime = 0;
-    private int pocetRadov = 2;
+    private int pocetRadov = 1;
     private int strategia;
 
     private final JLabel resultLabel;
@@ -107,7 +107,7 @@ public class GUI extends JFrame implements ISimDelegate {
         String[] spinnerData2 = {"1", "2", "3"};
         SpinnerListModel spinnerListModel2 = new SpinnerListModel(spinnerData2);
         JSpinner spinner2 = new JSpinner(spinnerListModel2);
-        spinner2.setValue("2");
+        spinner2.setValue("1");
 
         resultLabel = new JLabel();
         replicationLabel = new JLabel();
@@ -256,8 +256,6 @@ public class GUI extends JFrame implements ISimDelegate {
 
                 salonSimulation.onSimulationDidFinish(s -> {
                     this.refresh(salonSimulation);
-                    stop.setEnabled(true);
-                    pause.setEnabled(true);
 
                     BufferedWriter writer;
                     BufferedWriter writer2;
@@ -284,6 +282,8 @@ public class GUI extends JFrame implements ISimDelegate {
                         ioException.printStackTrace();
                     }
                 });
+                stop.setEnabled(true);
+                pause.setEnabled(true);
             }
         });
 

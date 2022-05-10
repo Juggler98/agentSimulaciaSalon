@@ -50,12 +50,12 @@ public class ManagerUcesov extends ManagerPracovnika {
 	{
 		switch (message.code())
 		{
-		case Mc.obsluhaUcesy:
-			processObsluhaUcesy(message);
-		break;
-
 		case Mc.finish:
 			processFinish(message);
+		break;
+
+		case Mc.obsluhaUcesy:
+			processObsluhaUcesy(message);
 		break;
 
 		default:

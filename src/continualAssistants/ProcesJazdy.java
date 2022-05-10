@@ -35,7 +35,7 @@ public class ProcesJazdy extends Process
 		zakaznik.setStavZakaznika(StavZakaznika.IDEOKOLO);
 		switch (zakaznik.getPoloha()) {
 			case START:
-				zakaznik.setPoloha(PolohaZakaznika.A);
+				zakaznik.setPoloha(PolohaZakaznika.RAMPA);
 				hold((AgentParkoviska.width + AgentParkoviska.toA) / speed, message);
 				break;
 			case A:
@@ -50,7 +50,7 @@ public class ProcesJazdy extends Process
 				if (zakaznik.odchadza()) {
 					hold(AgentParkoviska.toA / speed, message);
 				} else {
-					zakaznik.setPoloha(PolohaZakaznika.A);
+					zakaznik.setPoloha(PolohaZakaznika.RAMPA);
 					hold((AgentParkoviska.width + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;
@@ -58,7 +58,7 @@ public class ProcesJazdy extends Process
 				if (zakaznik.odchadza()) {
 					hold((AgentParkoviska.toA + AgentParkoviska.toB) / speed, message);
 				} else {
-					zakaznik.setPoloha(PolohaZakaznika.A);
+					zakaznik.setPoloha(PolohaZakaznika.RAMPA);
 					hold((AgentParkoviska.width + AgentParkoviska.toB + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;
@@ -66,7 +66,7 @@ public class ProcesJazdy extends Process
 				if (zakaznik.odchadza()) {
 					hold((AgentParkoviska.toA + AgentParkoviska.toB + AgentParkoviska.toC) / speed, message);
 				} else {
-					zakaznik.setPoloha(PolohaZakaznika.A);
+					zakaznik.setPoloha(PolohaZakaznika.RAMPA);
 					hold((AgentParkoviska.width + AgentParkoviska.toB + AgentParkoviska.toC + 2 * AgentParkoviska.toA) / speed, message);
 				}
 				break;

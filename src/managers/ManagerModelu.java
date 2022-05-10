@@ -68,12 +68,12 @@ public class ManagerModelu extends Manager {
 			processUzavri(message);
 		break;
 
-		case Mc.obsluhaZakaznika:
-			processObsluhaZakaznika(message);
-		break;
-
 		case Mc.prichodZakaznika:
 			processPrichodZakaznika(message);
+		break;
+
+		case Mc.obsluhaZakaznika:
+			processObsluhaZakaznika(message);
 		break;
 
 		default:

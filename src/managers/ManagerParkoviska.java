@@ -1,6 +1,7 @@
 package managers;
 
 import OSPABA.*;
+import entities.zakaznik.PolohaZakaznika;
 import entities.zakaznik.Zakaznik;
 import simulation.*;
 import agents.*;
@@ -28,6 +29,8 @@ public class ManagerParkoviska extends Manager {
 		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
 		if (zakaznik.getMiesto() != null) {
 			message.setAddressee(myAgent().findAssistant(Id.procesChodze));
+		} else if (zakaznik.getPoloha() == PolohaZakaznika.RAMPA) {
+			message.setAddressee(myAgent().findAssistant(Id.procesRampy));
 		} else {
 			message.setAddressee(myAgent().findAssistant(Id.procesJazdy));
 		}
@@ -79,6 +82,15 @@ public class ManagerParkoviska extends Manager {
 		}
 	}
 
+	//meta! sender="ProcesRampy", id="126", type="Finish"
+	public void processFinishProcesRampy(MessageForm message)
+	{
+		Zakaznik zakaznik = ((MyMessage) message).getZakaznik();
+		zakaznik.setPoloha(PolohaZakaznika.A);
+		message.setAddressee(myAgent().findAssistant(Id.procesParkovania));
+		startContinualAssistant(message);
+	}
+
 	//meta! userInfo="Generated code: do not modify", tag="begin"
 	public void init()
 	{
@@ -92,16 +104,20 @@ public class ManagerParkoviska extends Manager {
 		case Mc.finish:
 			switch (message.sender().id())
 			{
-			case Id.procesJazdy:
-				processFinishProcesJazdy(message);
-			break;
-
 			case Id.procesParkovania:
 				processFinishProcesParkovania(message);
 			break;
 
 			case Id.procesChodze:
 				processFinishProcesChodze(message);
+			break;
+
+			case Id.procesJazdy:
+				processFinishProcesJazdy(message);
+			break;
+
+			case Id.procesRampy:
+				processFinishProcesRampy(message);
 			break;
 			}
 		break;

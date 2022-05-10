@@ -83,20 +83,20 @@ public class ManagerRecepcie extends ManagerPracovnika {
 	{
 		switch (message.code())
 		{
-		case Mc.zmenaRadu:
-			processZmenaRadu(message);
-		break;
-
-		case Mc.finish:
-			processFinish(message);
+		case Mc.uzavri:
+			processUzavri(message);
 		break;
 
 		case Mc.obsluhaRecepia:
 			processObsluhaRecepia(message);
 		break;
 
-		case Mc.uzavri:
-			processUzavri(message);
+		case Mc.finish:
+			processFinish(message);
+		break;
+
+		case Mc.zmenaRadu:
+			processZmenaRadu(message);
 		break;
 
 		default:
