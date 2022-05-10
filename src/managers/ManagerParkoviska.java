@@ -112,12 +112,12 @@ public class ManagerParkoviska extends Manager {
 				processFinishProcesChodze(message);
 			break;
 
-			case Id.procesJazdy:
-				processFinishProcesJazdy(message);
-			break;
-
 			case Id.procesRampy:
 				processFinishProcesRampy(message);
+			break;
+
+			case Id.procesJazdy:
+				processFinishProcesJazdy(message);
 			break;
 			}
 		break;
